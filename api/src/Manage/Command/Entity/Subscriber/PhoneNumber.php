@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\Admin\Command\Entity\Subscriber;
+namespace App\Manage\Command\Entity\Subscriber;
 
 
 use InvalidArgumentException;
@@ -20,11 +20,9 @@ class PhoneNumber
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
         try {
             $kzNumber = $phoneUtil->parse($value, "KZ");
-            if (!$phoneUtil->isValidNumber($kzNumber)) {
-                throw new InvalidArgumentException('Incorrect number.');
-            };
             $this->value = (string)$kzNumber->getNationalNumber();
         } catch (NumberParseException $e) {
+            echo $e->getMessage();
         }
     }
 

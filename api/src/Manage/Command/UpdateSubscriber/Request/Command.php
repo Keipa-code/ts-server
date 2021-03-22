@@ -3,11 +3,13 @@
 declare(strict_types=1);
 
 
-namespace App\Admin\Command\AddSubscriber\Request;
+namespace App\Manage\Command\UpdateSubscriber\Request;
 
 
 class Command
 {
+    public string $id = '';
+    public string $date = '';
     public string $phoneNumber = '';
     public string $subscriberType = '';
 

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$number = 'Маша-Альдин';
+$value = 'not phone number';
 
-$phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+    $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
-
-
-
-\Webmozart\Assert\Assert::unicodeLetters($number);
+try {
+    $kzNumber = $phoneUtil->parse($value, "KZ");
+    var_dump($kzNumber);
+} catch (\libphonenumber\NumberParseException $e) {
+    echo $e->getMessage();
+}

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\Admin\Command\Entity\Subscriber;
+namespace App\Manage\Command\Entity\Subscriber;
 
 
 use Ramsey\Uuid\Uuid;
@@ -27,5 +27,10 @@ class Id
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 }

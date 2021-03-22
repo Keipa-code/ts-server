@@ -2,63 +2,72 @@
 
 declare(strict_types=1);
 
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\Setup;
 use Psr\Container\ContainerInterface;
 
 return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
-    /**
-     * @var array $settings
-     * @psalm-suppress MixedArrayAccess
-     */
+        /**
+         * @var array $settings
+         * @psalm-suppress MixedArrayAccess
+         */
         $settings = $container->get('doctrine');
-    /**
-     * @var array<array-key, mixed> $settings['meta']['entity_path']
-     * @var bool $settings['meta']['auto_generate_proxies']
-     * @var null|string $settings['meta']['proxy_dir']
-     * @var Doctrine\Common\Cache\Cache|null $settings['meta']['cache']
-     * @psalm-suppress MixedArrayAccess
-     */
+        /**
+         * @var array<array-key, mixed> $settings ['meta']['entity_path']
+         * @var bool $settings ['meta']['dev_mode']
+         * @var null|string $settings ['meta']['proxy_dir']
+         * @var Doctrine\Common\Cache\Cache|null $settings ['meta']['cache']
+         * @psalm-suppress MixedArrayAccess
+         */
         $config = Setup::createAnnotationMetadataConfiguration(
             $settings['meta']['entity_path'],
-            $settings['meta']['auto_generate_proxies'],
+            $settings['meta']['dev_mode'],
             $settings['meta']['proxy_dir'],
-            $settings['meta']['cache'],
+            $settings['meta']['cache'] ? new FilesystemCache($settings['meta']['cache']) : new ArrayCache(),
             false
         );
-    /**
-     * @var Doctrine\DBAL\Connection|array<string, mixed> $settings['connection']
-     * @psalm-suppress MixedArrayAccess
-     */
+
+        $config->setNamingStrategy(new UnderscoreNamingStrategy());
+
+        foreach ($settings['types'] as $name => $class) {
+            if (!Type::hasType($name)){
+                Type::addType($name, $class);
+            }
+        }
+
+        /**
+         * @var Doctrine\DBAL\Connection|array<string, mixed> $settings ['connection']
+         * @psalm-suppress MixedArrayAccess
+         */
         return EntityManager::create($settings['connection'], $config);
     },
     'doctrine' => [
         'meta' => [
-            'entity_path' => [__DIR__ . '/../../src/'],
-            'auto_generate_proxies' => true,
+            'entity_path' => [__DIR__ . '/../../src/Manage/Command/Entity', __DIR__ . '/../../src/Manage/Admin/Entity'],
+            'dev_mode' => true,
             'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
             'cache' => null,
         ],
-        /*// if true, metadata caching is forcefully disabled
-        'dev_mode' => true,
 
-        // path where the compiled metadata info will be cached
-        // make sure the path exists and it is writable
-        'cache_dir' => APP_ROOT . '/../var/cache/doctrine',
-
-        // you should add any other path containing annotated entity classes
-        'metadata_dirs' => [APP_ROOT . '/src/Entity'],
-        */
         'connection' => [
             'driver' => 'pdo_pgsql',
             'host' => 'postgres',
-            'dbname' => 'test',
+            'dbname' => 'phonedir',
             'port' => '54321',
             'user' => 'admin',
             'password' => '123456',
             'charset' => 'utf-8'
+        ],
+        'types' => [
+            App\Manage\Command\Entity\Subscriber\IdType::NAME => App\Manage\Command\Entity\Subscriber\IdType::class,
+            App\Manage\Command\Entity\Subscriber\PhoneNumberType::NAME => App\Manage\Command\Entity\Subscriber\PhoneNumberType::class,
+            App\Manage\Command\Entity\Subscriber\SubscriberTypeType::NAME => App\Manage\Command\Entity\Subscriber\SubscriberTypeType::class
         ]
     ]
 ];
