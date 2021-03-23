@@ -9,10 +9,6 @@ RUN apk add --no-cache postgresql-dev fcgi \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo_pgsql
 
-RUN apk add --no-cache libpng libpng-dev libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev  \
-    && docker-php-ext-install gd \
-    && apk del libpng-dev libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev
-
 RUN apk add --no-cache tzdata
 ENV TZ Asia/Oral
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

@@ -11,10 +11,6 @@ RUN apk add --no-cache postgresql-dev bash coreutils \
 
 RUN apk add --no-cache unzip
 
-RUN apk add --no-cache libpng libpng-dev libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev  \
-    && docker-php-ext-install gd \
-    && apk del libpng-dev libjpeg-turbo-dev libwebp-dev zlib-dev libxpm-dev
-
 RUN apk add --no-cache tzdata
 ENV TZ Asia/Oral
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -23,6 +19,9 @@ RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 COPY ./common/php/conf.d /usr/local/etc/php/conf.d
 COPY ./development/php/conf.d /usr/local/etc/php/conf.d
+
+COPY ./common/wait-for-it.sh /usr/local/bin/wait-for-it
+RUN chmod 555 /usr/local/bin/wait-for-it
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 

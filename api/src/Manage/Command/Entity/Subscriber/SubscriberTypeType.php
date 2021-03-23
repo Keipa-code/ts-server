@@ -7,8 +7,9 @@ namespace App\Manage\Command\Entity\Subscriber;
 
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\StringType;
 
-class SubscriberTypeType
+class SubscriberTypeType extends StringType
 {
     public const NAME = 'subscriber_type';
 

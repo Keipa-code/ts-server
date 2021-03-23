@@ -20,7 +20,6 @@ $commands = $container->get('settings')['console']['commands'];
 $entityManager = $container->get(EntityManagerInterface::class);
 $cli->getHelperSet()->set(new EntityManagerHelper($entityManager), 'em');
 
-#\Doctrine\ORM\Tools\Console\ConsoleRunner::addCommands($cli);
 
 foreach ($commands as $name){
     $command = $container->get($name);

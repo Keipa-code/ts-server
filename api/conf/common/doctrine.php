@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\EventManager;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,11 +43,19 @@ return [
             }
         }
 
+        $eventManager = new EventManager();
+
+        foreach ($settings['meta']['event_subscribers'] as $name){
+            /** @var EventSubscriber $eventSubscribers */
+            $eventSubscribers = $container->get($name);
+            $eventManager->addEventSubscriber($eventSubscribers);
+        }
+
         /**
          * @var Doctrine\DBAL\Connection|array<string, mixed> $settings ['connection']
          * @psalm-suppress MixedArrayAccess
          */
-        return EntityManager::create($settings['connection'], $config);
+        return EntityManager::create($settings['connection'], $config, $eventManager);
     },
     'doctrine' => [
         'meta' => [
@@ -53,13 +63,16 @@ return [
             'dev_mode' => true,
             'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
             'cache' => null,
+            'event_subscribers' => [
+                \App\Data\Doctrine\FixDefaultSchemaSubscriber::class,
+            ]
         ],
 
         'connection' => [
             'driver' => 'pdo_pgsql',
             'host' => 'postgres',
             'dbname' => 'phonedir',
-            'port' => '54321',
+            'port' => '5432',
             'user' => 'admin',
             'password' => '123456',
             'charset' => 'utf-8'

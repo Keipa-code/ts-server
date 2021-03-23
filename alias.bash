@@ -4,7 +4,7 @@
 # PROXIES (to Docker-containers commands)
 alias php="docker-compose run --rm php-cli php"
 alias composer="docker-compose run --rm php-cli composer"
-alias app="docker-compose run --rm php-cli php bin/app.php"
+alias app="docker-compose run --rm php-cli php bin/app.php --ansi"
 alias linter="docker-compose run --rm php-cli composer lint"
 alias phpcs="docker-compose run --rm php-cli composer phpcs"
 alias lint="linter && phpcs"
