@@ -13,9 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="subscriber_juridical")
  */
-class JuridicalSubscriber extends Subscriber
+class JuridicalSubscriber implements Subscriber
 {
+    /**
+     * @ORM\Column(type="subscriber_id")
+     * @ORM\Id
+     */
+    protected Id $id;
 
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    protected DateTimeImmutable $date;
     /**
      * @ORM\Column
      */
@@ -48,28 +57,19 @@ class JuridicalSubscriber extends Subscriber
     public function __construct(
         Id $id,
         DateTimeImmutable $date,
-        PhoneNumber $phoneNumber,
-        SubscriberType $subscriberType,
-        string $organizationName,
-        string $departmentName,
-        string $country,
-        string $city,
-        string $street,
-        string $houseNumber,
-        ?string $floatNumber = null
+        $subData
     )
     {
         $this->id = $id;
         $this->date = $date;
         $this->phoneNumber = $phoneNumber;
-        $this->subscriberType = $subscriberType;
-        $this->organizationName = $organizationName;
-        $this->departmentName = $departmentName;
-        $this->country = $country;
-        $this->city = $city;
-        $this->street = $street;
-        $this->houseNumber = $houseNumber;
-        $this->floatNumber = $floatNumber;
+        $this->organizationName = $subData['organizationName'];
+        $this->departmentName = $subData['departmentName'];
+        $this->country = $subData['country'];
+        $this->city = $subData['city'];
+        $this->street = $subData['street'];
+        $this->houseNumber = $subData['houseNumber'];
+        $this->floatNumber = $subData['floatNumber'] ?? null;
     }
 
     public function updateSubscriber(
@@ -129,5 +129,10 @@ class JuridicalSubscriber extends Subscriber
     public function getFloatNumber(): string
     {
         return $this->floatNumber;
+    }
+
+    public function getId(): Id
+    {
+        return $this->id;
     }
 }

@@ -10,6 +10,8 @@ use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
+use App\Manage\Command\Entity\Subscriber\SubscriberCreator;
+use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use App\Flusher;
@@ -30,52 +32,28 @@ class Handler
     public function handle(Command $command): void
     {
         $id = new Id($command->id);
-        $phoneNumber = new PhoneNumber($command->phoneNumber);
         $subscriberType = new SubscriberType($command->subscriberType);
-        $subscriber = $this->subscribers->findById($id);
-        if($this->subscribers->hasByPhoneNumber($phoneNumber)){
-            throw new \DomainException('Number already exists.');
+        $phoneNumber = new PhoneNumber($command->phoneNumber, $subscriberType);
+
+        $subscriber = $this->subscribers->get($id);
+
+        $id->setValue($subscriber->getId());
+        if(!in_array($phoneNumber->getPhoneNumber(), $subscriber->getPhoneNumbers())) {
+            if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
+                throw new \DomainException('Number already exists.');
+            }
         }
 
-        if ($subscriberType->isPrivate()){
-            Assert::stringNotEmpty($command->firstname);
-            Assert::stringNotEmpty($command->surname);
-            Assert::stringNotEmpty($command->patronymic);
-            $subscriber->updateSubscriber(
-                $phoneNumber,
-                $subscriberType,
-                $command->firstname,
-                $command->surname,
-                $command->patronymic
-            );
-            /**
-             * @var PrivateSubscriber $subscriber
-             */
-            $this->subscribers->addPrivate($subscriber);
-        }elseif($subscriberType->isJuridical()){
-            Assert::stringNotEmpty($command->organizationName);
-            Assert::stringNotEmpty($command->departmentName);
-            Assert::stringNotEmpty($command->country);
-            Assert::stringNotEmpty($command->city);
-            Assert::stringNotEmpty($command->street);
-            Assert::stringNotEmpty($command->houseNumber);
-            Assert::stringNotEmpty($command->floatNumber);
-            $subscriber->updateSubscriber(
-                $phoneNumber,
-                $subscriberType,
-                $command->organizationName,
-                $command->departmentName,
-                $command->country,
-                $command->city,
-                $command->street,
-                $command->houseNumber,
-                $command->floatNumber
-            );
-            /**
-             * @var JuridicalSubscriber $subscriber
-             */
-            $this->subscribers->addJuridical($subscriber);
-        }
+        $newSubscriber = SubscriberCreator::create(
+            $id,
+            $subscriberType,
+            $command
+        );
+
+        /**
+         * @var SubscriberInterface $newSubscriber
+         */
+        $this->subscribers->add($newSubscriber);
 
         $this->flusher->flush();
     }

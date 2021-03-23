@@ -4,13 +4,38 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$value = 'not phone number';
+interface Baur
+{
+    public function __construct($value);
 
-    $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-
-try {
-    $kzNumber = $phoneUtil->parse($value, "KZ");
-    var_dump($kzNumber);
-} catch (\libphonenumber\NumberParseException $e) {
-    echo $e->getMessage();
+    public function getValue();
 }
+
+class Fooka implements Baur
+{
+    private $value;
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    public function getValue(){
+        return $this->value;
+    }
+
+    public function setLower($value)
+    {
+        return mb_strtolower($value);
+    }
+}
+
+$fooka = new Fooka('priva');
+/** @return string
+ * @var Baur $baur
+ */
+$value2 = function (Baur $baur){
+    return $baur->getValue();
+};
+
+echo $value2($fooka);

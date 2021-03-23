@@ -10,6 +10,7 @@ use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
+use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use App\Flusher;
@@ -30,6 +31,7 @@ class Handler
     public function handle(Command $command): void
     {
         $subscriber = $this->subscribers->get(new Id($command->id));
+        /** @var SubscriberInterface $subscriber */
         $this->subscribers->remove($subscriber);
         $this->flusher->flush();
     }

@@ -33,4 +33,9 @@ class Id
     {
         return $this->getValue();
     }
+
+    public function setValue($value): void
+    {
+        $this->value = $value;
+    }
 }

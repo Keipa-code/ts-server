@@ -9,21 +9,26 @@ namespace App\Manage\Command\UpdateSubscriber\Request;
 class Command
 {
     public string $id = '';
-    public string $date = '';
     public string $phoneNumber = '';
     public string $subscriberType = '';
 
-    //Частное лицо
-    public string $firstname = '';
-    public string $surname = '';
-    public string $patronymic = '';
+    public array $subData = [
+        //Частное лицо
+        'private' => [
+            'firstname' => '',
+            'surname' => '',
+            'patronymic' => '',
+        ],
 
-    //Организация
-    public string $organizationName = '';
-    public string $departmentName = '';
-    public string $country = '';
-    public string $city = '';
-    public string $street = '';
-    public string $houseNumber = '';
-    public string $floatNumber = '';
+        //Организация
+        'juridical' => [
+            'organizationName' => '',
+            'departmentName' => '',
+            'country' => '',
+            'city' => '',
+            'street' => '',
+            'houseNumber' => '',
+            'floatNumber' => '',
+        ],
+    ];
 }

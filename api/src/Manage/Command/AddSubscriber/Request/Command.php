@@ -11,7 +11,26 @@ class Command
     public string $phoneNumber = '';
     public string $subscriberType = '';
 
-    //Частное лицо
+    public array $subData = [
+        //Частное лицо
+        'private' => [
+            'firstname' => '',
+            'surname' => '',
+            'patronymic' => '',
+        ],
+
+        //Организация
+        'juridical' => [
+            'organizationName' => '',
+            'departmentName' => '',
+            'country' => '',
+            'city' => '',
+            'street' => '',
+            'houseNumber' => '',
+            'floatNumber' => '',
+        ],
+    ];
+    /*//Частное лицо
     public string $firstname = '';
     public string $surname = '';
     public string $patronymic = '';
@@ -23,5 +42,5 @@ class Command
     public string $city = '';
     public string $street = '';
     public string $houseNumber = '';
-    public string $floatNumber = '';
+    public string $floatNumber = '';*/
 }

@@ -21,14 +21,14 @@ class PhoneNumberTest extends TestCase
     {
         $phoneNumber = new PhoneNumber($value = '7075554444');
 
-        self::assertEquals($value, $phoneNumber->getValue());
+        self::assertEquals($value, $phoneNumber->getPhoneNumber());
     }
 
     public function testFormat(): void
     {
         $phoneNumber = new PhoneNumber($value = '8 707 555-4444');
 
-        self::assertEquals('7075554444', $phoneNumber->getValue());
+        self::assertEquals('7075554444', $phoneNumber->getPhoneNumber());
     }
 
     public function testIncorrect(): void

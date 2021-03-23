@@ -10,7 +10,5 @@ return [
             'base_path' => '',
             'env' => getenv('APP_ENV') ?: 'prod',
             'route_cache' => __DIR__ . '/../../var/cache/routes',
-            'displayErrorDetails' => (bool)getenv('APP_DEBUG'),
-            'logErrors' => true,
             ],
         ];

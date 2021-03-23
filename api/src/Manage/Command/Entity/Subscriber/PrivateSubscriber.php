@@ -13,9 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="subscriber_private")
  */
-class PrivateSubscriber extends Subscriber
+class PrivateSubscriber implements SubscriberInterface
 {
+    /**
+     * @ORM\Column(type="subscriber_id")
+     * @ORM\Id
+     */
+    private Id $id;
 
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private DateTimeImmutable $date;
     /**
      * @ORM\Column
      */
@@ -33,20 +42,15 @@ class PrivateSubscriber extends Subscriber
     public function __construct(
         Id $id,
         DateTimeImmutable $date,
-        PhoneNumber $phoneNumber,
-        SubscriberType $subscriberType,
-        string $firstname,
-        string $surname,
-        string $patronymic
+        array $subData
     )
     {
         $this->id = $id;
         $this->date = $date;
-        $this->phoneNumber = $phoneNumber;
-        $this->subscriberType = $subscriberType;
-        $this->firstname = $firstname;
-        $this->surname = $surname;
-        $this->patronymic = $patronymic;
+        $this->phoneNumber = $subData[''];
+        $this->firstname = $subData['firstname'];
+        $this->surname = $subData['surname'];
+        $this->patronymic = $subData['patronymic'];
     }
 
     public function updateSubscriber(
@@ -78,5 +82,11 @@ class PrivateSubscriber extends Subscriber
     public function getPatronymic(): string
     {
         return $this->patronymic;
+    }
+
+
+    public function getId(): Id
+    {
+        return $this->id;
     }
 }
