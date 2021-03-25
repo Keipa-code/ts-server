@@ -7,6 +7,8 @@ namespace App\Manage\Command\Entity\Subscriber;
 
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,20 +39,27 @@ class PrivateSubscriber implements SubscriberInterface
      * @ORM\Column
      */
     private string $patronymic;
+    /**
+     * @psalm-var Collection<array-key,PhoneNumber>
+     * @ORM\OneToMany(targetEntity="PhoneDirectory", mappedBy="privateSubscriber", cascade={"all"}, orphanRemoval=true)
+     */
+    private Collection $phoneNumbers;
 
 
     public function __construct(
         Id $id,
+        PhoneNumber $phoneNumber,
         DateTimeImmutable $date,
         array $subData
     )
     {
         $this->id = $id;
         $this->date = $date;
-        $this->phoneNumber = $subData[''];
+        $this->phoneNumbers = new ArrayCollection();
         $this->firstname = $subData['firstname'];
         $this->surname = $subData['surname'];
         $this->patronymic = $subData['patronymic'];
+        $this->phoneNumbers->add(new PhoneDirectory($this, null, $phoneNumber));
     }
 
     public function updateSubscriber(
@@ -63,10 +72,14 @@ class PrivateSubscriber implements SubscriberInterface
     {
         $this->date = new DateTimeImmutable();
         $this->phoneNumber = $phoneNumber;
-        $this->subscriberType = $subscriberType;
         $this->firstname = $firstname;
         $this->surname = $surname;
         $this->patronymic = $patronymic;
+    }
+
+    public function setPhoneNumbers(PrivateSubscriber $subscriber, PhoneNumber $phoneNumber)
+    {
+        $this->phoneNumbers->add(new PhoneDirectory($subscriber, null, $phoneNumber));
     }
 
     public function getFirstname(): string
@@ -88,5 +101,18 @@ class PrivateSubscriber implements SubscriberInterface
     public function getId(): Id
     {
         return $this->id;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
+    }
+
+    public function getPhoneNumbers(): array
+    {
+        /** @var PhoneNumber[] */
+        return $this->phoneNumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhoneNumber();
+        })->toArray();
     }
 }

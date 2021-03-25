@@ -46,6 +46,7 @@ class Handler
 
         $newSubscriber = SubscriberCreator::create(
             $id,
+            $phoneNumber,
             $subscriberType,
             $command
         );

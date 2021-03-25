@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Interfaces\CallableResolverInterface;
 use Slim\Middleware\ErrorMiddleware;
 
@@ -19,15 +20,17 @@ return [
             $callableResolver,
             $responseFactory,
             $settings['displayErrorDetails'],
-            true,
+            $settings['logErrors'],
             true
         );
+
     },
 
 
     'settings' => [
         'errors' => [
-            'displayErrorDetails' => (bool)getenv('APP_DEBUG')
+            'displayErrorDetails' => (bool)getenv('APP_DEBUG'),
+            'logErrors' => getenv('APP_ENV') ?: 'prod'
         ]
     ]
 ];

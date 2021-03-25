@@ -7,8 +7,8 @@ use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\TwigMiddleware;
 
-return function (App $app) {
+return function (App $app, ContainerInterface $container) {
     $app->add(TwigMiddleware::createFromContainer($app));
-    $app->add(ErrorMiddleware::class);  //ErrorMiddleware($settings['displayErrorDetails'], $settings['env'] !== 'test', $settings['logErrors']);
-
+    $settings = $container->get('settings')['errors'];
+    $app->addErrorMiddleware($settings['displayErrorDetails'], $settings['logErrors'] !== 'test', true);
 };

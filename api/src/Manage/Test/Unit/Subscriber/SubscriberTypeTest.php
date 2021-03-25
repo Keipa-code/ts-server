@@ -22,8 +22,8 @@ class SubscriberTypeTest extends TestCase
         $subscriberType1 = new SubscriberType($value1 = 'private');
         $subscriberType2 = new SubscriberType($value2 = 'juridical');
 
-        self::assertEquals($value1, $subscriberType1->getValue());
-        self::assertEquals($value2, $subscriberType2->getValue());
+        self::assertEquals($value1, $subscriberType1->getSubscriberType());
+        self::assertEquals($value2, $subscriberType2->getSubscriberType());
     }
 
     public function testCase(): void
@@ -32,7 +32,7 @@ class SubscriberTypeTest extends TestCase
 
         $subscriberType = new SubscriberType(mb_strtolower($value));
 
-        self::assertEquals($value, $subscriberType->getValue());
+        self::assertEquals($value, $subscriberType->getSubscriberType());
     }
 
     public function testIsPrivate(): void

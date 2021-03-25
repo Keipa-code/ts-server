@@ -14,8 +14,9 @@ interface SubscriberInterface
     /**
      * Subscriber constructor.
      * @param Id $id
+     * @param PhoneNumber $phoneNumber
      * @param DateTimeImmutable $date
      * @param array $subData
      */
-    public function __construct(Id $id, DateTimeImmutable $date, array $subData);
+    public function __construct(Id $id, PhoneNumber $phoneNumber, DateTimeImmutable $date, array $subData);
 }

@@ -23,49 +23,48 @@ class RequestTest extends TestCase
     {
         $subscriber = new PrivateSubscriber(
             $id = Id::generate(),
-            $date = new DateTimeImmutable(),
-            $phoneNumber = new PhoneNumber('77075554444'),
-            $subscriberType = new SubscriberType('private'),
-            $firstname = 'Baur',
-            $surname = 'Shuak',
-            $patronymic = 'Semauli'
+            $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
+            $date = new DateTimeImmutable,
+            $subData = [
+                'firstname' => 'Baur',
+                'surname' => 'Shuak',
+                'patronymic' => 'Semba',
+            ],
         );
 
         self::assertEquals($id, $subscriber->getId());
         self::assertEquals($date, $subscriber->getDate());
-        self::assertEquals($phoneNumber, $subscriber->getPhoneNumber());
-        self::assertEquals($subscriberType, $subscriber->getSubscriberType());
-        self::assertEquals($firstname, $subscriber->getFirstname());
-        self::assertEquals($surname, $subscriber->getSurname());
-        self::assertEquals($patronymic, $subscriber->getPatronymic());
+        self::assertIsArray($subscriber->getPhoneNumbers());
+        self::assertEquals($subData['firstname'], $subscriber->getFirstname());
+        self::assertEquals($subData['surname'], $subscriber->getSurname());
+        self::assertEquals($subData['patronymic'], $subscriber->getPatronymic());
           }
 
     public function testSuccessJuridical(): void
     {
         $subscriber = new JuridicalSubscriber(
             $id = Id::generate(),
-            $date = new DateTimeImmutable(),
-            $phoneNumber = new PhoneNumber('77075554444'),
-            $subscriberType = new SubscriberType('juridical'),
-            $organizationName = 'Uniserv',
-            $departmentName = 'priemnaya',
-            $country = 'Kazakstan',
-            $city = 'Oral',
-            $street = 'Amana',
-            $houseNumber = '62A',
-            $floatNumber = '41'
+            $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
+            $date = new DateTimeImmutable,
+            $subData = [
+                'organizationName' => 'Uniserv',
+                'departmentName' => 'priemnaya',
+                'country' => 'Kazakstan',
+                'city' => 'Oral',
+                'street' => 'Amana',
+                'houseNumber' => '62A',
+                'floatNumber' => '41',
+            ],
         );
 
         self::assertEquals($id, $subscriber->getId());
         self::assertEquals($date, $subscriber->getDate());
-        self::assertEquals($phoneNumber, $subscriber->getPhoneNumber());
-        self::assertEquals($subscriberType, $subscriber->getSubscriberType());
-        self::assertEquals($organizationName, $subscriber->getOrganizationName());
-        self::assertEquals($departmentName, $subscriber->getDepartmentName());
-        self::assertEquals($country, $subscriber->getCountry());
-        self::assertEquals($city, $subscriber->getCity());
-        self::assertEquals($street, $subscriber->getStreet());
-        self::assertEquals($houseNumber, $subscriber->getHouseNumber());
-        self::assertEquals($floatNumber, $subscriber->getFloatNumber());
+        self::assertIsArray($subscriber->getPhoneNumbers());
+        self::assertEquals($subData['organizationName'], $subscriber->getOrganizationName());
+        self::assertEquals($subData['country'], $subscriber->getCountry());
+        self::assertEquals($subData['city'], $subscriber->getCity());
+        self::assertEquals($subData['street'], $subscriber->getStreet());
+        self::assertEquals($subData['houseNumber'], $subscriber->getHouseNumber());
+        self::assertEquals($subData['floatNumber'], $subscriber->getFloatNumber());
     }
 }

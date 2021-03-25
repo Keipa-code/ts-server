@@ -11,6 +11,7 @@ use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
 use App\Manage\Command\Entity\Subscriber\SubscriberCreator;
+use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use App\Flusher;
@@ -41,6 +42,7 @@ class Handler
 
         $subscriber = SubscriberCreator::create(
             $id,
+            $phoneNumber,
             $subscriberType,
             $command
         );

@@ -11,6 +11,9 @@ use InvalidArgumentException;
 use libphonenumber\NumberParseException;
 use Webmozart\Assert\Assert;
 
+/**
+ * @ORM\Embeddable()
+ */
 class PhoneNumber
 {
     /**
@@ -20,7 +23,7 @@ class PhoneNumber
     /**
      * @ORM\Column(type="subscriber_type", length=10)
      */
-    private string $type;
+    private string $subscriberType;
 
     public function __construct(string $value, SubscriberType $type)
     {
@@ -32,7 +35,7 @@ class PhoneNumber
         } catch (NumberParseException $e) {
             echo $e->getMessage();
         }
-        $this->type = $type->getValue();
+        $this->subscriberType = $type->getSubscriberType();
     }
 
 
@@ -41,8 +44,8 @@ class PhoneNumber
         return $this->phoneNumber;
     }
 
-    public function getType(): string
+    public function getSubscriberType(): string
     {
-        return $this->type;
+        return $this->subscriberType;
     }
 }

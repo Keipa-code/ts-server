@@ -9,6 +9,7 @@ namespace App\Manage\Fixture;
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
+use App\Manage\Command\Entity\Subscriber\SubscriberCreator;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -18,14 +19,17 @@ class PrivateSubscriberFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
-        $privateSub = new PrivateSubscriber(
+        $subscriberType = new SubscriberType('private');
+        $phoneNumber = new PhoneNumber('7770000001', $subscriberType);
+        $privateSub = SubscriberCreator::create(
             new Id('00000000-0000-0000-0000-000000000001'),
-            $date = new DateTimeImmutable('-30 days'),
-            $phoneNumber = new PhoneNumber('7770000001'),
-            $subscriberType = new SubscriberType('private'),
-            'Baur',
-            'Shuak',
-            'Semba'
+            $phoneNumber,
+            $subscriberType,
+            $data = [
+                'private' => [
+                    'firstname' => 'Baur',
+                    'surname' => 'Shuak',
+                    'patronymic' => 'Semba']]
         );
 
         $manager->persist($privateSub);

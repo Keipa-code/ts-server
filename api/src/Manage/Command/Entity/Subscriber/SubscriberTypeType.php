@@ -15,7 +15,7 @@ class SubscriberTypeType extends StringType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value instanceof SubscriberType ? $value->getValue() : $value;
+        return $value instanceof SubscriberType ? $value->getSubscriberType() : $value;
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)

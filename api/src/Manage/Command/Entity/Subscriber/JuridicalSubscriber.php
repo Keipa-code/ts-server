@@ -7,13 +7,15 @@ namespace App\Manage\Command\Entity\Subscriber;
 
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="subscriber_juridical")
  */
-class JuridicalSubscriber implements Subscriber
+class JuridicalSubscriber implements SubscriberInterface
 {
     /**
      * @ORM\Column(type="subscriber_id")
@@ -53,16 +55,22 @@ class JuridicalSubscriber implements Subscriber
      * @ORM\Column(nullable=true)
      */
     private ?string $floatNumber = null;
+    /**
+     * @psalm-var Collection<array-key,PhoneNumber>
+     * @ORM\OneToMany(targetEntity="PhoneDirectory", mappedBy="juridicalSubscriber", cascade={"all"}, orphanRemoval=true)
+     */
+    private Collection $phoneNumbers;
 
     public function __construct(
         Id $id,
+        PhoneNumber $phoneNumber,
         DateTimeImmutable $date,
         $subData
     )
     {
         $this->id = $id;
         $this->date = $date;
-        $this->phoneNumber = $phoneNumber;
+        $this->phoneNumbers = new ArrayCollection();
         $this->organizationName = $subData['organizationName'];
         $this->departmentName = $subData['departmentName'];
         $this->country = $subData['country'];
@@ -70,6 +78,7 @@ class JuridicalSubscriber implements Subscriber
         $this->street = $subData['street'];
         $this->houseNumber = $subData['houseNumber'];
         $this->floatNumber = $subData['floatNumber'] ?? null;
+        $this->phoneNumbers->add(new PhoneDirectory(null, $this, $phoneNumber));
     }
 
     public function updateSubscriber(
@@ -94,6 +103,11 @@ class JuridicalSubscriber implements Subscriber
         $this->street = $street;
         $this->houseNumber = $houseNumber;
         $this->floatNumber = $floatNumber;
+    }
+
+    public function setPhoneNumbers(SubscriberInterface $subscriber, PhoneNumber $phoneNumber)
+    {
+        $this->phoneNumbers->add(new PhoneDirectory(null, $subscriber, $phoneNumber));
     }
 
     public function getOrganizationName(): string
@@ -134,5 +148,18 @@ class JuridicalSubscriber implements Subscriber
     public function getId(): Id
     {
         return $this->id;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
+    }
+
+    public function getPhoneNumbers(): array
+    {
+        /** @var PhoneNumber[] */
+        return $this->phoneNumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhoneNumber();
+        })->toArray();
     }
 }
