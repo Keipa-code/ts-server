@@ -6,7 +6,7 @@ namespace App\Manage\Command\Entity\Subscriber\Subscriber\AddSubscriber;
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
-use App\Manage\Command\Entity\Subscriber\PhoneNumber;
+use App\Manage\Command\Entity\Subscriber\Phonenumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use DateTimeImmutable;
@@ -21,7 +21,7 @@ class RequestTest extends TestCase
     {
         $subscriber = new PrivateSubscriber(
             $id = Id::generate(),
-            $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
+            $phoneNumber = new Phonenumber('77075554444', new SubscriberType('private')),
             $date = new DateTimeImmutable(),
             $subData = [
                 'firstname' => 'Baur',
@@ -32,7 +32,7 @@ class RequestTest extends TestCase
 
         self::assertEquals($id, $subscriber->getId());
         self::assertEquals($date, $subscriber->getDate());
-        self::assertIsArray($subscriber->getPhoneNumbers());
+        self::assertIsArray($subscriber->getPhonenumbers());
         self::assertEquals($subData['firstname'], $subscriber->getFirstname());
         self::assertEquals($subData['surname'], $subscriber->getSurname());
         self::assertEquals($subData['patronymic'], $subscriber->getPatronymic());
@@ -42,7 +42,7 @@ class RequestTest extends TestCase
     {
         $subscriber = new JuridicalSubscriber(
             $id = Id::generate(),
-            $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
+            $phoneNumber = new Phonenumber('77075554444', new SubscriberType('private')),
             $date = new DateTimeImmutable(),
             $subData = [
                 'organizationName' => 'Uniserv',
@@ -57,7 +57,7 @@ class RequestTest extends TestCase
 
         self::assertEquals($id, $subscriber->getId());
         self::assertEquals($date, $subscriber->getDate());
-        self::assertIsArray($subscriber->getPhoneNumbers());
+        self::assertIsArray($subscriber->getPhonenumbers());
         self::assertEquals($subData['organizationName'], $subscriber->getOrganizationName());
         self::assertEquals($subData['country'], $subscriber->getCountry());
         self::assertEquals($subData['city'], $subscriber->getCity());

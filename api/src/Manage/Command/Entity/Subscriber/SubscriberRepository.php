@@ -32,19 +32,19 @@ class SubscriberRepository
         $this->juridicalRepo = $juridicalRepo;
     }
 
-    public function hasByPhoneNumber(PhoneNumber $phoneNumber): bool
+    public function hasByPhoneNumber(Phonenumber $phoneNumber): bool
     {
         $privateSearch = $this->privateRepo->createQueryBuilder('t')
             ->select('COUNT(t.id)')
-            ->innerJoin('t.phoneNumbers', 'n')
-            ->andWhere('n.phone_number.phone_number = :phoneNumber')
-            ->setParameter(':phoneNumber', $phoneNumber->getPhoneNumber())
+            ->innerJoin('t.phonenumbers', 'n')
+            ->andWhere('n.phonenumber.number = :phonenumber')
+            ->setParameter(':phonenumber', $phoneNumber->getNumber())
             ->getQuery()->getSingleScalarResult() > 0;
         $juridicalSearch = $this->juridicalRepo->createQueryBuilder('t')
                 ->select('COUNT(t.id)')
-                ->innerJoin('t.phoneNumbers', 'n')
-                ->andWhere('n.phone_number.phone_number = :phoneNumber')
-                ->setParameter(':phoneNumber', $phoneNumber->getPhoneNumber())
+                ->innerJoin('t.phonenumbers', 'n')
+                ->andWhere('n.phonenumber.number = :phonenumber')
+                ->setParameter(':phonenumber', $phoneNumber->getNumber())
                 ->getQuery()->getSingleScalarResult() > 0;
         if($privateSearch === true)
         {
@@ -57,9 +57,9 @@ class SubscriberRepository
         }
     }
 
-    public function findByPhoneNumber(PhoneNumber $phoneNumber): object
+    public function findByPhoneNumber(Phonenumber $phoneNumber): object
     {
-        $sub = $this->privateRepo->findOneBy(['phoneNumber' => $phoneNumber->getPhoneNumber()]);
+        $sub = $this->privateRepo->findOneBy(['phoneNumber' => $phoneNumber->getNumber()]);
         if ($sub !== null) {
             throw new DomainException('Phone number not found.');
         }

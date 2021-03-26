@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Manage\Command\Entity\Subscriber;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
+use Laminas\Stdlib\Exception\DomainException;
 
 class SubscriberType
 {
@@ -20,7 +22,7 @@ class SubscriberType
         } elseif ($value == $this->juridical) {
             $this->subscriberType = $value;
         } else {
-            throw new \InvalidArgumentException('Invalid subscriber type');
+            throw new InvalidArgumentException('Invalid subscriber type'. $value);
         }
     }
 

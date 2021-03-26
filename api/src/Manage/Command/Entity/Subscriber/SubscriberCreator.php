@@ -6,15 +6,17 @@ namespace App\Manage\Command\Entity\Subscriber;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
 class SubscriberCreator
 {
     public static function create(
         Id $id,
-        PhoneNumber $phoneNumber,
+        Phonenumber $phoneNumber,
         SubscriberType $subscriberType,
-        array $subData
+        array $subData,
+        LoggerInterface $logger
     ): object {
         /** @psalm-var array{
          *     private:array<array-key, mixed>,
@@ -22,7 +24,9 @@ class SubscriberCreator
          * } $subData
          */
         if ($subscriberType->isPrivate()) {
+            //$logger->critical('ya tuta'.$subData['private']['surname']);
             foreach ($subData['private'] as $sub) {
+
                 Assert::stringNotEmpty($sub);
             }
             $subscriber = new PrivateSubscriber(

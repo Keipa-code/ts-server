@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * @ORM\Entity
  * @ORM\Table(name="phone_dircetory", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"phone_number_phone_number", "phone_number_subscriber_type"})
+ *     @ORM\UniqueConstraint(columns={"phonenumber_number", "phonenumber_subscriber_type"})
  * })
  */
 class PhoneDirectory
@@ -20,37 +20,37 @@ class PhoneDirectory
      * @ORM\Id
      */
     private string $id;
-
+    /**
+     * @ORM\Embedded(class="Phonenumber")
+     */
+    private Phonenumber $phonenumber;
     /**
      * @var ?PrivateSubscriber
-     * @ORM\ManyToOne(targetEntity="PrivateSubscriber", inversedBy="phoneNumbers")
+     * @ORM\ManyToOne(targetEntity="PrivateSubscriber", inversedBy="phonenumbers")
      * @ORM\JoinColumn(name="private_subscriber_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private ?PrivateSubscriber $privateSubscriber;
     /**
      * @var ?JuridicalSubscriber
-     * @ORM\ManyToOne(targetEntity="JuridicalSubscriber", inversedBy="phoneNumbers")
+     * @ORM\ManyToOne(targetEntity="JuridicalSubscriber", inversedBy="phonenumbers")
      * @ORM\JoinColumn(name="juridical_subscriber_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private ?JuridicalSubscriber $juridicalSubscriber;
-    /**
-     * @ORM\Embedded(class="PhoneNumber")
-     */
-    private PhoneNumber $phoneNumber;
+
 
     public function __construct(
         ?PrivateSubscriber $privateSubscriber,
         ?JuridicalSubscriber $juridicalSubscriber,
-        PhoneNumber $phoneNumber
+        Phonenumber $number
     ) {
         $this->id = Uuid::uuid4()->toString();
         $this->privateSubscriber = $privateSubscriber;
         $this->juridicalSubscriber = $juridicalSubscriber;
-        $this->phoneNumber = $phoneNumber;
+        $this->phonenumber = $number;
     }
 
-    public function getPhoneNumber(): PhoneNumber
+    public function getPhonenumber(): Phonenumber
     {
-        return $this->phoneNumber;
+        return $this->phonenumber;
     }
 }

@@ -41,28 +41,28 @@ class PrivateSubscriber implements SubscriberInterface
      * @psalm-var Collection<array-key,PhoneDirectory>
      * @ORM\OneToMany(targetEntity="PhoneDirectory", mappedBy="privateSubscriber", cascade={"all"}, orphanRemoval=true)
      */
-    private Collection $phoneNumbers;
+    private Collection $phonenumbers;
 
 
     public function __construct(
         Id $id,
-        PhoneNumber $phoneNumber,
+        Phonenumber $phoneNumber,
         DateTimeImmutable $date,
         array $subData
     ) {
         $this->id = $id;
         $this->date = $date;
-        $this->phoneNumbers = new ArrayCollection();
+        $this->phonenumbers = new ArrayCollection();
         /** @var string[] $subData */
         $this->firstname = $subData['firstname'];
         $this->surname = $subData['surname'];
         $this->patronymic = $subData['patronymic'];
-        $this->phoneNumbers->add(new PhoneDirectory($this, null, $phoneNumber));
+        $this->phonenumbers->add(new PhoneDirectory($this, null, $phoneNumber));
     }
 
-    public function setPhoneNumbers(PrivateSubscriber $subscriber, PhoneNumber $phoneNumber): void
+    public function setPhonenumbers(PrivateSubscriber $subscriber, Phonenumber $phoneNumber): void
     {
-        $this->phoneNumbers->add(new PhoneDirectory($subscriber, null, $phoneNumber));
+        $this->phonenumbers->add(new PhoneDirectory($subscriber, null, $phoneNumber));
     }
 
     public function getFirstname(): string
@@ -91,11 +91,11 @@ class PrivateSubscriber implements SubscriberInterface
         return $this->date;
     }
 
-    public function getPhoneNumbers(): array
+    public function getPhonenumbers(): array
     {
-        /** @var PhoneNumber[] */
-        return $this->phoneNumbers->map(static function (PhoneDirectory $phoneNumber) {
-            return $phoneNumber->getPhoneNumber();
+        /** @var Phonenumber[] */
+        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhonenumber();
         })->toArray();
     }
 }

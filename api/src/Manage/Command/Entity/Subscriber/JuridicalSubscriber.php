@@ -58,17 +58,17 @@ class JuridicalSubscriber implements SubscriberInterface
      * @ORM\OneToMany(targetEntity="PhoneDirectory",
      *     mappedBy="juridicalSubscriber", cascade={"all"}, orphanRemoval=true)
      */
-    private Collection $phoneNumbers;
+    private Collection $phonenumbers;
 
     public function __construct(
         Id $id,
-        PhoneNumber $phoneNumber,
+        Phonenumber $phoneNumber,
         DateTimeImmutable $date,
         $subData
     ) {
         $this->id = $id;
         $this->date = $date;
-        $this->phoneNumbers = new ArrayCollection();
+        $this->phonenumbers = new ArrayCollection();
         /**
          * @var string[] $subData
          */
@@ -79,13 +79,13 @@ class JuridicalSubscriber implements SubscriberInterface
         $this->street = $subData['street'];
         $this->houseNumber = $subData['houseNumber'];
         $this->floatNumber = $subData['floatNumber'] ?? null;
-        $this->phoneNumbers->add(new PhoneDirectory(null, $this, $phoneNumber));
+        $this->phonenumbers->add(new PhoneDirectory(null, $this, $phoneNumber));
     }
 
-    public function setPhoneNumbers(SubscriberInterface $subscriber, PhoneNumber $phoneNumber): void
+    public function setPhoneNumbers(SubscriberInterface $subscriber, Phonenumber $phoneNumber): void
     {
         /** @var JuridicalSubscriber|null $subscriber */
-        $this->phoneNumbers->add(new PhoneDirectory(null, $subscriber, $phoneNumber));
+        $this->phonenumbers->add(new PhoneDirectory(null, $subscriber, $phoneNumber));
     }
 
     public function getOrganizationName(): string
@@ -133,11 +133,11 @@ class JuridicalSubscriber implements SubscriberInterface
         return $this->date;
     }
 
-    public function getPhoneNumbers(): array
+    public function getPhonenumbers(): array
     {
-        /** @var PhoneNumber[] */
-        return $this->phoneNumbers->map(static function (PhoneDirectory $phoneNumber) {
-            return $phoneNumber->getPhoneNumber();
+        /** @var Phonenumber[] */
+        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhonenumber();
         })->toArray();
     }
 }

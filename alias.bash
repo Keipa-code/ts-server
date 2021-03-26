@@ -35,6 +35,13 @@ alias permissions="chmod -R u=rwX,g=rwX,o=rwX ./"
 
 
 ################################################################################
+#Doctrine
+
+alias app-validate="app orm:validate-schema"
+alias app-diff="app migrations:diff"
+alias app-migrate="app migrations:migrate"
+
+################################################################################
 ################################################################################
 
 alias build-gateway="docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=${REGISTRY}/ts-gateway:${IMAGE_TAG} gateway/docker/production/nginx"

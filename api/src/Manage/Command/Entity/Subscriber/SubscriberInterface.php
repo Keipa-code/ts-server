@@ -11,13 +11,13 @@ interface SubscriberInterface
     /**
      * Subscriber constructor.
      * @param Id $id
-     * @param PhoneNumber $phoneNumber
+     * @param Phonenumber $phoneNumber
      * @param DateTimeImmutable $date
      * @param array $subData
      */
-    public function __construct(Id $id, PhoneNumber $phoneNumber, DateTimeImmutable $date, array $subData);
+    public function __construct(Id $id, Phonenumber $phoneNumber, DateTimeImmutable $date, array $subData);
 
     public function getId(): Id;
 
-    public function getPhoneNumbers(): array;
+    public function getPhonenumbers(): array;
 }

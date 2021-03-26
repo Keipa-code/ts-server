@@ -13,12 +13,12 @@ use Webmozart\Assert\Assert;
 /**
  * @ORM\Embeddable
  */
-class PhoneNumber
+class Phonenumber
 {
     /**
      * @ORM\Column(type="string", unique=true)
      */
-    private string $phoneNumber;
+    private string $number;
     /**
      * @ORM\Column(type="string", length=10)
      */
@@ -29,18 +29,18 @@ class PhoneNumber
         Assert::stringNotEmpty($value);
         $phoneUtil = PhoneNumberUtil::getInstance();
         $kzNumber = $phoneUtil->parse($value, "KZ");
-        if (!$kzNumber->hasNationalNumber()) {
+        /*if (!$kzNumber->hasNationalNumber()) {
             return new InvalidArgumentException('Invalid phone number format');
-        }
-        $this->phoneNumber = (string)$kzNumber->getNationalNumber();
+        }*/
+        $this->number = (string)$kzNumber->getNationalNumber();
 
         $this->subscriberType = $type->getSubscriberType();
     }
 
 
-    public function getPhoneNumber(): string
+    public function getNumber(): string
     {
-        return $this->phoneNumber;
+        return $this->number;
     }
 
     public function getSubscriberType(): string

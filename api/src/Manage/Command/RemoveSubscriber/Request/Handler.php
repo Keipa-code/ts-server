@@ -6,7 +6,7 @@ namespace App\Manage\Command\RemoveSubscriber\Request;
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
-use App\Manage\Command\Entity\Subscriber\PhoneNumber;
+use App\Manage\Command\Entity\Subscriber\Phonenumber;
 use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
 use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;

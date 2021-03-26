@@ -19,14 +19,14 @@ class RequestTest extends WebTestCase
     public function testSuccess(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87775554444',
+            'phoneNumber' => '87775554211',
             'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
                 'surname' => 'Ivanov',
                 'patronymic' => 'Ivanovich',
-                ]
-            ]));
+            ]
+        ]));
 
         self::assertEquals(201, $response->getStatusCode());
         self::assertEquals('{}', (string)$response->getBody());
@@ -36,14 +36,14 @@ class RequestTest extends WebTestCase
     public function testExisting(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87770000002',
+            'phoneNumber' => '87775554444',
             'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
                 'surname' => 'Ivanov',
                 'patronymic' => 'Ivanovich',
-                ]
-            ]));
+            ]
+        ]));
 
         self::assertEquals(409, $response->getStatusCode());
         self::assertJson($body = (string)$response->getBody());
@@ -52,7 +52,6 @@ class RequestTest extends WebTestCase
             'message' => 'Phone number already exists.',
         ], Json::decode($body));
     }
-
 
     public function testEmpty(): void
     {
