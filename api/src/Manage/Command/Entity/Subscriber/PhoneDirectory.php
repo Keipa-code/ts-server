@@ -20,10 +20,7 @@ class PhoneDirectory
      * @ORM\Id
      */
     private string $id;
-    /**
-     * @ORM\Embedded(class="PhoneNumber")
-     */
-    private PhoneNumber $phoneNumber;
+
     /**
      * @var ?PrivateSubscriber
      * @ORM\ManyToOne(targetEntity="PrivateSubscriber", inversedBy="phoneNumbers")
@@ -36,6 +33,10 @@ class PhoneDirectory
      * @ORM\JoinColumn(name="juridical_subscriber_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private ?JuridicalSubscriber $juridicalSubscriber;
+    /**
+     * @ORM\Embedded(class="PhoneNumber")
+     */
+    private PhoneNumber $phoneNumber;
 
     public function __construct(
         ?PrivateSubscriber $privateSubscriber,

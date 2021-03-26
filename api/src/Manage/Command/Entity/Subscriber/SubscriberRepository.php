@@ -12,34 +12,54 @@ class SubscriberRepository
 {
     private EntityManagerInterface $em;
     /**
-     * @var EntityRepository $repo
-     * @psalm-param EntityRepository<SubscriberInterface>
+     * @var EntityRepository $privateRepo
      */
-    private EntityRepository $repo;
+    private EntityRepository $privateRepo;
+    /**
+     * @var EntityRepository $juridicalRepo
+     */
+    private EntityRepository $juridicalRepo;
 
     /**
      * @param EntityManagerInterface $em
-     * @param EntityRepository $repo
-     * @psalm-param EntityRepository<SubscriberInterface> $repo
+     * @param EntityRepository $privateRepo
+     * @param EntityRepository $juridicalRepo
      */
-    public function __construct(EntityManagerInterface $em, EntityRepository $repo)
+    public function __construct(EntityManagerInterface $em, EntityRepository $privateRepo, EntityRepository $juridicalRepo)
     {
         $this->em = $em;
-        $this->repo = $repo;
+        $this->privateRepo = $privateRepo;
+        $this->juridicalRepo = $juridicalRepo;
     }
 
     public function hasByPhoneNumber(PhoneNumber $phoneNumber): bool
     {
-        return $this->repo->createQueryBuilder('t')
+        $privateSearch = $this->privateRepo->createQueryBuilder('t')
             ->select('COUNT(t.id)')
-            ->andWhere('t.phoneNumber = :phoneNumber')
+            ->innerJoin('t.phoneNumbers', 'n')
+            ->andWhere('n.phone_number.phone_number = :phoneNumber')
             ->setParameter(':phoneNumber', $phoneNumber->getPhoneNumber())
             ->getQuery()->getSingleScalarResult() > 0;
+        $juridicalSearch = $this->juridicalRepo->createQueryBuilder('t')
+                ->select('COUNT(t.id)')
+                ->innerJoin('t.phoneNumbers', 'n')
+                ->andWhere('n.phone_number.phone_number = :phoneNumber')
+                ->setParameter(':phoneNumber', $phoneNumber->getPhoneNumber())
+                ->getQuery()->getSingleScalarResult() > 0;
+        if($privateSearch === true)
+        {
+            return true;
+        }elseif ($juridicalSearch === true)
+        {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function findByPhoneNumber(PhoneNumber $phoneNumber): object
     {
-        $sub = $this->repo->findOneBy(['phoneNumber' => $phoneNumber->getPhoneNumber()]);
+        $sub = $this->privateRepo->findOneBy(['phoneNumber' => $phoneNumber->getPhoneNumber()]);
         if ($sub !== null) {
             throw new DomainException('Phone number not found.');
         }
@@ -47,7 +67,7 @@ class SubscriberRepository
         return $sub;
     }
 
-    public function add(SubscriberInterface $subscriber): void
+    public function add(object $subscriber): void
     {
         $this->em->persist($subscriber);
     }
@@ -55,17 +75,18 @@ class SubscriberRepository
 
     public function get(Id $id): object
     {
-        $sub = $this->repo->find($id->getValue());
-
-        if ($sub !== null) {
-            throw new DomainException('Phone number not found.');
+        $privateSub = $this->privateRepo->find($id->getValue());
+        $juridicalSub = $this->juridicalRepo->find($id->getValue());
+        if($privateSub !== null){
+            return $privateSub;
+        }elseif ($juridicalSub !== null){
+            return $juridicalSub;
+        }else {
+            throw new DomainException('Subscriber number not found.');
         }
-
-        /** @var SubscriberInterface $sub */
-        return $sub;
     }
 
-    public function remove(SubscriberInterface $subscriber): void
+    public function remove(object $subscriber): void
     {
         $this->em->remove($subscriber);
     }

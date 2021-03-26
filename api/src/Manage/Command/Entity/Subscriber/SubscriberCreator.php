@@ -15,7 +15,7 @@ class SubscriberCreator
         PhoneNumber $phoneNumber,
         SubscriberType $subscriberType,
         array $subData
-    ): SubscriberInterface {
+    ): object {
         /** @psalm-var array{
          *     private:array<array-key, mixed>,
          *     juridical:array<array-key, mixed>
@@ -46,7 +46,7 @@ class SubscriberCreator
                 $subData['juridical']
             );
         }
-        /** @var SubscriberInterface $subscriber */
+        /** @var object $subscriber */
         return $subscriber;
     }
 }

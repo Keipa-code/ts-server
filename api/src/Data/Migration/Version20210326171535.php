@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210325164919 extends AbstractMigration
+final class Version20210326171535 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -27,8 +27,6 @@ final class Version20210325164919 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_161F595F467462021EC50039 ON phone_dircetory (phone_number_phone_number, phone_number_subscriber_type)');
         $this->addSql('COMMENT ON COLUMN phone_dircetory.private_subscriber_id IS \'(DC2Type:subscriber_id)\'');
         $this->addSql('COMMENT ON COLUMN phone_dircetory.juridical_subscriber_id IS \'(DC2Type:subscriber_id)\'');
-        $this->addSql('COMMENT ON COLUMN phone_dircetory.phone_number_phone_number IS \'(DC2Type:subscriber_phone_number)\'');
-        $this->addSql('COMMENT ON COLUMN phone_dircetory.phone_number_subscriber_type IS \'(DC2Type:subscriber_type)\'');
         $this->addSql('CREATE TABLE subscriber_juridical (id UUID NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, organization_name VARCHAR(255) NOT NULL, department_name VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, house_number VARCHAR(255) NOT NULL, float_number VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN subscriber_juridical.id IS \'(DC2Type:subscriber_id)\'');
         $this->addSql('COMMENT ON COLUMN subscriber_juridical.date IS \'(DC2Type:datetime_immutable)\'');

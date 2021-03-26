@@ -6,9 +6,9 @@ namespace App\Manage\Test\Unit\Subscriber;
 
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
+use InvalidArgumentException;
 use libphonenumber\NumberParseException;
 use PHPUnit\Framework\TestCase;
-use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * @covers PhoneNumber
@@ -34,7 +34,7 @@ class PhoneNumberTest extends TestCase
     public function testIncorrect(): void
     {
         $subscriberType = new SubscriberType('private');
-        $this->expectOutputString('The string supplied did not seem to be a phone number.');
+        $this->expectException(NumberParseException::class);
         new PhoneNumber($value = 'not phone number', $subscriberType);
     }
 

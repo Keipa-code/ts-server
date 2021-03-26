@@ -20,7 +20,7 @@ class RequestTest extends WebTestCase
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
             'phoneNumber' => '87775554444',
-            'subType' => 'private',
+            'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
                 'surname' => 'Ivanov',
@@ -36,8 +36,8 @@ class RequestTest extends WebTestCase
     public function testExisting(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87775554444',
-            'subType' => 'private',
+            'phoneNumber' => '87770000002',
+            'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
                 'surname' => 'Ivanov',
@@ -49,82 +49,31 @@ class RequestTest extends WebTestCase
         self::assertJson($body = (string)$response->getBody());
 
         self::assertEquals([
-            'message' => 'User already exists.',
+            'message' => 'Phone number already exists.',
         ], Json::decode($body));
     }
 
-    public function testExistingLang(): void
-    {
-        $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87775554444',
-            'subType' => 'private',
-            'private' => [
-                'firstname' => 'Ivan',
-                'surname' => 'Ivanov',
-                'patronymic' => 'Ivanovich',
-            ]
-        ])->withHeader('Accept-Language', 'ru'));
-
-        self::assertEquals(409, $response->getStatusCode());
-        self::assertJson($body = (string)$response->getBody());
-
-        $data = Json::decode($body);
-
-        self::assertEquals([
-            'message' => 'Пользователь уже существует.',
-        ], $data);
-    }
 
     public function testEmpty(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', []));
 
-        self::assertEquals(422, $response->getStatusCode());
-        self::assertJson($body = (string)$response->getBody());
-
-        self::assertEquals([
-            'errors' => [
-                'email' => 'This value should not be blank.',
-                'password' => 'This value should not be blank.',
-            ],
-        ], Json::decode($body));
+        self::assertEquals(500, $response->getStatusCode());
     }
 
     public function testNotValid(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'email' => 'not-email',
-            'password' => '',
+            'phoneNumber' => 'not-phone-number',
+            'subscriberType' => 'not-type',
+            'private' => [
+                'firstname' => 'Ivan',
+                'surname' => 'Ivanov',
+                'patronymic' => 'Ivanovich',
+            ]
         ]));
 
-        self::assertEquals(422, $response->getStatusCode());
-        self::assertJson($body = (string)$response->getBody());
-
-        self::assertEquals([
-            'errors' => [
-                'email' => 'This value is not a valid email address.',
-                'password' => 'This value should not be blank.',
-            ],
-        ], Json::decode($body));
+        self::assertEquals(500, $response->getStatusCode());
     }
 
-    public function testNotValidLang(): void
-    {
-        $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'email' => 'not-email',
-            'password' => '',
-        ])->withHeader('Accept-Language', 'es;q=0.9, ru;q=0.8, *;q=0.5'));
-
-        self::assertEquals(422, $response->getStatusCode());
-        self::assertJson($body = (string)$response->getBody());
-
-        $data = Json::decode($body);
-
-        self::assertEquals([
-            'errors' => [
-                'email' => 'Значение адреса электронной почты недопустимо.',
-                'password' => 'Значение не должно быть пустым.',
-            ],
-        ], $data);
-    }
 }

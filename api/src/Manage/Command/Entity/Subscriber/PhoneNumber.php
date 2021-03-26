@@ -11,7 +11,7 @@ use libphonenumber\PhoneNumberUtil;
 use Webmozart\Assert\Assert;
 
 /**
- * @ORM\Embeddable()
+ * @ORM\Embeddable
  */
 class PhoneNumber
 {

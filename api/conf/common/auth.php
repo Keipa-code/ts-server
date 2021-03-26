@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
+use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
 use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,9 +15,9 @@ return [
         $em = $container->get(EntityManagerInterface::class);
         /**
          * @var EntityRepository $repo
-         * @psalm-var EntityRepository<SubscriberInterface> $repo
          */
-        $repo = $em->getRepository(SubscriberInterface::class);
-        return new SubscriberRepository($em, $repo);
+        $privateRepo = $em->getRepository(PrivateSubscriber::class);
+        $juridicalRepo = $em->getRepository(JuridicalSubscriber::class);
+        return new SubscriberRepository($em, $privateRepo, $juridicalRepo);
     }
 ];
