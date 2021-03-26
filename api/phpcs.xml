@@ -11,9 +11,16 @@
             <property name="ignoreBlankLines" value="false"/>
         </properties>
     </rule>
+    <rule ref="Generic.Files.LineLength">
+        <exclude-pattern>src/Data/Migration</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon">
+        <exclude-pattern>src/Data/Migration</exclude-pattern>
+    </rule>
 
     <file>bin</file>
     <file>conf</file>
     <file>public</file>
     <file>src</file>
+    <file>tests</file>
 </ruleset>

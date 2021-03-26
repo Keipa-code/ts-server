@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Fixture;
-
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\PhoneNumber;
@@ -17,7 +15,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class PrivateSubscriberFixture extends AbstractFixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $subscriberType = new SubscriberType('private');
         $phoneNumber = new PhoneNumber('7770000001', $subscriberType);

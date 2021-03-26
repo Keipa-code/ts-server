@@ -9,7 +9,7 @@ use Slim\Factory\AppFactory;
 return static function (ContainerInterface $container): App {
 
     $app = AppFactory::createFromContainer($container);
-    (require __DIR__ . '/../conf/middleware.php')($app,$container);
+    (require __DIR__ . '/../conf/middleware.php')($app, $container);
     (require __DIR__ . '/../conf/routes.php')($app);
     return $app;
 };

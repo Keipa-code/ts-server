@@ -11,11 +11,14 @@ use Psr\Container\ContainerInterface;
 
 return [
     FixturesLoadCommand::class => static function (ContainerInterface $container) {
+        /**
+         * @psalm-suppress MixedArrayAccess
+         * @psalm-var array{fixture_paths:string[]} $config
+         */
         $config = $container->get('settings')['console'];
-        $em = $container->get(EntityManagerInterface::class);
 
         return new FixturesLoadCommand(
-            $em,
+            $container->get(EntityManagerInterface::class),
             $config['fixture_paths']
         );
     },
@@ -39,7 +42,7 @@ return [
                 Migrations\Tools\Console\Command\GenerateCommand::class,
             ],
             'fixture_paths' => [
-                __DIR__.'/../../src/Manage/Fixture',
+                __DIR__ . '/../../src/Manage/Fixture',
             ]
         ],
     ],

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
-
 
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -56,8 +54,9 @@ class JuridicalSubscriber implements SubscriberInterface
      */
     private ?string $floatNumber = null;
     /**
-     * @psalm-var Collection<array-key,PhoneNumber>
-     * @ORM\OneToMany(targetEntity="PhoneDirectory", mappedBy="juridicalSubscriber", cascade={"all"}, orphanRemoval=true)
+     * @psalm-var Collection<array-key,PhoneDirectory>
+     * @ORM\OneToMany(targetEntity="PhoneDirectory",
+     *     mappedBy="juridicalSubscriber", cascade={"all"}, orphanRemoval=true)
      */
     private Collection $phoneNumbers;
 
@@ -66,11 +65,13 @@ class JuridicalSubscriber implements SubscriberInterface
         PhoneNumber $phoneNumber,
         DateTimeImmutable $date,
         $subData
-    )
-    {
+    ) {
         $this->id = $id;
         $this->date = $date;
         $this->phoneNumbers = new ArrayCollection();
+        /**
+         * @var string[] $subData
+         */
         $this->organizationName = $subData['organizationName'];
         $this->departmentName = $subData['departmentName'];
         $this->country = $subData['country'];
@@ -81,32 +82,9 @@ class JuridicalSubscriber implements SubscriberInterface
         $this->phoneNumbers->add(new PhoneDirectory(null, $this, $phoneNumber));
     }
 
-    public function updateSubscriber(
-        PhoneNumber $phoneNumber,
-        SubscriberType $subscriberType,
-        string $organizationName,
-        string $departmentName,
-        string $country,
-        string $city,
-        string $street,
-        string $houseNumber,
-        ?string $floatNumber = null
-    )
+    public function setPhoneNumbers(SubscriberInterface $subscriber, PhoneNumber $phoneNumber): void
     {
-        $this->date = new DateTimeImmutable();
-        $this->phoneNumber = $phoneNumber;
-        $this->subscriberType = $subscriberType;
-        $this->organizationName = $organizationName;
-        $this->departmentName = $departmentName;
-        $this->country = $country;
-        $this->city = $city;
-        $this->street = $street;
-        $this->houseNumber = $houseNumber;
-        $this->floatNumber = $floatNumber;
-    }
-
-    public function setPhoneNumbers(SubscriberInterface $subscriber, PhoneNumber $phoneNumber)
-    {
+        /** @var JuridicalSubscriber|null $subscriber */
         $this->phoneNumbers->add(new PhoneDirectory(null, $subscriber, $phoneNumber));
     }
 
@@ -140,7 +118,7 @@ class JuridicalSubscriber implements SubscriberInterface
         return $this->houseNumber;
     }
 
-    public function getFloatNumber(): string
+    public function getFloatNumber(): ?string
     {
         return $this->floatNumber;
     }

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
-
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -39,8 +37,11 @@ class PhoneDirectory
      */
     private ?JuridicalSubscriber $juridicalSubscriber;
 
-    public function __construct(?PrivateSubscriber $privateSubscriber, ?JuridicalSubscriber $juridicalSubscriber, PhoneNumber $phoneNumber)
-    {
+    public function __construct(
+        ?PrivateSubscriber $privateSubscriber,
+        ?JuridicalSubscriber $juridicalSubscriber,
+        PhoneNumber $phoneNumber
+    ) {
         $this->id = Uuid::uuid4()->toString();
         $this->privateSubscriber = $privateSubscriber;
         $this->juridicalSubscriber = $juridicalSubscriber;

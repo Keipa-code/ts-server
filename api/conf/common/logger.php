@@ -34,7 +34,7 @@ return [
         'debug' => (bool)getenv('APP_DEBUG'),
         'stderr' => true,
         'name' => 'slim-app',
-        'path' => __DIR__ . '/../../var/log/'. PHP_SAPI .'/app.log',
+        'path' => __DIR__ . '/../../var/log/' . PHP_SAPI . '/app.log',
         'level' => (getenv('APPLICATION_ENV') != 'production') ? Logger::DEBUG : Logger::INFO,
     ],
 ];

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
-
 
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,7 +38,7 @@ class PrivateSubscriber implements SubscriberInterface
      */
     private string $patronymic;
     /**
-     * @psalm-var Collection<array-key,PhoneNumber>
+     * @psalm-var Collection<array-key,PhoneDirectory>
      * @ORM\OneToMany(targetEntity="PhoneDirectory", mappedBy="privateSubscriber", cascade={"all"}, orphanRemoval=true)
      */
     private Collection $phoneNumbers;
@@ -51,33 +49,18 @@ class PrivateSubscriber implements SubscriberInterface
         PhoneNumber $phoneNumber,
         DateTimeImmutable $date,
         array $subData
-    )
-    {
+    ) {
         $this->id = $id;
         $this->date = $date;
         $this->phoneNumbers = new ArrayCollection();
+        /** @var string[] $subData */
         $this->firstname = $subData['firstname'];
         $this->surname = $subData['surname'];
         $this->patronymic = $subData['patronymic'];
         $this->phoneNumbers->add(new PhoneDirectory($this, null, $phoneNumber));
     }
 
-    public function updateSubscriber(
-        PhoneNumber $phoneNumber,
-        SubscriberType $subscriberType,
-        string $firstname,
-        string $surname,
-        string $patronymic
-    )
-    {
-        $this->date = new DateTimeImmutable();
-        $this->phoneNumber = $phoneNumber;
-        $this->firstname = $firstname;
-        $this->surname = $surname;
-        $this->patronymic = $patronymic;
-    }
-
-    public function setPhoneNumbers(PrivateSubscriber $subscriber, PhoneNumber $phoneNumber)
+    public function setPhoneNumbers(PrivateSubscriber $subscriber, PhoneNumber $phoneNumber): void
     {
         $this->phoneNumbers->add(new PhoneDirectory($subscriber, null, $phoneNumber));
     }

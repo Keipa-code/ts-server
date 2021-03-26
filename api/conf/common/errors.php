@@ -9,21 +9,26 @@ use Slim\Interfaces\CallableResolverInterface;
 use Slim\Middleware\ErrorMiddleware;
 
 return [
-    ErrorMiddleware::class => static function (ContainerInterface $container): ErrorMiddleware{
+    ErrorMiddleware::class => static function (ContainerInterface $container): ErrorMiddleware {
         $callableResolver = $container->get(CallableResolverInterface::class);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
-
+        /**
+         * @psalm-suppress MixedArrayAccess
+         * @psalm-var array{
+         *     displayErrorDetails:bool,
+         *     logErrors:string
+         * }
+         */
         $settings = $container->get('settings')['errors'];
 
         return new ErrorMiddleware(
             $callableResolver,
             $responseFactory,
             $settings['displayErrorDetails'],
-            $settings['logErrors'],
+            $settings['logErrors'] !== 'test',
             true
         );
-
     },
 
 

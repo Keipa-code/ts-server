@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
 
 use Doctrine\ORM\Mapping as ORM;
-
 
 class SubscriberType
 {
@@ -19,9 +17,9 @@ class SubscriberType
     {
         if ($value == $this->private) {
             $this->subscriberType = $value;
-        }elseif ($value == $this->juridical) {
+        } elseif ($value == $this->juridical) {
             $this->subscriberType = $value;
-        }else{
+        } else {
             throw new \InvalidArgumentException('Invalid subscriber type');
         }
     }
@@ -34,7 +32,7 @@ class SubscriberType
 
     public function isPrivate(): bool
     {
-        if($this->subscriberType === $this->private){
+        if ($this->subscriberType === $this->private) {
             return true;
         }
         return false;
@@ -42,7 +40,7 @@ class SubscriberType
 
     public function isJuridical(): bool
     {
-        if($this->subscriberType === $this->juridical){
+        if ($this->subscriberType === $this->juridical) {
             return true;
         }
         return false;

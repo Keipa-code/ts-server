@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\AddSubscriber\Request;
-
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
@@ -34,7 +32,7 @@ class Handler
         $subscriberType = new SubscriberType($command->subscriberType);
         $phoneNumber = new PhoneNumber($command->phoneNumber, $subscriberType);
 
-        if($this->subscribers->hasByPhoneNumber($phoneNumber)){
+        if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
             throw new \DomainException('Phone number already exists.');
         }
 
@@ -44,7 +42,7 @@ class Handler
             $id,
             $phoneNumber,
             $subscriberType,
-            $command
+            $command->subData
         );
 
 

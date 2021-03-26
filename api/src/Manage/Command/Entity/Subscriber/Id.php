@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
-
 
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
 class Id
 {
-    private $value;
+    private string $value;
 
     public function __construct(string $value)
     {
@@ -24,7 +22,7 @@ class Id
         return new self(Uuid::uuid4()->toString());
     }
 
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -34,7 +32,7 @@ class Id
         return $this->getValue();
     }
 
-    public function setValue($value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }

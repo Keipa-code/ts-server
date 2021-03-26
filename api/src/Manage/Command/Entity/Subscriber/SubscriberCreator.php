@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
-
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,12 +11,16 @@ use Webmozart\Assert\Assert;
 class SubscriberCreator
 {
     public static function create(
-        $id,
-        $phoneNumber,
-        $subscriberType,
-        $subData
-    ): SubscriberInterface
-    {
+        Id $id,
+        PhoneNumber $phoneNumber,
+        SubscriberType $subscriberType,
+        array $subData
+    ): SubscriberInterface {
+        /** @psalm-var array{
+         *     private:array<array-key, mixed>,
+         *     juridical:array<array-key, mixed>
+         * } $subData
+         */
         if ($subscriberType->isPrivate()) {
             foreach ($subData['private'] as $sub) {
                 Assert::stringNotEmpty($sub);
@@ -29,8 +31,8 @@ class SubscriberCreator
                 new DateTimeImmutable(),
                 $subData['private']
             );
-        }
-        elseif ($subscriberType->isJuridical()) {
+        } elseif ($subscriberType->isJuridical()) {
+            /** @var string $sub */
             foreach ($subData['juridical'] as $key => $sub) {
                 if ($key = 'floatNumber') {
                     break;

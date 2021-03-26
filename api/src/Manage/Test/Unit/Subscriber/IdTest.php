@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Test\Unit\Subscriber;
-
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use InvalidArgumentException;

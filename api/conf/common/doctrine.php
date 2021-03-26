@@ -12,62 +12,61 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\Setup;
 use Psr\Container\ContainerInterface;
+use App\Manage\Command\Entity\Subscriber;
 
 return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
         /**
-         * @var array $settings
          * @psalm-suppress MixedArrayAccess
+         * @psalm-var array{
+         *     entity_path:array,
+         *     dev_mode:bool,
+         *     proxy_dir:string,
+         *     cache:?string,
+         *     event_subscribers:string[],
+         *     connection:array<string, mixed>,
+         *     types:array<string,class-string<Doctrine\DBAL\Types\Type>>
+         * } $settings
          */
         $settings = $container->get('doctrine');
-        /**
-         * @var array<array-key, mixed> $settings ['meta']['entity_path']
-         * @var bool $settings ['meta']['dev_mode']
-         * @var null|string $settings ['meta']['proxy_dir']
-         * @var Doctrine\Common\Cache\Cache|null $settings ['meta']['cache']
-         * @psalm-suppress MixedArrayAccess
-         */
+
         $config = Setup::createAnnotationMetadataConfiguration(
-            $settings['meta']['entity_path'],
-            $settings['meta']['dev_mode'],
-            $settings['meta']['proxy_dir'],
-            $settings['meta']['cache'] ? new FilesystemCache($settings['meta']['cache']) : new ArrayCache(),
+            $settings['entity_path'],
+            $settings['dev_mode'],
+            $settings['proxy_dir'],
+            $settings['cache'] ? new FilesystemCache($settings['cache']) : new ArrayCache(),
             false
         );
 
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
         foreach ($settings['types'] as $name => $class) {
-            if (!Type::hasType($name)){
+            if (!Type::hasType($name)) {
                 Type::addType($name, $class);
             }
         }
 
         $eventManager = new EventManager();
 
-        foreach ($settings['meta']['event_subscribers'] as $name){
-            /** @var EventSubscriber $eventSubscribers */
-            $eventSubscribers = $container->get($name);
-            $eventManager->addEventSubscriber($eventSubscribers);
+        foreach ($settings['event_subscribers'] as $name) {
+            /** @var EventSubscriber $eventSubscriber */
+            $eventSubscriber = $container->get($name);
+            $eventManager->addEventSubscriber($eventSubscriber);
         }
 
-        /**
-         * @var Doctrine\DBAL\Connection|array<string, mixed> $settings ['connection']
-         * @psalm-suppress MixedArrayAccess
-         */
         return EntityManager::create($settings['connection'], $config, $eventManager);
     },
     'doctrine' => [
-        'meta' => [
-            'entity_path' => [__DIR__ . '/../../src/Manage/Command/Entity', __DIR__ . '/../../src/Manage/Admin/Entity'],
-            'dev_mode' => true,
-            'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
-            'cache' => null,
-            'event_subscribers' => [
-                \App\Data\Doctrine\FixDefaultSchemaSubscriber::class,
-            ]
+        'entity_path' => [
+            __DIR__ . '/../../src/Manage/Command/Entity',
+            __DIR__ . '/../../src/Manage/Admin/Entity'
         ],
-
+        'dev_mode' => true,
+        'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
+        'cache' => null,
+        'event_subscribers' => [
+            \App\Data\Doctrine\FixDefaultSchemaSubscriber::class,
+        ],
         'connection' => [
             'driver' => 'pdo_pgsql',
             'host' => 'postgres',
@@ -78,9 +77,8 @@ return [
             'charset' => 'utf-8'
         ],
         'types' => [
-            App\Manage\Command\Entity\Subscriber\IdType::NAME => App\Manage\Command\Entity\Subscriber\IdType::class,
-            App\Manage\Command\Entity\Subscriber\PhoneNumberType::NAME => App\Manage\Command\Entity\Subscriber\PhoneNumberType::class,
-            App\Manage\Command\Entity\Subscriber\SubscriberTypeType::NAME => App\Manage\Command\Entity\Subscriber\SubscriberTypeType::class
+            Subscriber\IdType::NAME => Subscriber\IdType::class,
+            Subscriber\SubscriberTypeType::NAME => Subscriber\SubscriberTypeType::class
         ]
     ]
 ];

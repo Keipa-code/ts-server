@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber\Subscriber\AddSubscriber;
-
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
@@ -24,7 +22,7 @@ class RequestTest extends TestCase
         $subscriber = new PrivateSubscriber(
             $id = Id::generate(),
             $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
-            $date = new DateTimeImmutable,
+            $date = new DateTimeImmutable(),
             $subData = [
                 'firstname' => 'Baur',
                 'surname' => 'Shuak',
@@ -38,14 +36,14 @@ class RequestTest extends TestCase
         self::assertEquals($subData['firstname'], $subscriber->getFirstname());
         self::assertEquals($subData['surname'], $subscriber->getSurname());
         self::assertEquals($subData['patronymic'], $subscriber->getPatronymic());
-          }
+    }
 
     public function testSuccessJuridical(): void
     {
         $subscriber = new JuridicalSubscriber(
             $id = Id::generate(),
             $phoneNumber = new PhoneNumber('77075554444', new SubscriberType('private')),
-            $date = new DateTimeImmutable,
+            $date = new DateTimeImmutable(),
             $subData = [
                 'organizationName' => 'Uniserv',
                 'departmentName' => 'priemnaya',

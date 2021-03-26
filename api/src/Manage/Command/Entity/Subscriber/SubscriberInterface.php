@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\Entity\Subscriber;
 
-
 use DateTimeImmutable;
-
 
 interface SubscriberInterface
 {
@@ -19,4 +16,8 @@ interface SubscriberInterface
      * @param array $subData
      */
     public function __construct(Id $id, PhoneNumber $phoneNumber, DateTimeImmutable $date, array $subData);
+
+    public function getId(): Id;
+
+    public function getPhoneNumbers(): array;
 }

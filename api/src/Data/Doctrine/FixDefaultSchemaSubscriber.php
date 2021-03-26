@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Data\Doctrine;
-
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Schema\PostgreSqlSchemaManager;

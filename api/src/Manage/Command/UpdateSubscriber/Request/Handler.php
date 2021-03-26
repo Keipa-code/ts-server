@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Manage\Command\UpdateSubscriber\Request;
-
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
@@ -34,11 +32,11 @@ class Handler
         $id = new Id($command->id);
         $subscriberType = new SubscriberType($command->subscriberType);
         $phoneNumber = new PhoneNumber($command->phoneNumber, $subscriberType);
-
+        /** @var SubscriberInterface $subscriber */
         $subscriber = $this->subscribers->get($id);
+        $id = $subscriber->getId();
 
-        $id->setValue($subscriber->getId());
-        if(!in_array($phoneNumber->getPhoneNumber(), $subscriber->getPhoneNumbers())) {
+        if (!in_array($phoneNumber->getPhoneNumber(), $subscriber->getPhoneNumbers())) {
             if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
                 throw new \DomainException('Number already exists.');
             }
@@ -48,12 +46,9 @@ class Handler
             $id,
             $phoneNumber,
             $subscriberType,
-            $command
+            $command->subData
         );
 
-        /**
-         * @var SubscriberInterface $newSubscriber
-         */
         $this->subscribers->add($newSubscriber);
 
         $this->flusher->flush();
