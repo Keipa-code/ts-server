@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -14,6 +15,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Psr7\Factory\ServerRequestFactory;
+use Test\Functional\V1\Manage\Add\RequestFixture;
 
 class WebTestCase extends TestCase
 {
@@ -34,12 +36,17 @@ class WebTestCase extends TestCase
         return $request;
     }
 
+    /**
+     * @param array<string|int,string> $fixtures
+     */
     protected function loadFixtures(array $fixtures): void
     {
         /** @var ContainerInterface $container */
         $container = $this->app()->getContainer();
         $loader = new Loader();
+
         foreach ($fixtures as $name => $class) {
+            /** @var AbstractFixture $fixture*/
             $fixture = $container->get($class);
             $loader->addFixture($fixture);
         }

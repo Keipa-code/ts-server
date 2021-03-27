@@ -44,22 +44,26 @@ class RequestAction implements RequestHandlerInterface
         $command->phoneNumber = trim($data['phoneNumber'] ?? '');
         $command->subscriberType = trim($data['subscriberType'] ?? '');
         // Частное лицо
+        /**
+         * @psalm-var array{
+         *     private:string[],
+         *     juridical:string[]
+         * } $command->subData
+         */
         $command->subData['private']['firstname'] = trim($data['private']['firstname'] ?? '');
         $command->subData['private']['surname'] = trim($data['private']['surname'] ?? '');
         $command->subData['private']['patronymic'] = trim($data['private']['patronymic'] ?? '');
         // Юр лицо
-        $command->subData['juridical']['organizationName'] = trim($data['organizationName'] ?? '');
-        $command->subData['juridical']['departmentName'] = trim($data['departmentName'] ?? '');
-        $command->subData['juridical']['country'] = trim($data['country'] ?? '');
-        $command->subData['juridical']['city'] = trim($data['city'] ?? '');
-        $command->subData['juridical']['street'] = trim($data['street'] ?? '');
-        $command->subData['juridical']['houseNumber'] = trim($data['houseNumber'] ?? '');
-        $command->subData['juridical']['floatNumber'] = trim($data['floatNumber'] ?? '');
+        $command->subData['juridical']['organizationName'] = trim($data['juridical']['organizationName'] ?? '');
+        $command->subData['juridical']['departmentName'] = trim($data['juridical']['departmentName'] ?? '');
+        $command->subData['juridical']['country'] = trim($data['juridical']['country'] ?? '');
+        $command->subData['juridical']['city'] = trim($data['juridical']['city'] ?? '');
+        $command->subData['juridical']['street'] = trim($data['juridical']['street'] ?? '');
+        $command->subData['juridical']['houseNumber'] = trim($data['juridical']['houseNumber'] ?? '');
+        $command->subData['juridical']['floatNumber'] = trim($data['juridical']['floatNumber'] ?? '');
 
         try {
-            $this->handler->setLogger($this->logger);
             $this->handler->handle($command);
-
             return new EmptyResponse(201);
         } catch (DomainException $exception) {
             return new JsonResponse(['message' => $exception->getMessage()], 409);

@@ -76,7 +76,9 @@ class SubscriberRepository
 
     public function get(Id $id): object
     {
+        /** @var PrivateSubscriber|null $privateSub */
         $privateSub = $this->privateRepo->find($id->getValue());
+        /** @var JuridicalSubscriber|null $juridicalSub */
         $juridicalSub = $this->juridicalRepo->find($id->getValue());
         if ($privateSub !== null) {
             return $privateSub;

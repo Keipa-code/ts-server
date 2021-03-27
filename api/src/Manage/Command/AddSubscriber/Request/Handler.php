@@ -21,7 +21,6 @@ class Handler
 {
     private SubscriberRepository $subscribers;
     private Flusher $flusher;
-    private LoggerInterface $logger;
 
     public function __construct(SubscriberRepository $subscribers, Flusher $flusher)
     {
@@ -31,15 +30,13 @@ class Handler
 
     public function handle(Command $command): void
     {
-
         $subscriberType = new SubscriberType($command->subscriberType);
-
         $phoneNumber = new Phonenumber($command->phoneNumber, $subscriberType);
 
         if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
             throw new \DomainException('Phone number already exists.');
         }
-        $this->logger->critical('ya tuta' . $command->subData['private']['firstname']);
+
         $id = Id::generate();
 
         $subscriber = SubscriberCreator::create(
@@ -49,17 +46,8 @@ class Handler
             $command->subData
         );
 
-
         $this->subscribers->add($subscriber);
 
         $this->flusher->flush();
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
     }
 }
