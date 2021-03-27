@@ -15,8 +15,7 @@ class SubscriberCreator
         Id $id,
         Phonenumber $phoneNumber,
         SubscriberType $subscriberType,
-        array $subData,
-        LoggerInterface $logger
+        array $subData
     ): object {
         /** @psalm-var array{
          *     private:array<array-key, mixed>,
@@ -26,7 +25,6 @@ class SubscriberCreator
         if ($subscriberType->isPrivate()) {
             //$logger->critical('ya tuta'.$subData['private']['surname']);
             foreach ($subData['private'] as $sub) {
-
                 Assert::stringNotEmpty($sub);
             }
             $subscriber = new PrivateSubscriber(

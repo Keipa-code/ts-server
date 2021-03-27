@@ -11,5 +11,4 @@ return static function (App $app): void {
     $app->get('/', HomeAction::class);
 
     $app->post('/v1/manage/add', RequestAction::class);
-
 };

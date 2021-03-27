@@ -22,7 +22,7 @@ class SubscriberType
         } elseif ($value == $this->juridical) {
             $this->subscriberType = $value;
         } else {
-            throw new InvalidArgumentException('Invalid subscriber type'. $value);
+            throw new InvalidArgumentException('Invalid subscriber type' . $value);
         }
     }
 

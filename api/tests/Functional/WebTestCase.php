@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Loader;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,6 +17,14 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 
 class WebTestCase extends TestCase
 {
+    private ?App $app = null;
+
+    protected function tearDown(): void
+    {
+        $this->app = null;
+        parent::tearDown();
+    }
+
     protected static function json(string $method, string $path, array $body = []): ServerRequestInterface
     {
         $request = self::request($method, $path)
@@ -21,6 +34,21 @@ class WebTestCase extends TestCase
         return $request;
     }
 
+    protected function loadFixtures(array $fixtures): void
+    {
+        /** @var ContainerInterface $container */
+        $container = $this->app()->getContainer();
+        $loader = new Loader();
+        foreach ($fixtures as $name => $class) {
+            $fixture = $container->get($class);
+            $loader->addFixture($fixture);
+        }
+        /** @var EntityManager $executor */
+        $em = $container->get(EntityManagerInterface::class);
+        $executor = new ORMExecutor($em, new ORMPurger($em));
+        $executor->execute($loader->getFixtures());
+    }
+
     protected static function request(string $method, string $path): ServerRequestInterface
     {
         return (new ServerRequestFactory())->createServerRequest($method, $path);
@@ -28,8 +56,12 @@ class WebTestCase extends TestCase
 
     protected function app(): App
     {
-        /** @var App */
-        return (require __DIR__ . '/../../conf/app.php')($this->container());
+        if ($this->app === null) {
+            /** @var App */
+            $this->app = (require __DIR__ . '/../../conf/app.php')($this->container());
+        }
+
+        return $this->app;
     }
 
     protected function container(): ContainerInterface

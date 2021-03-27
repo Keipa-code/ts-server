@@ -13,10 +13,9 @@ use Psr\Container\ContainerInterface;
 return [
     SubscriberRepository::class => function (ContainerInterface $container): SubscriberRepository {
         $em = $container->get(EntityManagerInterface::class);
-        /**
-         * @var EntityRepository $repo
-         */
+        /** @var EntityRepository $privateRepo */
         $privateRepo = $em->getRepository(PrivateSubscriber::class);
+        /** @var EntityRepository $juridicalRepo */
         $juridicalRepo = $em->getRepository(JuridicalSubscriber::class);
         return new SubscriberRepository($em, $privateRepo, $juridicalRepo);
     }

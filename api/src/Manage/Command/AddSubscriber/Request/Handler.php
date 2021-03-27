@@ -39,15 +39,14 @@ class Handler
         if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
             throw new \DomainException('Phone number already exists.');
         }
-        $this->logger->critical('ya tuta'.$command->subData['private']['firstname']);
+        $this->logger->critical('ya tuta' . $command->subData['private']['firstname']);
         $id = Id::generate();
 
         $subscriber = SubscriberCreator::create(
             $id,
             $phoneNumber,
             $subscriberType,
-            $command->subData,
-            $this->logger
+            $command->subData
         );
 
 

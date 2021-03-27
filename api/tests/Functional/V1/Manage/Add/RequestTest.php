@@ -1,14 +1,21 @@
 <?php
 
-
 namespace Test\Functional\V1\Manage\Add;
 
-
+use Test\Functional\V1\Manage\Add\RequestFixture;
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;
 
 class RequestTest extends WebTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->loadFixtures([
+            RequestFixture::class,
+        ]);
+    }
     public function testMethod(): void
     {
         $response = $this->app()->handle(self::json('GET', '/v1/manage/add'));
@@ -19,7 +26,7 @@ class RequestTest extends WebTestCase
     public function testSuccess(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87775554211',
+            'phoneNumber' => '87775554231',
             'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
@@ -29,14 +36,13 @@ class RequestTest extends WebTestCase
         ]));
 
         self::assertEquals(201, $response->getStatusCode());
-        self::assertEquals('{}', (string)$response->getBody());
-
+        self::assertEquals('', (string)$response->getBody());
     }
 
     public function testExisting(): void
     {
         $response = $this->app()->handle(self::json('POST', '/v1/manage/add', [
-            'phoneNumber' => '87775554444',
+            'phoneNumber' => '87770000001',
             'subscriberType' => 'private',
             'private' => [
                 'firstname' => 'Ivan',
@@ -74,5 +80,4 @@ class RequestTest extends WebTestCase
 
         self::assertEquals(500, $response->getStatusCode());
     }
-
 }

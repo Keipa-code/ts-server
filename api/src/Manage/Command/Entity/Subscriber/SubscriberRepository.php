@@ -25,8 +25,11 @@ class SubscriberRepository
      * @param EntityRepository $privateRepo
      * @param EntityRepository $juridicalRepo
      */
-    public function __construct(EntityManagerInterface $em, EntityRepository $privateRepo, EntityRepository $juridicalRepo)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        EntityRepository $privateRepo,
+        EntityRepository $juridicalRepo
+    ) {
         $this->em = $em;
         $this->privateRepo = $privateRepo;
         $this->juridicalRepo = $juridicalRepo;
@@ -46,13 +49,11 @@ class SubscriberRepository
                 ->andWhere('n.phonenumber.number = :phonenumber')
                 ->setParameter(':phonenumber', $phoneNumber->getNumber())
                 ->getQuery()->getSingleScalarResult() > 0;
-        if($privateSearch === true)
-        {
+        if ($privateSearch === true) {
             return true;
-        }elseif ($juridicalSearch === true)
-        {
+        } elseif ($juridicalSearch === true) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -77,11 +78,11 @@ class SubscriberRepository
     {
         $privateSub = $this->privateRepo->find($id->getValue());
         $juridicalSub = $this->juridicalRepo->find($id->getValue());
-        if($privateSub !== null){
+        if ($privateSub !== null) {
             return $privateSub;
-        }elseif ($juridicalSub !== null){
+        } elseif ($juridicalSub !== null) {
             return $juridicalSub;
-        }else {
+        } else {
             throw new DomainException('Subscriber number not found.');
         }
     }

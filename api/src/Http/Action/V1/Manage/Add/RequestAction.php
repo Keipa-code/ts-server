@@ -1,9 +1,8 @@
 <?php
 
-
 namespace App\Http\Action\V1\Manage\Add;
 
-
+use App\Http\EmptyResponse;
 use App\Http\JsonResponse;
 use App\Manage\Command\AddSubscriber\Request\Command;
 use App\Manage\Command\AddSubscriber\Request\Handler;
@@ -30,6 +29,15 @@ class RequestAction implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        /**
+         * @psalm-var array{
+         *     phoneNumber:string,
+         *     subscriberType:string,
+         *     private:string[],
+         *     juridical:string[]
+         * } $data
+         * @psalm-suppress MixedArrayAccess
+         */
         $data = json_decode((string) $request->getBody(), true);
 
         $command = new Command();
@@ -52,10 +60,9 @@ class RequestAction implements RequestHandlerInterface
             $this->handler->setLogger($this->logger);
             $this->handler->handle($command);
 
-            return new JsonResponse(new stdClass(), 201);
-        }catch (DomainException $exception) {
+            return new EmptyResponse(201);
+        } catch (DomainException $exception) {
             return new JsonResponse(['message' => $exception->getMessage()], 409);
         }
-
     }
 }
