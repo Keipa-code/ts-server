@@ -48,7 +48,7 @@ class RequestAction implements RequestHandlerInterface
             $command->subData['firstname'] = ($data['firstname'] ?? '');
             $command->subData['surname'] = ($data['surname'] ?? '');
             $command->subData['patronymic'] = ($data['patronymic'] ?? '');
-        }elseif ($command->subscriberType == 'private') {
+        }elseif ($command->subscriberType == 'juridical') {
             $command->subData['organizationName'] = ($data['organizationName'] ?? '');
             $command->subData['departmentName'] = ($data['departmentName'] ?? '');
             $command->subData['country'] = ($data['country'] ?? '');

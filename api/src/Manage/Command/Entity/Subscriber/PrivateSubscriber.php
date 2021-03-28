@@ -107,4 +107,12 @@ class PrivateSubscriber implements SubscriberInterface
             return $phoneNumber->getPhonenumber();
         })->toArray();
     }
+
+    public function getSubscriberType(): array
+    {
+        /** @var Phonenumber[] */
+        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhonenumber()->getSubscriberType();
+        })->toArray();
+    }
 }

@@ -24,14 +24,13 @@ class JuridicalSubscriberFixture extends AbstractFixture
             $phoneNumber,
             $subscriberType,
             $data = [
-                'juridical' => [
-                    'organizationName' => 'uniserv',
-                    'departmentName' => 'priemnaya',
-                    'country' => 'RK',
-                    'city' => 'oral',
-                    'street' => 'nurmanova',
-                    'houseNumber' => '10/1'
-                    ]]
+                'organizationName' => 'uniserv',
+                'departmentName' => 'priemnaya',
+                'country' => 'RK',
+                'city' => 'oral',
+                'street' => 'nurmanova',
+                'houseNumber' => '10/1'
+            ]
         );
 
         $manager->persist($juridicalSub);
