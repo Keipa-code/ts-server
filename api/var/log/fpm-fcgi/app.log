@@ -1,0 +1,1 @@
+[2021-03-28T07:19:36.372088+00:00] slim-app.ERROR: Not found. {"exception":"[object] (Slim\\Exception\\HttpNotFoundException(code: 404): Not found. at /var/www/vendor/slim/slim/Slim/Middleware/RoutingMiddleware.php:91)","url":"http://localhost/favicon.ico"} {"uid":"c13d8e9"}
