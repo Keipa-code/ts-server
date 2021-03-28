@@ -43,7 +43,7 @@ class Command
             $this->subData['firstname'] = ($data['firstname'] ?? '');
             $this->subData['surname'] = ($data['surname'] ?? '');
             $this->subData['patronymic'] = ($data['patronymic'] ?? '');
-        }elseif ($this->subscriberType == 'private') {
+        }elseif ($this->subscriberType == 'juridical') {
             $this->subData['organizationName'] = ($data['organizationName'] ?? '');
             $this->subData['departmentName'] = ($data['departmentName'] ?? '');
             $this->subData['country'] = ($data['country'] ?? '');

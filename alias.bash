@@ -5,7 +5,7 @@
 alias php="docker-compose run --rm php-cli php"
 alias node-cli="docker-compose run --rm frontend-node-cli"
 alias composer="docker-compose run --rm php-cli composer"
-alias app="docker-compose run --rm php-cli php bin/app.php --ansi"
+alias app="docker-compose run --rm api-php-cli composer app"
 alias linter="docker-compose run --rm php-cli composer lint"
 alias phpcs="docker-compose run --rm php-cli composer phpcs"
 alias lint="linter && phpcs"
@@ -32,7 +32,7 @@ alias yii="docker-compose run --rm php-fpm php yii"
 
 # MAINTENANCE
 
-alias permissions="chmod -R u=rwX,g=rwX,o=rwX ./"
+alias permissions="docker run --rm -v /$PWD/api://var/www -w //var/www alpine chmod 777 var/cache var/log/cli var/log/fpm-fcgi"
 
 
 ################################################################################
@@ -53,9 +53,7 @@ alias build-api-nginx="docker --log-level=debug build --pull --file=api/docker/p
 
 alias build-api-php-fpm="docker --log-level=debug build --pull --file=api/docker/production/php-fpm/Dockerfile --tag=${REGISTRY}/ts-api-php-fpm:${IMAGE_TAG} api"
 
-alias frontend-clear="docker run --rm -v ${PWD}/frontend:/var/www -w /var/www alpine sh -c 'rm -rf build'"
-alias frontend-init="frontend-yarn-install"
-alias frontend-yarn-install="docker-compose run --rm frontend-node-cli yarn install"
+
 ################################################################################
 ################################################################################
 
@@ -65,15 +63,54 @@ alias env-up="docker-compose up -d"
 alias env-stop="docker-compose stop"
 alias env-down="docker-compose down --remove-orphans"
 alias env-restart="env-stop && env-up"
-alias env-build="docker-compose build"
+alias env-build="docker-compose build --pull"
 alias env-pull="docker-compose pull"
 alias env-rebuild="env-build && env-restart && permissions"
 alias env-logs="docker-compose logs"
-alias env-destroy="docker-compose down -v --remove-orphans"
+alias env-down-clear="docker-compose down -v --remove-orphans"
+
+##################################################################################
+# API DOCKER
+alias api-clear="docker run --rm -v /$PWD/api://var/www -w "//var/www" alpine sh -c 'rm -rf var/log/cli/* var/log/fpm-fcgi/* var/cache/*'"
+alias api-composer-install="docker-compose run --rm php-cli composer install"
+alias api-wait-db="docker-compose run --rm php-cli wait-for-it postgres:5432 -t 30"
+alias api-migrations="docker-compose run --rm php-cli composer app migrations:migrate -- --no-interaction"
+alias api-fixtures="docker-compose run --rm php-cli composer app fixtures:load"
+
+
+##################################################################################
+# FRONTEND DOCKER
+
+alias frontend-clear="docker run --rm -v /$PWD/frontend://var/www -w "//var/www" alpine sh -c 'rm -rf .ready build'"
+alias frontend-init="frontend-yarn-install"
+alias frontend-yarn-install="docker-compose run --rm frontend-node-cli yarn install"
+alias frontend-ready="docker run --rm -v /$PWD/frontend://var/www -w //var/www alpine touch .ready"
+
+
+##################################################################################
 
 env-init() {
   env-pull
   env-build
   env-restart
   permissions
+}
+
+api-init() {
+  permissions
+  api-composer-install
+  api-wait-db
+  api-migrations
+  api-fixtures
+}
+
+make-init() {
+  env-down-clear
+  api-clear
+  env-pull
+  env-build
+  env-up
+  api-init
+  frontend-init
+  frontend-ready
 }

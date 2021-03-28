@@ -121,6 +121,14 @@ class JuridicalSubscriber implements SubscriberInterface
         })->toArray();
     }
 
+    public function getSubscriberType(): array
+    {
+        /** @var Phonenumber[] */
+        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhonenumber()->getSubscriberType();
+        })->toArray();
+    }
+
     public function getOrganizationName(): string
     {
         return $this->organizationName;

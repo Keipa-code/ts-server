@@ -24,10 +24,9 @@ class PrivateSubscriberFixture extends AbstractFixture
             $phoneNumber,
             $subscriberType,
             $data = [
-                'private' => [
-                    'firstname' => 'Baur',
-                    'surname' => 'Shuak',
-                    'patronymic' => 'Semba']]
+                'firstname' => 'Baur',
+                'surname' => 'Shuak',
+                'patronymic' => 'Semba']
         );
 
         $manager->persist($privateSub);

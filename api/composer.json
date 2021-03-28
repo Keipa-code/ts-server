@@ -55,6 +55,7 @@
         "phpcs": "phpcs --standard=phpcs.xml",
         "phpcbf": "phpcbf --standard=phpcs.xml",
         "psalm": "psalm",
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "app": "php bin/app.php --ansi"
     }
 }

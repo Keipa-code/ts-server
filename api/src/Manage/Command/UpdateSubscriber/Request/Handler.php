@@ -14,6 +14,7 @@ use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use App\Flusher;
 use DateTimeImmutable;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
 class Handler
@@ -27,7 +28,7 @@ class Handler
         $this->flusher = $flusher;
     }
 
-    public function handle(Command $command): void
+    public function handle(Command $command, LoggerInterface $logger): void
     {
         $id = new Id($command->id);
         $subscriberType = new SubscriberType($command->subscriberType);
@@ -42,7 +43,7 @@ class Handler
             }
         }
 
-        if ($subscriberType->getSubscriberType() == $command->subscriberType) {
+        if (in_array($command->subscriberType, $subscriber->getSubscriberType())) {
             $subscriber->setUpdatedData($phoneNumber, $command->subData);
         }else{
             $newSubscriber = SubscriberCreator::create(
