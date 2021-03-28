@@ -20,4 +20,5 @@ interface SubscriberInterface
     public function getId(): Id;
 
     public function getPhonenumbers(): array;
+
 }

@@ -88,6 +88,39 @@ class JuridicalSubscriber implements SubscriberInterface
         $this->phonenumbers->add(new PhoneDirectory(null, $subscriber, $phoneNumber));
     }
 
+    public function setUpdatedData(Phonenumber $phonenumber, $subData): void
+    {
+        /**
+         * @var string[] $subData
+         */
+        $this->organizationName = $subData['organizationName'];
+        $this->departmentName = $subData['departmentName'];
+        $this->country = $subData['country'];
+        $this->city = $subData['city'];
+        $this->street = $subData['street'];
+        $this->houseNumber = $subData['houseNumber'];
+        $this->floatNumber = $subData['floatNumber'] ?? null;
+        $this->phonenumbers->add(new PhoneDirectory(null, $this, $phonenumber));
+    }
+
+    public function getId(): Id
+    {
+        return $this->id;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
+    }
+
+    public function getPhonenumbers(): array
+    {
+        /** @var Phonenumber[] */
+        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
+            return $phoneNumber->getPhonenumber();
+        })->toArray();
+    }
+
     public function getOrganizationName(): string
     {
         return $this->organizationName;
@@ -123,21 +156,4 @@ class JuridicalSubscriber implements SubscriberInterface
         return $this->floatNumber;
     }
 
-    public function getId(): Id
-    {
-        return $this->id;
-    }
-
-    public function getDate(): DateTimeImmutable
-    {
-        return $this->date;
-    }
-
-    public function getPhonenumbers(): array
-    {
-        /** @var Phonenumber[] */
-        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
-            return $phoneNumber->getPhonenumber();
-        })->toArray();
-    }
 }

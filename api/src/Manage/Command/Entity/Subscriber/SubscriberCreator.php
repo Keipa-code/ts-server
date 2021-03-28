@@ -17,25 +17,21 @@ class SubscriberCreator
         SubscriberType $subscriberType,
         array $subData
     ): object {
-        /** @psalm-var array{
-         *     private:array<array-key, mixed>,
-         *     juridical:array<array-key, mixed>
-         * } $subData
-         */
+        /** @psalm-var array $subData */
         if ($subscriberType->isPrivate()) {
-            //$logger->critical('ya tuta'.$subData['private']['surname']);
-            foreach ($subData['private'] as $sub) {
+            /** @var string $sub */
+            foreach ($subData as $sub) {
                 Assert::stringNotEmpty($sub);
             }
             $subscriber = new PrivateSubscriber(
                 $id,
                 $phoneNumber,
                 new DateTimeImmutable(),
-                $subData['private']
+                $subData
             );
         } elseif ($subscriberType->isJuridical()) {
             /** @var string $sub */
-            foreach ($subData['juridical'] as $key => $sub) {
+            foreach ($subData as $key => $sub) {
                 if ($key = 'floatNumber') {
                     break;
                 }
@@ -45,7 +41,7 @@ class SubscriberCreator
                 $id,
                 $phoneNumber,
                 new DateTimeImmutable(),
-                $subData['juridical']
+                $subData
             );
         }
         /** @var object $subscriber */

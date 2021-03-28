@@ -91,6 +91,15 @@ class PrivateSubscriber implements SubscriberInterface
         return $this->date;
     }
 
+    public function setUpdatedData(Phonenumber $phonenumber, $subData): void
+    {
+        /** @var string[] $subData */
+        $this->firstname = $subData['firstname'];
+        $this->surname = $subData['surname'];
+        $this->patronymic = $subData['patronymic'];
+        $this->phonenumbers->add(new PhoneDirectory($this, null, $phonenumber));
+    }
+
     public function getPhonenumbers(): array
     {
         /** @var Phonenumber[] */

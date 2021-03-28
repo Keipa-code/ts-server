@@ -19,6 +19,20 @@ services:
     volumes:
       - ./frontend:/var/www
 
+  frontend-node:
+    build:
+      context: frontend/docker/development/node
+    volumes:
+      - ./frontend:/var/www
+    command: yarn start
+    tty: true
+
+  frontend-node-cli:
+    build:
+      context: frontend/docker/development/node
+    volumes:
+      - ./frontend:/var/www
+
   api:
     build:
       context: api/docker

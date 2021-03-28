@@ -85,7 +85,7 @@ class SubscriberRepository
         } elseif ($juridicalSub !== null) {
             return $juridicalSub;
         } else {
-            throw new DomainException('Subscriber number not found.');
+            throw new DomainException('Subscriber not found.' . $id->getValue());
         }
     }
 
@@ -93,17 +93,5 @@ class SubscriberRepository
     {
         $this->em->remove($subscriber);
     }
-    /*public function hasByPhoneNumber(PhoneNumber $phoneNumber): bool;
 
-    public function addPrivate(PrivateSubscriber $subscriber): void;
-    public function addJuridical(JuridicalSubscriber $subscriber): void;
-
-    public function getByPhoneNumber(PhoneNumber $phoneNumber): Subscriber;
-    public function getById(Id $id): object;
-
-    public function findById(Id $id): object;
-
-    public function remove(Id $id):void;
-
-    public function get(Id $param);*/
 }

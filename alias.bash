@@ -3,6 +3,7 @@
 
 # PROXIES (to Docker-containers commands)
 alias php="docker-compose run --rm php-cli php"
+alias node-cli="docker-compose run --rm frontend-node-cli"
 alias composer="docker-compose run --rm php-cli composer"
 alias app="docker-compose run --rm php-cli php bin/app.php --ansi"
 alias linter="docker-compose run --rm php-cli composer lint"
@@ -52,6 +53,9 @@ alias build-api-nginx="docker --log-level=debug build --pull --file=api/docker/p
 
 alias build-api-php-fpm="docker --log-level=debug build --pull --file=api/docker/production/php-fpm/Dockerfile --tag=${REGISTRY}/ts-api-php-fpm:${IMAGE_TAG} api"
 
+alias frontend-clear="docker run --rm -v ${PWD}/frontend:/var/www -w /var/www alpine sh -c 'rm -rf build'"
+alias frontend-init="frontend-yarn-install"
+alias frontend-yarn-install="docker-compose run --rm frontend-node-cli yarn install"
 ################################################################################
 ################################################################################
 

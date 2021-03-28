@@ -38,18 +38,23 @@ class Handler
 
         if (!in_array($phoneNumber->getNumber(), $subscriber->getPhonenumbers())) {
             if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
-                throw new \DomainException('Number already exists.');
+                throw new \DomainException('Phone number already exists.');
             }
         }
 
-        $newSubscriber = SubscriberCreator::create(
-            $id,
-            $phoneNumber,
-            $subscriberType,
-            $command->subData
-        );
+        if ($subscriberType->getSubscriberType() == $command->subscriberType) {
+            $subscriber->setUpdatedData($phoneNumber, $command->subData);
+        }else{
+            $newSubscriber = SubscriberCreator::create(
+                $id,
+                $phoneNumber,
+                $subscriberType,
+                $command->subData
+            );
+            $this->subscribers->remove($subscriber);
 
-        $this->subscribers->add($newSubscriber);
+            $this->subscribers->add($newSubscriber);
+        }
 
         $this->flusher->flush();
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Manage\Command\Entity\Subscriber\Subscriber\AddSubscriber;
+namespace App\Manage\Test\Unit\Subscriber\Subscriber\AddSubscriber;
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
