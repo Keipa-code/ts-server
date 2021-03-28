@@ -25,16 +25,8 @@ return [
 
 
         //hack to force timezone to get set in logger the way we want it
-        $original_timezone = date_default_timezone_get();
         date_default_timezone_set($example_timezone);
-        $logger->pushHandler(new NullHandler());
-        $logger->debug("");
-        date_default_timezone_set($original_timezone);
-        $logger->popHandler();
 
-        //now we can add all our normal handlers
-        $file_handler = new StreamHandler(fopen("somepath","w+"));
-        $logger->pushHandler($file_handler);
 
         if ($loggerSettings['stderr']) {
             $logger->pushHandler(new StreamHandler('php://stderr', $level));
