@@ -85,7 +85,8 @@ alias frontend-clear="docker run --rm -v /$PWD/frontend://var/www -w "//var/www"
 alias frontend-init="frontend-yarn-install"
 alias frontend-yarn-install="docker-compose run --rm frontend-node-cli yarn install"
 alias frontend-ready="docker run --rm -v /$PWD/frontend://var/www -w //var/www alpine touch .ready"
-
+alias frontend-test="docker-compose run --rm frontend-node-cli yarn test --watchAll=false"
+alias frontend-lint="node-cli yarn lint"
 
 ##################################################################################
 
