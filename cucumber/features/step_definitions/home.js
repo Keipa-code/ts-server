@@ -1,11 +1,8 @@
-const { Given, When, Then } = require('cucumber')
+const { Then } = require('@cucumber/cucumber')
+const { expect } = require('chai')
 
-Given('I am a guest user', function () {});
-
-When('I open home page', async function () {
-    return await this.page.goto('http://gateway:8080')
-});
-
-Then('I see welcome block', function () {
-    return 'pending';
+Then('I see welcome block', async function () {
+    await this.page.waitForSelector('[data-test=welcome]')
+    const text = await this.page.$eval('[data-test=welcome] h1', el => el.textContent)
+    expect(text).to.eql('Phone Dire ctory')
 });

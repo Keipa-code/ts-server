@@ -1,5 +1,6 @@
 import React, { render } from '@testing-library/react'
 import App from './App'
+import { shallow } from 'enzyme'
 
 test('renders app', () => {
   const { getByText } = render(<App />)

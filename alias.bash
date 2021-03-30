@@ -9,7 +9,7 @@ alias app="docker-compose run --rm api-php-cli composer app"
 alias linter="docker-compose run --rm php-cli composer lint"
 alias phpcs="docker-compose run --rm php-cli composer phpcs"
 alias lint="linter && phpcs"
-alias e2etest="docker-compose run --rm cucumber-node-cli yarn e2e"
+alias test-e2e="api-fixtures && cucumber-clear && cucumber-e2e"
 
 # Symfony
 alias console="docker-compose run --rm php-fpm php ./bin/console"
@@ -94,6 +94,9 @@ alias frontend-lint="frontend-eslint && frontend-stylelint"
 ##################################################################################
 
 alias cucumber="docker-compose run --rm cucumber-node-cli"
+alias cucumber-clear="docker run --rm -v /$PWD/cucumber://var/www -w "//var/www" alpine sh -c 'rm -rf var/*'"
+alias cucumber-e2e="docker-compose run --rm cucumber-node-cli yarn e2e"
+
 
 env-init() {
   env-pull
@@ -113,6 +116,8 @@ api-init() {
 make-init() {
   env-down-clear
   api-clear
+  cucumber-clear
+  frontend-clear
   env-pull
   env-build
   env-up
