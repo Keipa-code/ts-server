@@ -21,13 +21,8 @@ return [
         $logger = new Logger($loggerSettings['name']);
 
         $example_timezone = "Asia/Oral";
-
-
-
         //hack to force timezone to get set in logger the way we want it
         date_default_timezone_set($example_timezone);
-
-
         if ($loggerSettings['stderr']) {
             $logger->pushHandler(new StreamHandler('php://stderr', $level));
         }
