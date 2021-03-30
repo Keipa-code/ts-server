@@ -1,0 +1,12 @@
+{
+  "name": "cucumber",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "e2e": "cucumber-js"
+  },
+  "dependencies": {
+    "cucumber": "^7.0.0-rc.0",
+    "puppeteer": "^8.0.0"
+  }
+}
