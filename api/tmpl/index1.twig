@@ -5,37 +5,16 @@
     <meta charset="utf-8">
     <title>Example - SpazzMarticus\TusServer</title>
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
-    <link href="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 
 <body>
-<a href="/reset">Reset</a> - <i>Permanently</i> deletes uploads, storage and cache.
-<div id="drag-drop-area"></div>
 
-<script src="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.js"></script>
-<script>
-    var uppy = Uppy.Core({
-        debug: true,
-        autoProceed: true,
-    })
-        .use(Uppy.Dashboard, {
-            inline: true,
-            target: '#drag-drop-area',
-            showLinkToFileUploadResult: true, //Disable if you don't allow GET-calls via Server
-        })
-        .use(Uppy.Tus, {
-            endpoint: '/upload',
-            autoRetry: false,
-            retryDelays: [0, 1000, 2000, 4000, 8000],
-            limit: 1,
-            removeFingerprintOnSuccess: true,
-        });
-</script>
 
 {% block contents %}
 {% endblock %}
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </body>
 
 </html>

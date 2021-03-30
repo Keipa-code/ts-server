@@ -29,7 +29,8 @@ class SubscriberRepository
         EntityManagerInterface $em,
         EntityRepository $privateRepo,
         EntityRepository $juridicalRepo
-    ) {
+    )
+    {
         $this->em = $em;
         $this->privateRepo = $privateRepo;
         $this->juridicalRepo = $juridicalRepo;
@@ -38,11 +39,11 @@ class SubscriberRepository
     public function hasByPhoneNumber(Phonenumber $phoneNumber): bool
     {
         $privateSearch = $this->privateRepo->createQueryBuilder('t')
-            ->select('COUNT(t.id)')
-            ->innerJoin('t.phonenumbers', 'n')
-            ->andWhere('n.phonenumber.number = :phonenumber')
-            ->setParameter(':phonenumber', $phoneNumber->getNumber())
-            ->getQuery()->getSingleScalarResult() > 0;
+                ->select('COUNT(t.id)')
+                ->innerJoin('t.phonenumbers', 'n')
+                ->andWhere('n.phonenumber.number = :phonenumber')
+                ->setParameter(':phonenumber', $phoneNumber->getNumber())
+                ->getQuery()->getSingleScalarResult() > 0;
         $juridicalSearch = $this->juridicalRepo->createQueryBuilder('t')
                 ->select('COUNT(t.id)')
                 ->innerJoin('t.phonenumbers', 'n')
@@ -58,14 +59,24 @@ class SubscriberRepository
         }
     }
 
-    public function findByPhoneNumber(Phonenumber $phoneNumber): object
+    public function findByPhoneNumber(Phonenumber $phoneNumber): string
     {
-        $sub = $this->privateRepo->findOneBy(['phoneNumber' => $phoneNumber->getNumber()]);
-        if ($sub !== null) {
-            throw new DomainException('Phone number not found.');
-        }
-        /** @var SubscriberInterface $sub */
-        return $sub;
+        return $this->privateRepo->createQueryBuilder('p')
+                ->select('p')
+                ->innerJoin('p.phonenumbers', 'n')
+                ->andWhere('n.phonenumber.number = :phonenumber')
+                ->setParameter(':phonenumber', $phoneNumber->getNumber())
+                ->getQuery()->getResult();
+    }
+
+    public function findByFIO($privateSubData)
+    {
+        $privateSearch = $this->privateRepo->createQueryBuilder('p')
+                ->select('COUNT(t.id)')
+                ->innerJoin('t.phonenumbers', 'n')
+                ->andWhere('n.phonenumber.number = :phonenumber')
+                ->setParameter(':phonenumber', $phoneNumber->getNumber())
+                ->getQuery()->getSingleScalarResult() > 0;
     }
 
     public function add(object $subscriber): void
