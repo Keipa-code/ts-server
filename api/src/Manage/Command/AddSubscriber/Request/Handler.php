@@ -31,7 +31,7 @@ class Handler
     public function handle(Command $command): void
     {
         $subscriberType = new SubscriberType($command->subscriberType);
-        $phoneNumber = new Phonenumber($command->phoneNumber, $subscriberType);
+        $phoneNumber = new Phonenumber($command->phoneNumber);
 
         if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
             throw new \DomainException('Phone number already exists.');

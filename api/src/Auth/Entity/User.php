@@ -10,6 +10,7 @@ class User
 {
     private string $userName;
     private string $password;
+    private string $token;
 
     public function __construct(string $userName, string $password)
     {

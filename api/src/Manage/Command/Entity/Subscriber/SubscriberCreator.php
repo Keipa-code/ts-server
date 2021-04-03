@@ -26,6 +26,7 @@ class SubscriberCreator
             $subscriber = new PrivateSubscriber(
                 $id,
                 $phoneNumber,
+                $subscriberType,
                 new DateTimeImmutable(),
                 $subData
             );
@@ -40,6 +41,7 @@ class SubscriberCreator
             $subscriber = new JuridicalSubscriber(
                 $id,
                 $phoneNumber,
+                $subscriberType,
                 new DateTimeImmutable(),
                 $subData
             );

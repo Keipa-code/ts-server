@@ -32,7 +32,7 @@ class Handler
     {
         $id = new Id($command->id);
         $subscriberType = new SubscriberType($command->subscriberType);
-        $phoneNumber = new Phonenumber($command->phoneNumber, $subscriberType);
+        $phoneNumber = new Phonenumber($command->phoneNumber);
         /** @var SubscriberInterface $subscriber */
         $subscriber = $this->subscribers->get($id);
         $id = $subscriber->getId();

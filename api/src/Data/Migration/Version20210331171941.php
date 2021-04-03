@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210326190908 extends AbstractMigration
+final class Version20210331171941 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,19 +20,20 @@ final class Version20210326190908 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE phone_dircetory (id UUID NOT NULL, private_subscriber_id UUID DEFAULT NULL, juridical_subscriber_id UUID DEFAULT NULL, phonenumber_number VARCHAR(255) NOT NULL, phonenumber_subscriber_type VARCHAR(10) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_161F595F27FE4F2D ON phone_dircetory (phonenumber_number)');
+        $this->addSql('CREATE TABLE phone_dircetory (id UUID NOT NULL, private_subscriber_id UUID DEFAULT NULL, juridical_subscriber_id UUID DEFAULT NULL, phonenumber_number VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_161F595F9650AD29 ON phone_dircetory (private_subscriber_id)');
         $this->addSql('CREATE INDEX IDX_161F595F8ECF84B ON phone_dircetory (juridical_subscriber_id)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_161F595F27FE4F2D41450929 ON phone_dircetory (phonenumber_number, phonenumber_subscriber_type)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_161F595F27FE4F2D ON phone_dircetory (phonenumber_number)');
         $this->addSql('COMMENT ON COLUMN phone_dircetory.private_subscriber_id IS \'(DC2Type:subscriber_id)\'');
         $this->addSql('COMMENT ON COLUMN phone_dircetory.juridical_subscriber_id IS \'(DC2Type:subscriber_id)\'');
-        $this->addSql('CREATE TABLE subscriber_juridical (id UUID NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, organization_name VARCHAR(255) NOT NULL, department_name VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, house_number VARCHAR(255) NOT NULL, float_number VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE subscriber_juridical (id UUID NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, subscriber_type VARCHAR(255) NOT NULL, organization_name VARCHAR(255) NOT NULL, department_name VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, house_number VARCHAR(255) NOT NULL, float_number VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN subscriber_juridical.id IS \'(DC2Type:subscriber_id)\'');
         $this->addSql('COMMENT ON COLUMN subscriber_juridical.date IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE subscriber_private (id UUID NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, firstname VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, patronymic VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('COMMENT ON COLUMN subscriber_juridical.subscriber_type IS \'(DC2Type:subscriber_type)\'');
+        $this->addSql('CREATE TABLE subscriber_private (id UUID NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, subscriber_type VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, patronymic VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN subscriber_private.id IS \'(DC2Type:subscriber_id)\'');
         $this->addSql('COMMENT ON COLUMN subscriber_private.date IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN subscriber_private.subscriber_type IS \'(DC2Type:subscriber_type)\'');
         $this->addSql('ALTER TABLE phone_dircetory ADD CONSTRAINT FK_161F595F9650AD29 FOREIGN KEY (private_subscriber_id) REFERENCES subscriber_private (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE phone_dircetory ADD CONSTRAINT FK_161F595F8ECF84B FOREIGN KEY (juridical_subscriber_id) REFERENCES subscriber_juridical (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }

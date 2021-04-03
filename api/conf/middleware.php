@@ -10,7 +10,8 @@ use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\TwigMiddleware;
 
-return function (App $app) {
+return function (App $app, ContainerInterface $container) {
+    $app->add($container->get('session'));
     $app->add(TwigMiddleware::createFromContainer($app));
     $app->add(DomainExceptionHandler::class);
     $app->add(ValidationExceptionHandler::class);

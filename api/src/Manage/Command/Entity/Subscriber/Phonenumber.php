@@ -19,12 +19,10 @@ class Phonenumber
      * @ORM\Column(type="string", unique=true)
      */
     private string $number;
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private string $subscriberType;
 
-    public function __construct(string $value, SubscriberType $type)
+    private string $formattedNumber;
+
+    public function __construct(string $value)
     {
         Assert::stringNotEmpty($value);
         $phoneUtil = PhoneNumberUtil::getInstance();
@@ -33,18 +31,19 @@ class Phonenumber
             return new InvalidArgumentException('Invalid phone number format');
         }*/
         $this->number = (string)$kzNumber->getNationalNumber();
-
-        $this->subscriberType = $type->getSubscriberType();
+        $this->formattedNumber = $phoneUtil->formatOutOfCountryCallingNumber($kzNumber, 'KZ');
     }
-
 
     public function getNumber(): string
     {
         return $this->number;
     }
 
-    public function getSubscriberType(): string
+    public function getFormattedNumber(): string
     {
-        return $this->subscriberType;
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $kzNumber = $phoneUtil->parse($this->number, "KZ");
+        return $phoneUtil->formatOutOfCountryCallingNumber($kzNumber, 'KZ');
     }
+
 }

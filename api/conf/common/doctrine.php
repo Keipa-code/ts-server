@@ -10,9 +10,11 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Setup;
 use Psr\Container\ContainerInterface;
 use App\Manage\Command\Entity\Subscriber;
+
 
 return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
@@ -46,6 +48,7 @@ return [
             }
         }
 
+        //$config->setDefaultQueryHint(Query::HINT_CUSTOM_OUTPUT_WALKER,'\App\Data\Doctrine\IlikeWalker');
         $eventManager = new EventManager();
 
         foreach ($settings['event_subscribers'] as $name) {
@@ -59,7 +62,7 @@ return [
     'doctrine' => [
         'entity_path' => [
             __DIR__ . '/../../src/Manage/Command/Entity',
-            __DIR__ . '/../../src/Manage/Admin/Entity'
+            __DIR__ . '/../../src/Auth/Entity'
         ],
         'dev_mode' => true,
         'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
@@ -78,7 +81,8 @@ return [
         ],
         'types' => [
             Subscriber\IdType::NAME => Subscriber\IdType::class,
-            Subscriber\SubscriberTypeType::NAME => Subscriber\SubscriberTypeType::class
+            Subscriber\SubscriberTypeType::NAME => Subscriber\SubscriberTypeType::class,
+
         ]
     ]
 ];

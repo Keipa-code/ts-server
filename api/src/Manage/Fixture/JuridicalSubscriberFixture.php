@@ -18,7 +18,7 @@ class JuridicalSubscriberFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $subscriberType = new SubscriberType('juridical');
-        $phoneNumber = new Phonenumber('7770000002', $subscriberType);
+        $phoneNumber = new Phonenumber('7770000002');
         $juridicalSub = SubscriberCreator::create(
             new Id('00000000-0000-0000-0000-000000000002'),
             $phoneNumber,

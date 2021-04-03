@@ -16,7 +16,7 @@ class RequestFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $subscriberType = new SubscriberType('private');
-        $phoneNumber = new Phonenumber('7770000001', $subscriberType);
+        $phoneNumber = new Phonenumber('7770000001');
         $privateSub = SubscriberCreator::create(
             Id::generate(),
             $phoneNumber,

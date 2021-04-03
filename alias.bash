@@ -5,7 +5,7 @@
 alias php="docker-compose run --rm php-cli php"
 alias node-cli="docker-compose run --rm frontend-node-cli"
 alias composer="docker-compose run --rm php-cli composer"
-alias app="docker-compose run --rm api-php-cli composer app"
+alias app="docker-compose run --rm php-cli composer app"
 alias linter="docker-compose run --rm php-cli composer lint"
 alias phpcs="docker-compose run --rm php-cli composer phpcs"
 alias lint="linter && phpcs"

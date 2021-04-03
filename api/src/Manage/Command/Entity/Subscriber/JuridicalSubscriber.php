@@ -26,6 +26,10 @@ class JuridicalSubscriber implements SubscriberInterface
      */
     protected DateTimeImmutable $date;
     /**
+     * @ORM\Column(type="subscriber_type")
+     */
+    private SubscriberType $subscriberType;
+    /**
      * @ORM\Column
      */
     private string $organizationName;
@@ -63,11 +67,13 @@ class JuridicalSubscriber implements SubscriberInterface
     public function __construct(
         Id $id,
         Phonenumber $phoneNumber,
+        SubscriberType $subscriberType,
         DateTimeImmutable $date,
         $subData
     ) {
         $this->id = $id;
         $this->date = $date;
+        $this->subscriberType = $subscriberType;
         $this->phonenumbers = new ArrayCollection();
         /**
          * @var string[] $subData
@@ -121,12 +127,22 @@ class JuridicalSubscriber implements SubscriberInterface
         })->toArray();
     }
 
-    public function getSubscriberType(): array
+    public function getInListFormat(): array
     {
-        /** @var Phonenumber[] */
-        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
-            return $phoneNumber->getPhonenumber()->getSubscriberType();
-        })->toArray();
+        $row = [
+            'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
+            'rowValue' => ''
+        ];
+
+        $row['rowValue'] = $this->organizationName . ' ' . $this->departmentName . ' ' . $this->country
+            . ' ' . $this->city . ' ' . $this->street . ' ' . $this->houseNumber
+            . ' ' . $this->floatNumber;
+        return $row;
+    }
+
+    public function getSubscriberType(): SubscriberType
+    {
+        return $this->subscriberType;
     }
 
     public function getOrganizationName(): string

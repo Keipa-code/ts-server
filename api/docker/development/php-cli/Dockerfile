@@ -11,9 +11,11 @@ RUN apk add --no-cache postgresql-dev bash coreutils \
 
 RUN apk add --no-cache unzip
 
-RUN apk add --no-cache tzdata
-ENV TZ Asia/Oral
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apk add --no-cache \
+    oniguruma-dev \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-enable mbstring \
+    && rm -rf /tmp/*
 
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 

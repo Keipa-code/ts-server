@@ -18,7 +18,7 @@ class PrivateSubscriberFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $subscriberType = new SubscriberType('private');
-        $phoneNumber = new Phonenumber('7770000001', $subscriberType);
+        $phoneNumber = new Phonenumber('7770000006');
         $privateSub = SubscriberCreator::create(
             new Id('00000000-0000-0000-0000-000000000001'),
             $phoneNumber,
@@ -27,6 +27,38 @@ class PrivateSubscriberFixture extends AbstractFixture
                 'firstname' => 'Baur',
                 'surname' => 'Shuak',
                 'patronymic' => 'Semba']
+        );
+
+        $manager->persist($privateSub);
+
+        $manager->flush();
+
+        $subscriberType = new SubscriberType('private');
+        $phoneNumber = new Phonenumber('7770000007');
+        $privateSub = SubscriberCreator::create(
+            Id::generate(),
+            $phoneNumber,
+            $subscriberType,
+            $data = [
+                'firstname' => 'Baur',
+                'surname' => 'Dosan',
+                'patronymic' => 'Tastan']
+        );
+
+        $manager->persist($privateSub);
+
+        $manager->flush();
+
+        $subscriberType = new SubscriberType('private');
+        $phoneNumber = new Phonenumber('7770000008');
+        $privateSub = SubscriberCreator::create(
+            Id::generate(),
+            $phoneNumber,
+            $subscriberType,
+            $data = [
+                'firstname' => 'Baur',
+                'surname' => 'Roman',
+                'patronymic' => 'Stalin']
         );
 
         $manager->persist($privateSub);

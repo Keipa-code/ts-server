@@ -1,22 +1,32 @@
-{% extends 'index1.twig' %}
+{% extends 'layout.twig' %}
 
-{% block contents %}
+{% block index %}
+     <div class="container-lg">
+          <h1>
+               <div class="mb-5">
+                    <div class="display-1">
+                         <p>Телефонный справочник</p>
+                    </div>
+               </div>
+          </h1>
+     </div>
+
      <div class="container">
-     <form class="row row-cols-lg-auto g-3 align-items-center">
-          <div class="col-sm-7">
-               <input type="text" class="form-control" placeholder="City" aria-label="Номер телефона">
-          </div>
-          <div class="col-sm">
-               <input type="text" class="form-control" placeholder="State" aria-label="Ф.И.О.">
-          </div>
-          <div class="col-sm">
-               <input type="text" class="form-control" placeholder="Zip" aria-label="Название организации">
-          </div>
+          <form class="d-flex bd-highlight" action="/list" method="get">
+               <div class="p-2 flex-fill bd-highlight">
+                    <input type="search" class="form-control" name="phonenumber" placeholder="Номер телефона" aria-label="Номер телефона">
+               </div>
+               <div class="p-2 flex-fill bd-highlight">
+                    <input type="search" class="form-control" name="fio" placeholder="Ф.И.О." value="{{ fio }}" aria-label="Ф.И.О.">
+               </div>
+               <div class="p-2 flex-fill bd-highlight">
+                    <input type="search" class="form-control" name="organizationName" placeholder="Название организации" aria-label="Название организации">
+               </div>
 
-          <div class="col-12">
-               <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-     </form>
+               <div class="p-2 flex-fill bd-highlight">
+                    <button type="submit" class="btn btn-primary">Поиск</button>
+               </div>
+          </form>
      </div>
 
 {% endblock %}

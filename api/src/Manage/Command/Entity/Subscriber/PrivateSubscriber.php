@@ -26,6 +26,10 @@ class PrivateSubscriber implements SubscriberInterface
      */
     private DateTimeImmutable $date;
     /**
+     * @ORM\Column(type="subscriber_type")
+     */
+    private SubscriberType $subscriberType;
+    /**
      * @ORM\Column
      */
     private string $firstname;
@@ -47,11 +51,13 @@ class PrivateSubscriber implements SubscriberInterface
     public function __construct(
         Id $id,
         Phonenumber $phoneNumber,
+        SubscriberType $subscriberType,
         DateTimeImmutable $date,
         array $subData
     ) {
         $this->id = $id;
         $this->date = $date;
+        $this->subscriberType = $subscriberType;
         $this->phonenumbers = new ArrayCollection();
         /** @var string[] $subData */
         $this->firstname = $subData['firstname'];
@@ -108,11 +114,14 @@ class PrivateSubscriber implements SubscriberInterface
         })->toArray();
     }
 
-    public function getSubscriberType(): array
+    public function getInListFormat(): array
     {
-        /** @var Phonenumber[] */
-        return $this->phonenumbers->map(static function (PhoneDirectory $phoneNumber) {
-            return $phoneNumber->getPhonenumber()->getSubscriberType();
-        })->toArray();
+        $row = [
+            'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
+            'rowValue' => ''
+        ];
+
+        $row['rowValue'] = $this->firstname . ' ' . $this->surname . ' ' . $this->patronymic;
+        return $row;
     }
 }

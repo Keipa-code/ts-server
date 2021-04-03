@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * @ORM\Entity
  * @ORM\Table(name="phone_dircetory", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"phonenumber_number", "phonenumber_subscriber_type"})
+ *     @ORM\UniqueConstraint(columns={"phonenumber_number"})
  * })
  */
 class PhoneDirectory
