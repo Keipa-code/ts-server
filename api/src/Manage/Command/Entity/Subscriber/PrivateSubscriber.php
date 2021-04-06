@@ -122,7 +122,7 @@ class PrivateSubscriber implements SubscriberInterface
             'id' => $this->id->getValue()
         ];
 
-        $row['rowValue'] = $this->firstname . ' ' . $this->surname . ' ' . $this->patronymic;
+        $row['rowValue'] = $this->surname . ' ' . $this->firstname . ' ' . $this->patronymic;
         return $row;
     }
 }

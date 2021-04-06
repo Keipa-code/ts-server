@@ -7,16 +7,16 @@
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
-                <th class="col-2" scope="col">Номер телефона</th>
-                <th scope="col">Информация об абоненте</th>
+                <th class="col-2" scope="col"><a href="{{ numberSort }}">Номер телефона</a></th>
+                <th scope="col"><a href="{{ nameSort }}">Информация об абоненте</a></th>
             </tr>
             </thead>
             <tbody>
             {% for row in list %}
-            <tr>
-                <th>{{ row.phonenumber }}</th>
-                <td>{{ row.rowValue }}</td>
-            </tr>
+                <tr>
+                    <th>{{ row.phonenumber }}</th>
+                    <td>{{ row.rowValue }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
@@ -45,19 +45,25 @@
                                     {% elseif 0 < (current - nearbyPagesLimit) - loop.index %}
                                     {% elseif 0 > (current + nearbyPagesLimit) - loop.index %}
                                     {% else %}
-                                        {% if current == loop.index  %}
-                                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ loop.index }}</a></li>
+                                        {% if current == loop.index %}
+                                            <li class="page-item active" aria-current="page"><a class="page-link"
+                                                                                                href="">{{ loop.index }}</a>
+                                            </li>
                                         {% else %}
-                                <li class="page-item"><a class="page-link" href="{{ url ~ loop.index }}">{{ loop.index }}</a></li>
+                                            <li class="page-item"><a class="page-link"
+                                                                     href="{{ url ~ loop.index }}">{{ loop.index }}</a>
+                                            </li>
                                         {% endif %}
 
                                     {% endif %}
                                 {% endfor %}
                                 {% if current != total  and (current + nearbyPagesLimit) < total %}
-                                    <li class="page-item"><a class="page-link" href="{{ (url ~ total)|e }}">{{ total }}</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="{{ (url ~ total)|e }}">{{ total }}</a></li>
                                 {% endif %}
                                 {% if current < total %}
-                                <li class="page-item"><a class="page-link" aria-label="Next" href="{{ (url ~ (current+1))|e }}">Next</a></li>
+                                    <li class="page-item"><a class="page-link" aria-label="Next"
+                                                             href="{{ (url ~ (current+1))|e }}">Next</a></li>
                                 {% endif %}
                             </div>
                         </div>

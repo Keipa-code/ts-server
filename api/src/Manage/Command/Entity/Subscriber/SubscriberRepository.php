@@ -14,7 +14,7 @@ class SubscriberRepository
     /**
      * @var EntityRepository $privateRepo
      */
-    private EntityRepository $privateRepo;
+    public EntityRepository $privateRepo;
     /**
      * @var EntityRepository $juridicalRepo
      */
@@ -107,6 +107,35 @@ class SubscriberRepository
             ->getQuery()->getResult();
     }
 
+    public function findByFIOWithSort($fio, $sort, $order): array
+    {
+        //$this->privateRepo->findBy(['firstname' => $fio]);
+        $qb = $this->privateRepo->createQueryBuilder('p');
+        return $qb->select('p')
+            ->where($qb->expr()->orX(
+                $qb->expr()->like('LOWER(p.firstname)', '?1'),
+                $qb->expr()->like('LOWER(p.surname)', '?2'),
+                $qb->expr()->like('LOWER(p.patronymic)', '?3')
+            ))  //LOWER(p.firstname) LIKE :firstname
+            ->innerJoin('p.phonenumbers', 'n')
+            ->addOrderBy($sort, $order)
+            ->setParameter(1, '%'.addcslashes($fio, '%_').'%')
+            ->setParameter(2, '%'.addcslashes($fio, '%_').'%')
+            ->setParameter(3, '%'.addcslashes($fio, '%_').'%')
+            ->getQuery()->getResult();
+    }
+
+    public function findByOrgNameWithSort($organizationName, $sort, $order): array
+    {
+        $qb = $this->juridicalRepo->createQueryBuilder('p');
+        return $qb->select('p')
+            ->where($qb->expr()->like('LOWER(p.organizationName)', '?1'))
+            ->innerJoin('p.phonenumbers', 'n')
+            ->addOrderBy($sort, $order)
+            ->setParameter(1, '%'.addcslashes($organizationName, '%_').'%')
+            ->getQuery()->getResult();
+    }
+
     public function findAllPrivate(string $sort, string $order, int $offset, int $limit): array
     {
         $qb = $this->privateRepo->createQueryBuilder('p');
@@ -132,6 +161,13 @@ class SubscriberRepository
         $this->em->persist($subscriber);
     }
 
+    public function getCountOfAll()
+    {
+        $q = $this->em->createQuery('SELECT COUNT(p.id) FROM App\Manage\Command\Entity\Subscriber\PhoneDirectory p');
+
+        return $q->getSingleScalarResult();
+
+    }
 
     public function get(Id $id, SubscriberType $subscriberType): object
     {

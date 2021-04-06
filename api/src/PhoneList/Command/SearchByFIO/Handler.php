@@ -25,8 +25,11 @@ class Handler
     {
         $subs = [];
         if ($command->fio) {
-
-            $foundedFIO = $this->subscribers->findByFIO($command->fio);
+            if ($command->sort) {
+                $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
+            }else {
+                $foundedFIO = $this->subscribers->findByFIO($command->fio);
+            }
             foreach ($foundedFIO as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
@@ -38,12 +41,20 @@ class Handler
             }
         }
         if ($command->organizationName) {
-            $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
+            if ($command->sort) {
+                $foundedOrgs = $this->subscribers->findByOrgNameWithSort(
+                    $command->organizationName,
+                    $command->sort,
+                    $command->order);
+            }else {
+                $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
+            }
+
             foreach ($foundedOrgs as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
         }
-
+        //$logger->warning($this->subscribers->getCountOfAll());
         return $subs;
     }
 }

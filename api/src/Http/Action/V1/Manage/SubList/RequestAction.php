@@ -38,7 +38,11 @@ class RequestAction extends BaseAction
         $command->organizationName = mb_strtolower($data['organizationName'])  ?? '';
         $command->order = $data['order']  ?? 'ASC';
         $command->pageNumber = intval($data['page'])  ?? 1;
-        $command->sort = $data['sort']  ?? '';
+        if ($data['sort'] == 'number'){
+            $command->sort = 'n.phonenumber.number';
+        }elseif ($data['sort'] == 'name') {
+            $command->sort = 'p.surname';
+        }
 
         $this->validator->validate($command);
 
