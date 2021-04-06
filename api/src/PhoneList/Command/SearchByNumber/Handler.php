@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\PhoneList\Command\SearchByNumber\Request;
+namespace App\PhoneList\Command\SearchByNumber;
 
 
 use App\Manage\Command\Entity\Subscriber\Phonenumber;

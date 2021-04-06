@@ -43,6 +43,7 @@ return [
             ],
             'fixture_paths' => [
                 __DIR__ . '/../../src/Manage/Fixture',
+                __DIR__ . '/../../src/Auth/Fixtures',
             ]
         ],
     ],

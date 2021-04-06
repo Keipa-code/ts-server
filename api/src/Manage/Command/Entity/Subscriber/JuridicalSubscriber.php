@@ -131,7 +131,8 @@ class JuridicalSubscriber implements SubscriberInterface
     {
         $row = [
             'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
-            'rowValue' => ''
+            'rowValue' => '',
+            'id' => $this->id->getValue()
         ];
 
         $row['rowValue'] = $this->organizationName . ' ' . $this->departmentName . ' ' . $this->country

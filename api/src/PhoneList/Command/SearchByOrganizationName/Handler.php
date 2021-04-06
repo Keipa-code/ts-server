@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\PhoneList\Command\SearchByFIO\Request;
+namespace App\PhoneList\Command\SearchByOrganizationName;
 
 
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
@@ -20,11 +20,11 @@ class Handler
         $this->subscribers = $subscribers;
     }
 
-    public function handle(Command $command, LoggerInterface $logger): array
+    public function handle(Command $command, LoggerInterface $logger)
     {
-        Assert::stringNotEmpty($command->fio);
+        Assert::stringNotEmpty($command->organizationName);
 
-        $foundedSubs =  $this->subscribers->findByFIO($command->fio);
+        $foundedSubs =  $this->subscribers->findByOrgName($command->organizationName);
         $subs = [];
         foreach ($foundedSubs as $sub) {
             $subs[] = $sub->getInListFormat();

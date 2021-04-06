@@ -1,33 +1,27 @@
 <?php
 
-namespace App\Http\Action\V1\PhoneList\SearchByFIO;
+declare(strict_types=1);
+
+namespace App\Http\Action\V1\Manage\SubList;
 
 use App\Http\BaseAction;
-use App\Http\Service\Link;
 use App\Http\Validator\Validator;
-use App\PhoneList\Command\SearchByFIO\Command;
-use App\PhoneList\Command\SearchByFIO\Handler;
+use App\Manage\Command\ListSubscriber\Request\Command;
+use App\Manage\Command\ListSubscriber\Request\Handler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class RequestAction extends BaseAction
 {
-    private Handler $handler;
     private Validator $validator;
+    private Handler $handler;
 
     public function __construct(Handler $handler, Validator $validator, ContainerInterface $container)
     {
         parent::__construct($container);
-        $this->handler = $handler;
         $this->validator = $validator;
-    }
-
-    public function index(Request $request, Response $response, array $args = []): Response
-    {
-        $this->logger->info("Home page action dispatched");
-
-        return $this->render($request, $response, 'index.twig');
+        $this->handler = $handler;
     }
 
     public function handle(Request $request, Response $response, array $args = []): Response
@@ -37,29 +31,29 @@ class RequestAction extends BaseAction
          * @psalm-suppress MixedArrayAccess
          */
         $data = $request->getQueryParams();
-        //$this->logger->warning("list?" . http_build_query($data));
+        //$data = $args;
         $command = new Command();
-        $link = new Link();
         $command->fio = mb_strtolower($data['fio']) ?? '';
         $command->phonenumber = $data['phonenumber']  ?? '';
         $command->organizationName = mb_strtolower($data['organizationName'])  ?? '';
+        $command->order = $data['order']  ?? 'ASC';
+        $command->pageNumber = intval($data['page'])  ?? 1;
+        $command->sort = $data['sort']  ?? '';
 
         $this->validator->validate($command);
 
-        $list = $this->handler->handle($command, $this->logger);
-
+        $list = $this->handler->handle($command);
+        //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
         return $this->render(
             $request,
             $response,
-            'list.twig',
+            'manage.twig',
             [
                 'list' => $list,
                 'fio' => $data['fio'],
                 'phonenumber' => $data['phonenumber'],
                 'organizationName' => $data['organizationName'],
-                'total' => 2,//$link->pageCount($list),
-                'current' => $data['page'] ?? 1,
-                'url' => "list?" . http_build_query($data)
+                'order'
             ]);
     }
 }

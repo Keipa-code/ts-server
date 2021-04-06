@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Manage\Admin\Services;
+namespace App\Auth\Services;
 
 use RuntimeException;
 use Webmozart\Assert\Assert;

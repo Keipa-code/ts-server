@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace App\Auth\Command\SignIn;
 
-use App\Manage\Command\Entity\Subscriber\Id;
-use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
-use App\Manage\Command\Entity\Subscriber\Phonenumber;
-use App\Manage\Command\Entity\Subscriber\PrivateSubscriber;
-use App\Manage\Command\Entity\Subscriber\SubscriberInterface;
-use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
-use App\Manage\Command\Entity\Subscriber\SubscriberType;
+use App\Auth\Entity\Admin;
+use App\Auth\Services\PasswordHasher;
 use App\Flusher;
-use DateTimeImmutable;
-use Webmozart\Assert\Assert;
+use Doctrine\ORM\EntityManagerInterface;
 
 class Handler
 {
-    private SubscriberRepository $subscribers;
+    private EntityManagerInterface $em;
     private Flusher $flusher;
+    private PasswordHasher $hasher;
 
-    public function __construct(SubscriberRepository $subscribers, Flusher $flusher)
+    public function __construct(EntityManagerInterface $em, Flusher $flusher, PasswordHasher $hasher)
     {
-        $this->subscribers = $subscribers;
+        $this->em = $em;
         $this->flusher = $flusher;
+        $this->hasher = $hasher;
     }
 
-    public function handle(Command $command): object
+    public function handle(Command $command)
     {
-
-        return $this->subscribers->get($id, $subscriberType);
+        $uinfo = $this->em->getRepository(Admin::Class)->findOneBy(['username' => $command->username]);
+        if ($this->hasher->validate($command->password, $uinfo->getPassword())) {
+            return $uinfo;
+        }
+        return false;
     }
 }

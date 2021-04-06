@@ -1,0 +1,31 @@
+{% extends 'layout.twig' %}
+
+{% block contents %}
+
+
+    <div class="container">
+        <h1>
+            Управление справочником
+        </h1>
+
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th class="col-2" scope="col">Номер телефона</th>
+                <th scope="col">Информация об абоненте</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in list %}
+            <tr>
+                <th>{{ row.phonenumber }}</th>
+                <td>{{ row.rowValue }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}
+

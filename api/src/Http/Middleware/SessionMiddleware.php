@@ -3,60 +3,31 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use ArrayAccess;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class SessionMiddleware implements Middleware, ArrayAccess
+final class SessionMiddleware implements MiddlewareInterface
 {
-    private $storage;
+    /**
+     * @var Session
+     */
+    private Session $session;
 
-    public function __construct()
+    public function __construct(Session $session)
     {
-        session_start();
-        $this->storage =& $_SESSION;
+        $this->session = $session;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function process(Request $request, RequestHandler $handler): Response
-    {
-        if (!isset($this->storage['logged'])) {
-            $this->storage['logged'] = false;
-        }
+    public function process(
+        ServerRequestInterface $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface {
+        $this->session->start();
 
-        $request = $request->withAttribute('session', $this);
-        $request = $request->withAttribute('uinfo', array_key_exists('uinfo', $this->storage) ? $this->storage['uinfo'] : null);
         return $handler->handle($request);
-    }
-
-    /**
-     * ArrayAccess for storage
-     */
-    public function offsetSet($offset, $value)
-    {
-        if (is_null($offset)) {
-            $this->storage[] = $value;
-        } else {
-            $this->storage[$offset] = $value;
-        }
-    }
-    public function offsetExists($offset)
-    {
-        return isset($this->storage[$offset]);
-    }
-    public function offsetUnset($offset)
-    {
-        unset($this->storage[$offset]);
-    }
-    public function &offsetGet($offset)
-    {
-        if ($this->offsetExists($offset)) {
-            return  $this->storage[$offset];
-        }
-        return null;
     }
 }

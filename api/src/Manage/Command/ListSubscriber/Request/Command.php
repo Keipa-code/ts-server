@@ -15,7 +15,6 @@ class Command
      */
     public string $order = '';
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(max=20, allowEmptyString=true)
      */
     public string $sort = '';
@@ -24,7 +23,7 @@ class Command
      * @Assert\Regex(pattern="/\d/")
      * @Assert\Length(max=1000, allowEmptyString=true)
      */
-    public string $pageNumber = '';
+    public int $pageNumber = 1;
     /**
      * @Assert\NotBlank()
      * @Assert\Regex(pattern="/\d/")
@@ -36,4 +35,16 @@ class Command
      * @Assert\Choice({"private", "juridical"}, message="Wrong value in type.")
      */
     public string $subscriberType = '';
+    /**
+     * @Assert\Length(max=30, allowEmptyString=true)
+     */
+    public string $fio = '';
+    /**
+     * @Assert\Length(min=8, max=20, allowEmptyString=true)
+     */
+    public string $phonenumber = '';
+    /**
+     * @Assert\Length(max=30, allowEmptyString=true)
+     */
+    public string $organizationName = '';
 }

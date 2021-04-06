@@ -28,14 +28,47 @@ class Handler
 
     public function handle(Command $command): array
     {
+
         $offset = (int)$command->pageNumber * 50;
         $limit = $command->rowCount;
         $subscriberType = new SubscriberType($command->subscriberType);
-        if ($subscriberType->isPrivate()) {
-            return $this->subscribers->findAllPrivate($command->sort, $command->order, $offset, $limit);
-        } elseif ($subscriberType->isJuridical()) {
-            return $this->subscribers->findAllJuridical($command->sort, $command->order, $offset, $limit);
+        $subs = [];
+
+        if (!$command->phonenumber && !$command->organizationName && !$command->fio) {
+            if ($subscriberType->isPrivate()) {
+                $privateSubs = $this->subscribers->findAllPrivate($command->sort, $command->order, $offset, $limit);
+                foreach ($privateSubs as $sub) {
+                    $subs[] = $sub->getInListFormat();
+                }
+            } elseif ($subscriberType->isJuridical()) {
+                $juridicalSubs = $this->subscribers->findAllJuridical($command->sort, $command->order, $offset, $limit);
+                foreach ($juridicalSubs as $sub) {
+                    $subs[] = $sub->getInListFormat();
+                }
+            }
+        }else {
+            if ($command->fio) {
+
+                $foundedFIO = $this->subscribers->findByFIO($command->fio);
+                foreach ($foundedFIO as $sub) {
+                    $subs[] = $sub->getInListFormat();
+                }
+            }
+            if ($command->phonenumber) {
+                $foundedPhonenumber = $this->subscribers->findByPhoneNumber(new Phonenumber($command->phonenumber));
+                foreach ($foundedPhonenumber as $sub) {
+                    $subs[] = $sub->getInListFormat();
+                }
+            }
+            if ($command->organizationName) {
+                $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
+                foreach ($foundedOrgs as $sub) {
+                    $subs[] = $sub->getInListFormat();
+                }
+            }
         }
+
+        return $subs;
 
     }
 }

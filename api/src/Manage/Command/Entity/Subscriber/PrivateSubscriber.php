@@ -118,7 +118,8 @@ class PrivateSubscriber implements SubscriberInterface
     {
         $row = [
             'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
-            'rowValue' => ''
+            'rowValue' => '',
+            'id' => $this->id->getValue()
         ];
 
         $row['rowValue'] = $this->firstname . ' ' . $this->surname . ' ' . $this->patronymic;

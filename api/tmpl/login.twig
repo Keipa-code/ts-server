@@ -1,19 +1,30 @@
-{% extends 'list.twig' %}
+{% extends 'layout.twig' %}
 
 {% block contents %}
-    <h1>
-        Login
-    </h1>
 
-    <form action="{{ url_for('login') }}" method="post">
-        <div class="form-group">
-            <label for="exampleInputUsername">Username</label>
-            <input type="text" name="uname" class="form-control" id="exampleInputUsername" placeholder="Enter username">
+    <div class="container pt-5">
+        <div class="row justify-content-md-center">
+            <h1 class="col-3 g-2">
+                Вход
+            </h1>
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword">Password</label>
-            <input type="password" name="pswd" class="form-control" id="exampleInputPassword" placeholder="Password">
+            <div class="row justify-content-md-center">
+            <form class="col-3" action="{{ url_for('login') }}" method="post">
+                <div class="form-group pt-3">
+                    <label for="exampleInputUsername">Имя пользователя</label>
+                    <input type="text" name="uname" class="form-control" id="exampleInputUsername"
+                           placeholder="Введите имя">
+                </div>
+                <div class="form-group pt-3">
+                    <label for="exampleInputPassword">Пароль</label>
+                    <input type="password" name="pswd" class="form-control" id="exampleInputPassword"
+                           placeholder="Пароль">
+                </div>
+                <div class="pt-3">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 {% endblock %}
