@@ -1,0 +1,46 @@
+{% extends 'layout.twig' %}
+
+{% block contents %}
+    <div class="container">
+        <h1>{{ head }}</h1>
+    </div>
+    <div class="container">
+        <div class="d-flex flex-column col-4 align-center">
+            <form class="d-inline-flex flex-column" action="{{ '/v1/manage/update' }}" method="post">
+            <div class="p-2">
+                <div class="mb-3">
+                    <label for="phonenumber" class="form-label">Номер телефона</label>
+                    <input type="text" class="form-control" name="phonenumber" value="{{ rows.phonenumber }}" id="phonenumber">
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Имя</label>
+                    <input type="text" class="form-control" name="firstname" value="{{ rows.firstname }}" id="firstname">
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="mb-3">
+                    <label for="surname" class="form-label">Фамилия</label>
+                    <input type="text" class="form-control" name="surname" value="{{ rows.surname }}" id="surname">
+                </div>
+            </div>
+                <div class="p-2">
+                    <div class="mb-3">
+                        <label for="patronymic" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control" name="patronymic" value="{{ rows.patronymic }}" id="patronymic">
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="{{ rows.id }}">
+                <input type="hidden" name="type" value="{{ type }}">
+                <div class="p-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="p-2">
+                <button type="submit" class="btn btn-primary" formaction="{{ '/v1/manage/remove' }}">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

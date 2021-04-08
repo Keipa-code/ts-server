@@ -46,4 +46,15 @@ class Phonenumber
         return $phoneUtil->formatOutOfCountryCallingNumber($kzNumber, 'KZ');
     }
 
+    public function setNumber(string $number): void
+    {
+        Assert::stringNotEmpty($number);
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $kzNumber = $phoneUtil->parse($number, "KZ");
+        /*if (!$kzNumber->hasNationalNumber()) {
+            return new InvalidArgumentException('Invalid phone number format');
+        }*/
+        $this->number = (string)$kzNumber->getNationalNumber();
+    }
+
 }

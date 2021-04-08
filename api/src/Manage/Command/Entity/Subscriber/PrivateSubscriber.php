@@ -103,7 +103,9 @@ class PrivateSubscriber implements SubscriberInterface
         $this->firstname = $subData['firstname'];
         $this->surname = $subData['surname'];
         $this->patronymic = $subData['patronymic'];
-        $this->phonenumbers->add(new PhoneDirectory($this, null, $phonenumber));
+        $this->phonenumbers->map(static function (PhoneDirectory $phoneDir) use ($phonenumber) {
+            $phoneDir->setPhonenumber($phonenumber);
+        });
     }
 
     public function getPhonenumbers(): array
@@ -124,5 +126,21 @@ class PrivateSubscriber implements SubscriberInterface
 
         $row['rowValue'] = $this->surname . ' ' . $this->firstname . ' ' . $this->patronymic;
         return $row;
+    }
+
+    public function getInEditFormat(): array
+    {
+        return [
+            'id' => $this->id->getValue(),
+            'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
+            'firstname' => $this->firstname,
+            'surname' => $this->surname,
+            'patronymic' => $this->patronymic,
+        ];
+    }
+
+    public function getSubscriberType(): string
+    {
+        return $this->subscriberType->getSubscriberType();
     }
 }

@@ -53,4 +53,12 @@ class PhoneDirectory
     {
         return $this->phonenumber;
     }
+
+
+    public function setPhonenumber(Phonenumber $phonenumber): void
+    {
+        $this->phonenumber = $phonenumber;
+    }
+
+
 }

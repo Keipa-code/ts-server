@@ -33,8 +33,8 @@ class Command
     public function writeData($data): void
     {
         $this->id = ($data['id'] ?? '');
-        $this->phoneNumber = ($data['phoneNumber'] ?? '');
-        $this->subscriberType = ($data['subscriberType'] ?? '');
+        $this->phoneNumber = ($data['phonenumber'] ?? '');
+        $this->subscriberType = ($data['type'] ?? '');
         // Частное лицо
         /**
          * @psalm-var array $this->subData

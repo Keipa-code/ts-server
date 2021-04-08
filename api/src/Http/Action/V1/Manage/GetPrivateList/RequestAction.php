@@ -66,8 +66,9 @@ class RequestAction extends BaseAction
             [
                 'list' => $list,
                 'value' => $data['name'] ?? '',
-                'placeholder' => 'Ф.И.О.',
                 'phonenumber' => $data['phonenumber'] ?? '',
+                'placeholder' => 'Ф.И.О.',
+                'type' => 'private',
                 'total' => $this->counter->pageCount($list, $data),
                 'current' => $data['page'] ?? 1,
                 'url' => "list?" . http_build_query($data) . 'page=',

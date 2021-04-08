@@ -34,16 +34,16 @@ class Handler
         $subscriberType = new SubscriberType($command->subscriberType);
         $phoneNumber = new Phonenumber($command->phoneNumber);
         /** @var SubscriberInterface $subscriber */
-        $subscriber = $this->subscribers->get($id);
+        $subscriber = $this->subscribers->get($id, $subscriberType);
         $id = $subscriber->getId();
 
-        if (!in_array($phoneNumber->getNumber(), $subscriber->getPhonenumbers())) {
+        if ($phoneNumber->getNumber() !== $subscriber->getPhonenumbers()['0']->getNumber()) {
             if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
                 throw new \DomainException('Phone number already exists.');
             }
         }
 
-        if (in_array($command->subscriberType, $subscriber->getSubscriberType())) {
+        if ($command->subscriberType == $subscriber->getSubscriberType()) {
             $subscriber->setUpdatedData($phoneNumber, $command->subData);
         }else{
             $newSubscriber = SubscriberCreator::create(

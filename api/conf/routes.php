@@ -21,7 +21,7 @@ return static function (App $app): void {
         $group->get('/private', 'App\Http\Action\V1\Manage\GetPrivateList\RequestAction:handle')->setName('private');
         $group->get('/juridical', 'App\Http\Action\V1\Manage\GetJuridicalList\RequestAction:handle')->setName('juridical');
         $group->post('/add', V1\Manage\Add\RequestAction::class)->setName('add');
-        $group->get('/edit/[{uuid}]', V1\Manage\Add\RequestAction::class)->setName('edit');
+        $group->get('/edit/[{type}/{uuid}]', 'App\Http\Action\V1\Manage\EditPrivate\RequestAction:handle')->setName('edit');
         $group->post('/update', V1\Manage\Update\RequestAction::class);
         $group->post('/remove/[{uuid}]', V1\Manage\Update\RequestAction::class)->setName('remove');
     })->add(UserAuthMiddleware::class);

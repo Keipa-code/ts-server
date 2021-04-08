@@ -10,9 +10,4 @@ use Psalm\PhpUnitPlugin\Plugin;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$var1 = ['1' => '123'];
-$var2 = '';
-
-$var = ($var1['1'] == '123' ? '321' : '123');
-
-    echo $var;
+\Webmozart\Assert\Assert::uuid('00000000-0000-0000-0000-000000000001');

@@ -26,10 +26,11 @@ class Handler
         $this->flusher = $flusher;
     }
 
-    public function handle(Command $command): object
+    public function handle(Command $command): array
     {
         $id = new Id($command->id);
         $subscriberType = new SubscriberType($command->subscriberType);
-        return $this->subscribers->get($id, $subscriberType);
+        $sub = $this->subscribers->get($id, $subscriberType);
+        return $sub->getInEditFormat();
     }
 }
