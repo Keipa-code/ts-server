@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Manage\Command\ListSubscriber\Request;
+namespace App\Manage\Command\GetPrivateList;
 
 use App\Manage\Command\Entity\Subscriber\Id;
 use App\Manage\Command\Entity\Subscriber\JuridicalSubscriber;
@@ -13,6 +13,7 @@ use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
 use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use App\Flusher;
 use DateTimeImmutable;
+use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
 class Handler
@@ -26,45 +27,41 @@ class Handler
         $this->flusher = $flusher;
     }
 
-    public function handle(Command $command): array
+    public function handle(Command $command, LoggerInterface $logger): array
     {
-
-        $offset = (int)$command->pageNumber * 50;
+        if ($command->pageNumber === 1) {
+            $offset = 0;
+        } elseif ($command->pageNumber > 1) {
+            $offset = (int)$command->pageNumber * 50;
+        }
         $limit = $command->rowCount;
-        $subscriberType = new SubscriberType($command->subscriberType);
+        //$subscriberType = new SubscriberType($command->subscriberType);
         $subs = [];
 
-        if (!$command->phonenumber && !$command->organizationName && !$command->fio) {
-            if ($subscriberType->isPrivate()) {
-                $privateSubs = $this->subscribers->findAllPrivate($command->sort, $command->order, $offset, $limit);
+        if (!$command->phonenumber && !$command->fio) {
+                $privateSubs = $this->subscribers->findAllPrivate($offset, $limit);
                 foreach ($privateSubs as $sub) {
                     $subs[] = $sub->getInListFormat();
                 }
-            } elseif ($subscriberType->isJuridical()) {
-                $juridicalSubs = $this->subscribers->findAllJuridical($command->sort, $command->order, $offset, $limit);
-                foreach ($juridicalSubs as $sub) {
-                    $subs[] = $sub->getInListFormat();
-                }
-            }
+                return $subs;
         }else {
             if ($command->fio) {
-
-                $foundedFIO = $this->subscribers->findByFIO($command->fio);
+                if ($command->sort) {
+                    $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
+                }else {
+                    $foundedFIO = $this->subscribers->findByFIO($command->fio);
+                }
                 foreach ($foundedFIO as $sub) {
                     $subs[] = $sub->getInListFormat();
                 }
+                return $subs;
             }
             if ($command->phonenumber) {
                 $foundedPhonenumber = $this->subscribers->findByPhoneNumber(new Phonenumber($command->phonenumber));
                 foreach ($foundedPhonenumber as $sub) {
                     $subs[] = $sub->getInListFormat();
                 }
-            }
-            if ($command->organizationName) {
-                $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
-                foreach ($foundedOrgs as $sub) {
-                    $subs[] = $sub->getInListFormat();
-                }
+                return $subs;
             }
         }
 

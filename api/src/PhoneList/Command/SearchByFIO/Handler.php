@@ -26,6 +26,7 @@ class Handler
         $subs = [];
         if ($command->fio) {
             if ($command->sort) {
+                $command->sort = 'p.surname';
                 $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
             }else {
                 $foundedFIO = $this->subscribers->findByFIO($command->fio);
@@ -33,15 +34,18 @@ class Handler
             foreach ($foundedFIO as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
+            return $subs;
         }
         if ($command->phonenumber) {
             $foundedPhonenumber = $this->subscribers->findByPhoneNumber(new Phonenumber($command->phonenumber));
             foreach ($foundedPhonenumber as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
+            return $subs;
         }
         if ($command->organizationName) {
             if ($command->sort) {
+                $command->sort = 'p.organizationName';
                 $foundedOrgs = $this->subscribers->findByOrgNameWithSort(
                     $command->organizationName,
                     $command->sort,
@@ -53,6 +57,7 @@ class Handler
             foreach ($foundedOrgs as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
+            return $subs;
         }
         //$logger->warning($this->subscribers->getCountOfAll());
         return $subs;

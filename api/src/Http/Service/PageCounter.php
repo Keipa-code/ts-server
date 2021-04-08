@@ -16,13 +16,14 @@ class PageCounter
 
     public function pageCount($rows, $queryData): int
     {
-        if (
-            !$queryData['phonenumber'] &&
-            !$queryData['organizationName'] &&
-            !$queryData['fio']
-        ) {
-            return $this->handler->handle();
-        }
+          if (
+                !isset($queryData['phonenumber']) &&
+                !isset($queryData['organizationName']) &&
+                !isset($queryData['fio'])
+            ) {
+                return $this->handler->handle();
+            }
+
 
         $rowCount = count($rows);
 

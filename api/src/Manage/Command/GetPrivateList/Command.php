@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Manage\Command\ListSubscriber\Request;
+namespace App\Manage\Command\GetPrivateList;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,7 +10,7 @@ class Command
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(max=3, allowEmptyString=true)
+     * @Assert\Length(max=4, allowEmptyString=true)
      * @Assert\Choice({"ASC", "DESC"}, message="Wrong value in sort.")
      */
     public string $order = '';
@@ -29,12 +29,6 @@ class Command
      * @Assert\Regex(pattern="/\d/")
      */
     public int $rowCount = 50;
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(max=11, allowEmptyString=true)
-     * @Assert\Choice({"private", "juridical"}, message="Wrong value in type.")
-     */
-    public string $subscriberType = '';
     /**
      * @Assert\Length(max=30, allowEmptyString=true)
      */

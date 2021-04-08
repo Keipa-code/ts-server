@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity;
 
-use App\Manage\Admin\Services\PasswordHasher;
+use App\Auth\Services\PasswordHasher;
 use App\Manage\Command\Entity\Subscriber\Id;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;

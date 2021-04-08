@@ -17,7 +17,9 @@ return static function (App $app): void {
     $app->get('/v1/logout', V1\Member\Logout\RequestAction::class);
 
     $app->group('/v1/manage', function (RouteCollectorProxy $group) {
-        $group->get('[/]', 'App\Http\Action\V1\Manage\SubList\RequestAction:handle')->setName('manage');
+        $group->get('[/]', 'App\Http\Action\V1\Manage\GetPrivateList\RequestAction:handle')->setName('manage');
+        $group->get('/private', 'App\Http\Action\V1\Manage\GetPrivateList\RequestAction:handle')->setName('private');
+        $group->get('/juridical', 'App\Http\Action\V1\Manage\GetJuridicalList\RequestAction:handle')->setName('juridical');
         $group->post('/add', V1\Manage\Add\RequestAction::class);
         $group->post('/update', V1\Manage\Update\RequestAction::class);
         $group->post('/remove', V1\Manage\Update\RequestAction::class);

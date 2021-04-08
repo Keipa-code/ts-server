@@ -3,29 +3,69 @@
 {% block contents %}
 
 
-    <div class="container">
+    <div class="container mb-5 mt-3">
         <h1>
             Управление справочником
         </h1>
+    </div>
 
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-3">
+                <a href="{{ url_for('private') }}" role="button" class="btn btn-primary btn-lg">Физичиские лица</a>
+            </div>
+
+
+            <div class="col-3">
+                <a href="{{ url_for('juridical') }}" role="button" class="btn btn-primary btn-lg">Юридичиские лица</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="d-flex bd-highlight">
+            <form class="d-inline-flex flex-fill bd-highlight" method="get">
+                <div class="p-2 flex-fill bd-highlight">
+                    <input type="search" class="form-control" name="phonenumber" placeholder="Номер телефона"
+                           aria-label="Номер телефона">
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button type="submit" class="btn btn-primary">Поиск</button>
+                </div>
+            </form>
+            <form class="d-inline-flex flex-fill bd-highlight" method="get">
+                <div class="p-2 flex-fill bd-highlight">
+                    <input type="search" class="form-control" name="name" placeholder="{{ placeholder }}"
+                           value="{{ value }}" aria-label="Ф.И.О.">
+                </div>
+                <div class="p-2 bd-highlight">
+                    <button type="submit" class="btn btn-primary">Поиск</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    </div>
+    <div class="container">
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
-                <th class="col-2" scope="col">Номер телефона</th>
-                <th scope="col">Информация об абоненте</th>
+                <th class="col-2" scope="col"><a href="{{ numberSort }}">Номер телефона</a></th>
+                <th scope="col"><a href="{{ nameSort }}">Информация об абоненте</a></th>
             </tr>
             </thead>
             <tbody>
             {% for row in list %}
-            <tr>
-                <th>{{ row.phonenumber }}</th>
-                <td>{{ row.rowValue }}</td>
-            </tr>
+                <tr>
+                    <th>{{ row.phonenumber }}</th>
+                    <td>{{ row.rowValue }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
-
     </div>
+
 
 {% endblock %}
 

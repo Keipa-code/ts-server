@@ -60,7 +60,7 @@ class RequestAction extends BaseAction
             $flash->clear();
 
             $uinfo = $this->handler->handle($command);
-
+            $this->logger->warning($uinfo->getUserName);
             if ($uinfo == false) {
                 $flash->set('error', 'Login failed!');
                 $url = $routeParser->urlFor('login');

@@ -14,17 +14,9 @@ $subs = $container->get(SubscriberRepository::class);
 
 $qb = $subs->privateRepo->createQueryBuilder('p');
 $data = $qb->select('p')
-    ->where($qb->expr()->orX(
-        $qb->expr()->like('LOWER(p.firstname)', '?1'),
-        $qb->expr()->like('LOWER(p.surname)', '?2'),
-        $qb->expr()->like('LOWER(p.patronymic)', '?3')
-    ))  //LOWER(p.firstname) LIKE :firstname
-    ->innerJoin('p.phonenumbers', 'n')
-    ->addOrderBy('p.surname', 'ASC')
-    ->setParameter(1, '%'.addcslashes('baur', '%_').'%')
-    ->setParameter(2, '%'.addcslashes('baur', '%_').'%')
-    ->setParameter(3, '%'.addcslashes('baur', '%_').'%')
-    ->getQuery()->getResult();
+    ->setFirstResult(0)
+    ->setMaxResults(50)
+    ->getQuery()->getResult();;
 $subs = [];
 foreach ($data as $datum) {
     $subs[] = $datum->getInListFormat();

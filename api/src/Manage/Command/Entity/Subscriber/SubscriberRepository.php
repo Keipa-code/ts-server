@@ -136,21 +136,39 @@ class SubscriberRepository
             ->getQuery()->getResult();
     }
 
-    public function findAllPrivate(string $sort, string $order, int $offset, int $limit): array
+    public function findAllPrivate(int $offset, int $limit): array
     {
         $qb = $this->privateRepo->createQueryBuilder('p');
         return $qb->select('p')
-            ->addOrderBy('p'.$sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()->getResult();
     }
 
-    public function findAllJuridical(string $sort, string $order, int $offset, int $limit): array
+    public function findAllJuridical(int $offset, int $limit): array
     {
         $qb = $this->juridicalRepo->createQueryBuilder('p');
         return $qb->select('p')
-            ->addOrderBy('p'.$sort, $order)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+    }
+
+    public function findAllPrivateWithSort(string $sort, string $order, int $offset, int $limit): array
+    {
+        $qb = $this->privateRepo->createQueryBuilder('p');
+        return $qb->select('p')
+            ->addOrderBy($sort, $order)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+    }
+
+    public function findAllJuridicalWithSort(string $sort, string $order, int $offset, int $limit): array
+    {
+        $qb = $this->juridicalRepo->createQueryBuilder('p');
+        return $qb->select('p')
+            ->addOrderBy($sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()->getResult();
@@ -166,7 +184,6 @@ class SubscriberRepository
         $q = $this->em->createQuery('SELECT COUNT(p.id) FROM App\Manage\Command\Entity\Subscriber\PhoneDirectory p');
 
         return $q->getSingleScalarResult();
-
     }
 
     public function get(Id $id, SubscriberType $subscriberType): object

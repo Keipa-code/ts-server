@@ -24,8 +24,8 @@ class Handler
 
     public function handle(Command $command)
     {
-        $uinfo = $this->em->getRepository(Admin::Class)->findOneBy(['username' => $command->username]);
-        if ($this->hasher->validate($command->password, $uinfo->getPassword())) {
+        $uinfo = $this->em->getRepository(Admin::Class)->findOneBy(['userName' => $command->username]);
+        if ($this->hasher->validate($command->password, $uinfo->getPasswordHash())) {
             return $uinfo;
         }
         return false;
