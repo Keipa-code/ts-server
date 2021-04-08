@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Manage\Command\GetById\Request;
+namespace App\Manage\Command\GetById;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

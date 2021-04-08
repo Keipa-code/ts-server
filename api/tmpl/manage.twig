@@ -48,11 +48,13 @@
 
     </div>
     <div class="container">
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th class="col-2" scope="col"><a href="{{ numberSort }}">Номер телефона</a></th>
-                <th scope="col"><a href="{{ nameSort }}">Информация об абоненте</a></th>
+                <th class="col-10" scope="col"><a href="{{ nameSort }}">Информация об абоненте</a></th>
+                <th class="col-1" scope="col"></th>
+                <th class="col-1" scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -60,11 +62,19 @@
                 <tr>
                     <th>{{ row.phonenumber }}</th>
                     <td>{{ row.rowValue }}</td>
+                    <td><a href="{{ url_for('edit') ~ row.id }}" role="button" class="btn btn-warning">&#9998</a></td>
+                    <td><a href="{{ url_for('remove') ~ row.id }}" role="button" class="btn btn-light">&#10060</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+    <div class="container">
+        <div class="d-flex flex-row-reverse">
+        <a href="{{ url_for('add') }}" role="button" class="btn-primary btn">Добавить</a>
+    </div>
+    </div>
+    <div>{{ path }}</div>
 
 
 {% endblock %}
