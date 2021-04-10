@@ -186,13 +186,22 @@ class SubscriberRepository
         return $q->getSingleScalarResult();
     }
 
-    public function get(Id $id, SubscriberType $subscriberType): object
+    public function get(Id $id): object
     {
-        if ($subscriberType->isPrivate()) {
+        /*if ($subscriberType->isPrivate()) {
             return $this->privateRepo->find($id->getValue());
         } elseif ($subscriberType->isJuridical()) {
             return $this->juridicalRepo->find($id->getValue());
         } else {
+            throw new DomainException('Subscriber not found.' . $id->getValue());
+        }*/
+        $privateSub = $this->privateRepo->find($id->getValue());
+        $juridicalSub = $this->juridicalRepo->find($id->getValue());
+        if ($privateSub) {
+            return $privateSub;
+        }elseif ($juridicalSub) {
+            return $juridicalSub;
+        }else {
             throw new DomainException('Subscriber not found.' . $id->getValue());
         }
     }

@@ -62,8 +62,8 @@
                 <tr>
                     <th>{{ row.phonenumber }}</th>
                     <td>{{ row.rowValue }}</td>
-                    <td><a href="{{ (url_for('edit') ~ type ~ '/' ~ row.id)|e }}" role="button" class="btn btn-warning">&#9998</a></td>
-                    <td><a href="{{ (url_for('remove') ~ type ~ '/' ~ row.id)|e }}" role="button" class="btn btn-light">&#10060</a></td>
+                    <td><a href="{{ (url_for(urlForButton) ~ row.id)|e }}" role="button" class="btn btn-warning">&#9998</a></td>
+                    <td><a href="{{ (url_for('remove') ~ row.id)|e }}" role="button" class="btn btn-light">&#10060</a></td>
                 </tr>
             {% endfor %}
             </tbody>

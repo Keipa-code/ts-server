@@ -106,7 +106,9 @@ class JuridicalSubscriber implements SubscriberInterface
         $this->street = $subData['street'];
         $this->houseNumber = $subData['houseNumber'];
         $this->floatNumber = $subData['floatNumber'] ?? null;
-        $this->phonenumbers->add(new PhoneDirectory(null, $this, $phonenumber));
+        $this->phonenumbers->map(static function (PhoneDirectory $phoneDir) use ($phonenumber) {
+            $phoneDir->setPhonenumber($phonenumber);
+        });
     }
 
     public function getId(): Id
@@ -141,9 +143,24 @@ class JuridicalSubscriber implements SubscriberInterface
         return $row;
     }
 
-    public function getSubscriberType(): SubscriberType
+    public function getInEditFormat(): array
     {
-        return $this->subscriberType;
+        return [
+            'id' => $this->id->getValue(),
+            'phonenumber' => $this->getPhonenumbers()['0']->getFormattedNumber(),
+            'organizationName' => $this->organizationName,
+            'departmentName' => $this->departmentName,
+            'country' => $this->country,
+            'city' => $this->city,
+            'street' => $this->street,
+            'houseNumber' => $this->houseNumber,
+            'floatNumber' => $this->floatNumber,
+        ];
+    }
+
+    public function getSubscriberType(): string
+    {
+        return $this->subscriberType->getSubscriberType();
     }
 
     public function getOrganizationName(): string

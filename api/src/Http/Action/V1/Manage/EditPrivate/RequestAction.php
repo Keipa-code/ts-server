@@ -39,9 +39,7 @@ class RequestAction extends BaseAction
          */
         $data = $args;
         $command = new Command();
-        $this->logger->warning($data['type']);
         $command->id = $data['uuid'] ?? '';
-        $command->subscriberType = $data['type'] ?? '';
 
         $this->validator->validate($command);
         $rows = $this->handler->handle($command);
@@ -53,7 +51,8 @@ class RequestAction extends BaseAction
             [
                 'rows' => $rows,
                 'command' => 'update',
-                'type' => 'private'
+                'type' => 'private',
+                'head' => 'Редактирование абонента'
             ]);
     }
 }

@@ -67,11 +67,13 @@ class RequestAction extends BaseAction
                 'value' => $data['name'] ?? '',
                 'placeholder' => 'Наименование организации',
                 'phonenumber' => $data['phonenumber'] ?? '',
+                'type' => 'juridical',
                 'total' => $this->counter->pageCount($list, $data),
                 'current' => $data['page'] ?? 1,
                 'url' => "list?" . http_build_query($data) . 'page=',
                 'numberSort' => $link['number'],
-                'nameSort' => $link['name']
+                'nameSort' => $link['name'],
+                'urlForButton' => 'editJuridical'
             ]);
     }
 }

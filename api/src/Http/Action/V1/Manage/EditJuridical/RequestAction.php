@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Action\V1\Manage\GetJuridicalList;
+namespace App\Http\Action\V1\Manage\EditJuridical;
 
 use App\Http\BaseAction;
 use App\Http\Service\Link;
 use App\Http\Service\PageCounter;
 use App\Http\Validator\Validator;
-use App\Manage\Command\GetJuridicalList\Command;
-use App\Manage\Command\GetJuridicalList\Handler;
+use App\Manage\Command\GetById\Command;
+use App\Manage\Command\GetById\Handler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -41,25 +41,19 @@ class RequestAction extends BaseAction
          */
         $data = $args;
         $command = new Command();
+        $command->id = $data['uuid'] ?? '';
 
         $this->validator->validate($command);
-        $link = Link::generateSortLinkM($data);
-        $list = $this->handler->handle($command);
-        //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
+        $rows = $this->handler->handle($command);
         return $this->render(
             $request,
             $response,
-            'manage.twig',
+            'juridical.twig',
             [
-                'list' => $list,
-                'value' => $data['name'] ?? '',
-                'placeholder' => 'Наименование организации',
-                'phonenumber' => $data['phonenumber'] ?? '',
-                'total' => $this->counter->pageCount($list, $data),
-                'current' => $data['page'] ?? 1,
-                'url' => "list?" . http_build_query($data) . 'page=',
-                'numberSort' => $link['number'],
-                'nameSort' => $link['name']
+                'rows' => $rows,
+                'command' => 'update',
+                'type' => 'juridical',
+                'head' => 'Редактирование абонента'
             ]);
     }
 }

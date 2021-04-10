@@ -34,7 +34,7 @@ class Handler
         $subscriberType = new SubscriberType($command->subscriberType);
         $phoneNumber = new Phonenumber($command->phoneNumber);
         /** @var SubscriberInterface $subscriber */
-        $subscriber = $this->subscribers->get($id, $subscriberType);
+        $subscriber = $this->subscribers->get($id);
         $id = $subscriber->getId();
 
         if ($phoneNumber->getNumber() !== $subscriber->getPhonenumbers()['0']->getNumber()) {

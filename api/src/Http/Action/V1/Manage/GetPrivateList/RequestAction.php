@@ -73,7 +73,8 @@ class RequestAction extends BaseAction
                 'current' => $data['page'] ?? 1,
                 'url' => "list?" . http_build_query($data) . 'page=',
                 'numberSort' => $link['number'],
-                'nameSort' => $link['name']
+                'nameSort' => $link['name'],
+                'urlForButton' => 'editPrivate'
             ]);
     }
 }
