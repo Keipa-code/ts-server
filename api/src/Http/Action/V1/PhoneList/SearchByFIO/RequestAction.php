@@ -26,8 +26,7 @@ class RequestAction extends BaseAction
         Validator $validator,
         ContainerInterface $container,
         PageCounter $counter
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->handler = $handler;
         $this->validator = $validator;
@@ -51,18 +50,24 @@ class RequestAction extends BaseAction
         //$this->logger->warning();
         $command = new Command();
 
-        $command->fio = mb_strtolower($data['fio']) ?? '';
+        if (isset($data['fio'])) {
+            $command->fio = mb_strtolower($data['fio']);
+            $pageCount = $this->counter->pageCountByFIO($command->fio);
+        }
+        if (isset($data['organizationName'])) {
+            $command->organizationName = mb_strtolower($data['organizationName']);
+            $pageCount = $this->counter->pageCountByOrgName($command->organizationName);
+        }
         $command->phonenumber = $data['phonenumber']  ?? '';
-        $command->organizationName = mb_strtolower($data['organizationName'])  ?? '';
         $command->order = $data['order']  ?? 'ASC';
         $command->pageNumber = (isset($data['page'])) ? intval($data['page']) : 1;
-        if (isset($data['sort'])){
+        if (isset($data['sort'])) {
             if ($data['sort'] == 'number') {
                 $command->sort = 'n.phonenumber.number';
-            }elseif ($data['sort'] == 'name'){
+            } elseif ($data['sort'] == 'name') {
                 $command->sort = 'name';
             }
-        }else {
+        } else {
             $command->sort = '';
         }
         $this->validator->validate($command);
@@ -74,14 +79,15 @@ class RequestAction extends BaseAction
             'list.twig',
             [
                 'list' => $list,
-                'fio' => $data['fio'],
-                'phonenumber' => $data['phonenumber'],
-                'organizationName' => $data['organizationName'],
-                'total' => $this->counter->pageCount($list, $data),
+                'fio' => isset($data['fio']) ? ($data['fio']) : '',
+                'phonenumber' => isset($data['phonenumber']) ? ($data['phonenumber']) : '',
+                'orgName' => isset($data['organizationName']) ? ($data['organizationName']) : '',
+                'total' => $pageCount,
                 'current' => $data['page'] ?? 1,
-                'url' => "list?" . http_build_query($data) . 'page=',
+                'url' => "list?" . http_build_query($data) . '&page=',
                 'numberSort' => $link['number'],
                 'nameSort' => $link['name']
-            ]);
+            ]
+        );
     }
 }

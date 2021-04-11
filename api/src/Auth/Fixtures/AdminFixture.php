@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Auth\Fixtures;
-
 
 use App\Auth\Entity\Admin;
 use App\Auth\Services\PasswordHasher;

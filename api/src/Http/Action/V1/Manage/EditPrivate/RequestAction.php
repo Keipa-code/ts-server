@@ -24,8 +24,7 @@ class RequestAction extends BaseAction
         Handler $handler,
         Validator $validator,
         ContainerInterface $container
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
@@ -52,7 +51,9 @@ class RequestAction extends BaseAction
                 'rows' => $rows,
                 'command' => 'update',
                 'type' => 'private',
-                'head' => 'Редактирование абонента'
-            ]);
+                'head' => 'Редактирование абонента',
+                'action' => 'update'
+            ]
+        );
     }
 }

@@ -197,5 +197,4 @@ class JuridicalSubscriber implements SubscriberInterface
     {
         return $this->floatNumber;
     }
-
 }

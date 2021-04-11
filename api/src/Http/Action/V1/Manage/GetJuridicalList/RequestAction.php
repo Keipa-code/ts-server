@@ -25,8 +25,7 @@ class RequestAction extends BaseAction
         Validator $validator,
         ContainerInterface $container,
         PageCounter $counter
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
@@ -42,7 +41,12 @@ class RequestAction extends BaseAction
         $data = $request->getQueryParams();
         //$data = $args;
         $command = new Command();
-        $command->fio = isset($data['name']) ? mb_strtolower($data['name']) : '';
+        if (isset($data['name'])) {
+            $command->organizationName = mb_strtolower($data['name']);
+            $pageCount = $this->counter->pageCountByOrgName($command->organizationName);
+        } else {
+            $pageCount = $this->counter->pageCountJuridical();
+        }
         $command->phonenumber = $data['phonenumber'] ?? '';
         $command->order = $data['order'] ?? 'ASC';
         $command->pageNumber = isset($data['page']) ? intval($data['page']) : 1;
@@ -55,7 +59,7 @@ class RequestAction extends BaseAction
             }
         }
         $this->validator->validate($command);
-        $link = Link::generateSortLinkM($data);
+        $link = Link::generateSortLink($data);
         $list = $this->handler->handle($command);
         //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
         return $this->render(
@@ -68,12 +72,14 @@ class RequestAction extends BaseAction
                 'placeholder' => 'Наименование организации',
                 'phonenumber' => $data['phonenumber'] ?? '',
                 'type' => 'juridical',
-                'total' => $this->counter->pageCount($list, $data),
+                'total' => $pageCount,
                 'current' => $data['page'] ?? 1,
-                'url' => "list?" . http_build_query($data) . 'page=',
+                'url' => "juridical?" . http_build_query($data) . '&page=',
                 'numberSort' => $link['number'],
                 'nameSort' => $link['name'],
-                'urlForButton' => 'editJuridical'
-            ]);
+                'urlForButton' => 'editJuridical',
+                'addButton' => 'addJuridical'
+            ]
+        );
     }
 }

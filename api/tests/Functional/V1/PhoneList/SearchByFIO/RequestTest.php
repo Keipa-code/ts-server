@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Test\Functional\V1\PhoneList\SearchByFIO;
-
 
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;
@@ -34,5 +32,4 @@ class RequestTest extends WebTestCase
             '1' => ['phonenumber' => '8 (777) 000 0006', 'rowValue' => 'Baur Awar Duma']
         ], Json::decode($body));
     }
-
 }

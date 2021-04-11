@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Test\Functional\V1\PhoneList\SearchByOrganizationName;
-
 
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;
@@ -33,5 +31,4 @@ class RequestTest extends WebTestCase
             '0' => ['phonenumber' => '8 (777) 000 0005', 'rowValue' => 'Uniserv priemnaya Kaz Oral Nekrasova 14 ']
         ], Json::decode($body));
     }
-
 }

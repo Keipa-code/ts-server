@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http\Middleware;
-
 
 use App\Http\JsonResponse;
 use DomainException;
@@ -34,7 +32,7 @@ class DomainExceptionHandler implements MiddlewareInterface
             ]);
             return new JsonResponse([
                 'message' => $exception->getMessage(),
-                ],409);
+                ], 409);
         }
     }
 }

@@ -56,5 +56,4 @@ class Phonenumber
         }*/
         $this->number = (string)$kzNumber->getNationalNumber();
     }
-
 }

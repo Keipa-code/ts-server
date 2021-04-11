@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http;
-
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;

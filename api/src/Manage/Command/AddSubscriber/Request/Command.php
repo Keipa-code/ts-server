@@ -6,7 +6,6 @@ namespace App\Manage\Command\AddSubscriber\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 class Command
 {
     /**
@@ -25,5 +24,4 @@ class Command
      * @Assert\All({@Assert\NotBlank(), @Assert\Length(max=50, allowEmptyString=true)})
      */
     public array $subData = [];
-
 }

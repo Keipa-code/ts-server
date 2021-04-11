@@ -40,15 +40,15 @@ class Handler
 
         if (!$command->phonenumber && !$command->fio) {
                 $privateSubs = $this->subscribers->findAllPrivate($offset, $limit);
-                foreach ($privateSubs as $sub) {
-                    $subs[] = $sub->getInListFormat();
-                }
+            foreach ($privateSubs as $sub) {
+                $subs[] = $sub->getInListFormat();
+            }
                 return $subs;
-        }else {
+        } else {
             if ($command->fio) {
                 if ($command->sort) {
                     $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
-                }else {
+                } else {
                     $foundedFIO = $this->subscribers->findByFIO($command->fio);
                 }
                 foreach ($foundedFIO as $sub) {
@@ -66,6 +66,5 @@ class Handler
         }
 
         return $subs;
-
     }
 }

@@ -29,7 +29,7 @@ class Command
      * @Assert\All({@Assert\NotBlank(), @Assert\Length(max=50, allowEmptyString=true)})
      */
     public array $subData = [];
-    
+
     public function writeData($data): void
     {
         $this->id = ($data['id'] ?? '');
@@ -43,7 +43,7 @@ class Command
             $this->subData['firstname'] = ($data['firstname'] ?? '');
             $this->subData['surname'] = ($data['surname'] ?? '');
             $this->subData['patronymic'] = ($data['patronymic'] ?? '');
-        }elseif ($this->subscriberType == 'juridical') {
+        } elseif ($this->subscriberType == 'juridical') {
             $this->subData['organizationName'] = ($data['organizationName'] ?? '');
             $this->subData['departmentName'] = ($data['departmentName'] ?? '');
             $this->subData['country'] = ($data['country'] ?? '');

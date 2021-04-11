@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Test\Functional\V1\PhoneList\SearchByNumber;
-
 
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;

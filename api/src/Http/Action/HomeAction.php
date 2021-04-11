@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Action;
 
-
 use App\Http\JsonResponse;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,7 +20,6 @@ class HomeAction
     public function __construct(ContainerInterface $container)
     {
         $this->view = $container->get('view');
-
     }
 
     protected function render(Request $request, Response $response, string $template, array $params = []): Response

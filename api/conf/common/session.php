@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 use App\Http\Middleware\SessionMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

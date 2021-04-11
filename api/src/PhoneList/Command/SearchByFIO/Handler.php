@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-
 namespace App\PhoneList\Command\SearchByFIO;
-
 
 use App\Manage\Command\Entity\Subscriber\Phonenumber;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
 
@@ -23,13 +22,20 @@ class Handler
 
     public function handle(Command $command, LoggerInterface $logger): array
     {
+        if ($command->pageNumber === 1) {
+            $offset = 0;
+        } elseif ($command->pageNumber > 1) {
+            $offset = $command->pageNumber * 50;
+        } else {
+            throw new InvalidArgumentException('Invalid page number');
+        }
         $subs = [];
         if ($command->fio) {
             if ($command->sort) {
                 $command->sort = 'p.surname';
-                $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
-            }else {
-                $foundedFIO = $this->subscribers->findByFIO($command->fio);
+                $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order, $offset, $command->rowCount);
+            } else {
+                $foundedFIO = $this->subscribers->findByFIO($command->fio, $offset, $command->rowCount);
             }
             foreach ($foundedFIO as $sub) {
                 $subs[] = $sub->getInListFormat();
@@ -49,9 +55,12 @@ class Handler
                 $foundedOrgs = $this->subscribers->findByOrgNameWithSort(
                     $command->organizationName,
                     $command->sort,
-                    $command->order);
-            }else {
-                $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
+                    $command->order,
+                    $offset,
+                    $command->rowCount
+                );
+            } else {
+                $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName, $offset, $command->rowCount);
             }
 
             foreach ($foundedOrgs as $sub) {

@@ -15,7 +15,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Views\Twig;
 
-class RequestAction  implements RequestHandlerInterface
+class RequestAction implements RequestHandlerInterface
 {
     private Handler $handler;
 

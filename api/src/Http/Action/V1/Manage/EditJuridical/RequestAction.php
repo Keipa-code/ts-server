@@ -25,8 +25,7 @@ class RequestAction extends BaseAction
         Validator $validator,
         ContainerInterface $container,
         PageCounter $counter
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
@@ -51,9 +50,11 @@ class RequestAction extends BaseAction
             'juridical.twig',
             [
                 'rows' => $rows,
-                'command' => 'update',
+                'command' => 'Обновить',
                 'type' => 'juridical',
-                'head' => 'Редактирование абонента'
-            ]);
+                'head' => 'Редактирование абонента',
+                'action' => 'update'
+            ]
+        );
     }
 }

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http\Action\V1\Member\Login;
-
 
 use App\Auth\Command\SignIn\Command;
 use App\Auth\Command\SignIn\Handler;
@@ -13,28 +11,25 @@ use App\Http\Validator\Validator;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Flash\Messages;
 use Slim\Routing\RouteContext;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class RequestAction extends BaseAction
 {
     private Handler $handler;
-    private Validator $validator;
-    private ContainerInterface $container;
     private Session $session;
+    private Messages $flash;
 
     public function __construct(
         Handler $handler,
-        Validator $validator,
         ContainerInterface $container,
         Session $session
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->handler = $handler;
-        $this->validator = $validator;
-        $this->container = $container;
         $this->session = $session;
+        $this->flash = $container->get(Messages::class);
     }
 
     public function handle(Request $request, Response $response): Response
@@ -47,8 +42,7 @@ class RequestAction extends BaseAction
             $data = $request->getParsedBody();
 
             if (empty($data["uname"]) || empty($data["pswd"])) {
-
-                return $response->withStatus(302)->withHeader('Location', '/member/login');
+                return $response->withStatus(302)->withHeader('Location', '/v1/login');
             }
             $command = new Command();
             $command->username = (string)($data['uname'] ?? '');
@@ -56,13 +50,10 @@ class RequestAction extends BaseAction
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
 
-            $flash = $this->session->getFlashBag();
-            $flash->clear();
-
             $uinfo = $this->handler->handle($command);
-            $this->logger->warning($uinfo->getUserName);
+
             if ($uinfo == false) {
-                $flash->set('error', 'Login failed!');
+                $this->flash->addMessage('danger', 'Неверно введены имя пользователя или пароль');
                 $url = $routeParser->urlFor('login');
                 return $response->withStatus(302)->withHeader('Location', $url);
             }
@@ -71,7 +62,7 @@ class RequestAction extends BaseAction
             $this->session->start();
             $url = $routeParser->urlFor('manage');
             $this->session->set('user', $uinfo->getUserName());
-            $flash->set('success', 'Login successfully');
+            $this->flash->addMessage('success', 'Login successfully');
             return $response->withStatus(302)->withHeader('Location', $url);
         }
 
@@ -80,8 +71,9 @@ class RequestAction extends BaseAction
             $response,
             'login.twig',
             [
-                'flash' => $this->session->getFlashBag()->get('info'),
+                //'flash' => $this->flash->getMessage('info'),
                 'uinfo' => $request->getAttribute('uinfo')
-            ]);
+            ]
+        );
     }
 }

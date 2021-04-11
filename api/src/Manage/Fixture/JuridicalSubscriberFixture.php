@@ -12,6 +12,7 @@ use App\Manage\Command\Entity\Subscriber\SubscriberType;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
 class JuridicalSubscriberFixture extends AbstractFixture
 {
@@ -36,5 +37,29 @@ class JuridicalSubscriberFixture extends AbstractFixture
         $manager->persist($juridicalSub);
 
         $manager->flush();
+
+        $faker = Factory::create('ru_RU');
+        for ($j = 0; $j < 500; $j++) {
+            $subscriberType = new SubscriberType('juridical');
+            $phoneNumber = new Phonenumber($faker->phoneNumber);
+            $juridicalSub = SubscriberCreator::create(
+                Id::generate(),
+                $phoneNumber,
+                $subscriberType,
+                $data = [
+                    'organizationName' => $faker->company,
+                    'departmentName' => $faker->jobTitle,
+                    'country' => $faker->country,
+                    'city' => $faker->city,
+                    'street' => $faker->streetName,
+                    'houseNumber' => $faker->buildingNumber,
+                    'floatNumber' => $faker->buildingNumber
+                ]
+            );
+
+            $manager->persist($juridicalSub);
+
+            $manager->flush();
+        }
     }
 }

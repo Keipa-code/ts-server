@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http\Action\V1\Member\Logout;
-
 
 use App\Auth\Command\SignIn\Command;
 use App\Auth\Command\SignIn\Handler;
@@ -32,13 +30,12 @@ class RequestAction
     public function __invoke(
         Request $request,
         Response $response
-    ): Response
-    {
+    ): Response {
         // Logout user
         $this->session->invalidate();
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-        $url = $routeParser->urlFor('logout');
+        $url = $routeParser->urlFor('index');
 
         return $response->withStatus(302)->withHeader('Location', $url);
     }

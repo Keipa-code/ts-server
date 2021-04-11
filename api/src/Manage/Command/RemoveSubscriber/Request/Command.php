@@ -10,7 +10,7 @@ class Command
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Uuid()
+     * @Assert\Length(min=20, max=40)
      */
     public string $id = '';
 }

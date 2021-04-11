@@ -2,34 +2,31 @@
 
 namespace App\Http\Action\V1\Manage\Add;
 
-use App\Http\EmptyResponse;
-use App\Http\JsonResponse;
+use App\Http\BaseAction;
 use App\Http\Validator\Validator;
 use App\Manage\Command\AddSubscriber\Request\Command;
 use App\Manage\Command\AddSubscriber\Request\Handler;
-use DomainException;
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Log\LoggerInterface;
-use stdClass;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 
-class RequestAction implements RequestHandlerInterface
+class RequestAction extends BaseAction
 {
+    private Validator $validator;
     private Handler $handler;
 
-    private Validator $validator;
-
-    public function __construct(Handler $handler, Validator $validator)
-    {
-        $this->handler = $handler;
+    public function __construct(
+        Handler $handler,
+        Validator $validator,
+        ContainerInterface $container
+    ) {
+        parent::__construct($container);
         $this->validator = $validator;
+        $this->handler = $handler;
     }
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(Request $request, Response $response): Response
     {
         /**
          * @psalm-var string[] $data
@@ -38,8 +35,8 @@ class RequestAction implements RequestHandlerInterface
         $data = $request->getParsedBody();
 
         $command = new Command();
-        $command->phoneNumber = ($data['phoneNumber'] ?? '');
-        $command->subscriberType = ($data['subscriberType'] ?? '');
+        $command->phoneNumber = ($data['phonenumber'] ?? '');
+        $command->subscriberType = ($data['type'] ?? '');
         // Частное лицо
         /**
          * @psalm-var array $command->subData
@@ -48,7 +45,7 @@ class RequestAction implements RequestHandlerInterface
             $command->subData['firstname'] = ($data['firstname'] ?? '');
             $command->subData['surname'] = ($data['surname'] ?? '');
             $command->subData['patronymic'] = ($data['patronymic'] ?? '');
-        }elseif ($command->subscriberType == 'juridical') {
+        } elseif ($command->subscriberType == 'juridical') {
             $command->subData['organizationName'] = ($data['organizationName'] ?? '');
             $command->subData['departmentName'] = ($data['departmentName'] ?? '');
             $command->subData['country'] = ($data['country'] ?? '');
@@ -64,6 +61,10 @@ class RequestAction implements RequestHandlerInterface
 
         $this->handler->handle($command);
 
-        return new EmptyResponse(201);
+        $routeParser = RouteContext::fromRequest($request)->getRouteParser();
+        $url = $routeParser->urlFor('manage');
+        return $response
+            ->withStatus(302)
+            ->withHeader('Location', $url);
     }
 }

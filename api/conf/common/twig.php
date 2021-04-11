@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 
 return [
@@ -14,7 +15,12 @@ return [
          * @var array<string, mixed> $settings['twig']
          * @psalm-suppress MixedArrayAccess
          */
-        return Twig::create($settings['template_path'], $settings['twig']);
+        $twig = Twig::create($settings['template_path'], $settings['twig']);
+
+        $environment = $twig->getEnvironment();
+        $environment->addGlobal('flash', $container->get(Messages::class));
+
+        return $twig;
     },
 
     'views' => [

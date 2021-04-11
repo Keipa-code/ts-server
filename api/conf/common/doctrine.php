@@ -15,7 +15,6 @@ use Doctrine\ORM\Tools\Setup;
 use Psr\Container\ContainerInterface;
 use App\Manage\Command\Entity\Subscriber;
 
-
 return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
         /**

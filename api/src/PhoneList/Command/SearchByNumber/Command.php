@@ -6,7 +6,6 @@ namespace App\PhoneList\Command\SearchByNumber;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 class Command
 {
     /**

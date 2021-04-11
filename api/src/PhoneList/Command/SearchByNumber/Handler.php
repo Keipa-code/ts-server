@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\PhoneList\Command\SearchByNumber;
-
 
 use App\Manage\Command\Entity\Subscriber\Phonenumber;
 use App\Manage\Command\Entity\Subscriber\SubscriberRepository;
@@ -36,7 +34,7 @@ class Handler
         ];
 
         foreach ($data['0'] as $datum) {
-            $row['rowValue'].= ' '.$datum;
+            $row['rowValue'] .= ' ' . $datum;
         }
         //$logger->warning($row['rowValue']);
         $row['rowValue'] = trim($row['rowValue']);

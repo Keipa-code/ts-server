@@ -20,10 +20,13 @@ return static function (App $app): void {
         $group->get('[/]', 'App\Http\Action\V1\Manage\GetPrivateList\RequestAction:handle')->setName('manage');
         $group->get('/private', 'App\Http\Action\V1\Manage\GetPrivateList\RequestAction:handle')->setName('private');
         $group->get('/juridical', 'App\Http\Action\V1\Manage\GetJuridicalList\RequestAction:handle')->setName('juridical');
-        $group->post('/add', V1\Manage\Add\RequestAction::class)->setName('add');
+        $group->get('/logout', 'App\Http\Action\V1\Member\Logout\RequestAction')->setName('logout');
+        $group->post('/add', 'App\Http\Action\V1\Manage\Add\RequestAction:handle')->setName('add');
+        $group->get('/add/private', 'App\Http\Action\V1\Manage\AddPrivate\RequestAction:handle')->setName('addPrivate');
+        $group->get('/add/juridical', 'App\Http\Action\V1\Manage\AddJuridical\RequestAction:handle')->setName('addJuridical');
         $group->get('/edit/private/[{uuid}]', 'App\Http\Action\V1\Manage\EditPrivate\RequestAction:handle')->setName('editPrivate');
         $group->get('/edit/juridical/[{uuid}]', 'App\Http\Action\V1\Manage\EditJuridical\RequestAction:handle')->setName('editJuridical');
-        $group->post('/update', V1\Manage\Update\RequestAction::class);
-        $group->post('/remove/[{uuid}]', V1\Manage\Update\RequestAction::class)->setName('remove');
+        $group->post('/update', V1\Manage\Update\RequestAction::class)->setName('update');
+        $group->get('/remove/[{uuid}]', 'App\Http\Action\V1\Manage\Remove\RequestAction:handle')->setName('remove');
     })->add(UserAuthMiddleware::class);
 };

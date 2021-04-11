@@ -59,6 +59,4 @@ class PhoneDirectory
     {
         $this->phonenumber = $phonenumber;
     }
-
-
 }

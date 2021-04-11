@@ -45,7 +45,7 @@ class Handler
 
         if ($command->subscriberType == $subscriber->getSubscriberType()) {
             $subscriber->setUpdatedData($phoneNumber, $command->subData);
-        }else{
+        } else {
             $newSubscriber = SubscriberCreator::create(
                 $id,
                 $phoneNumber,

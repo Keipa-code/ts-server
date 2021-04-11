@@ -36,7 +36,6 @@ class RequestTest extends WebTestCase
 
         self::assertEquals(201, $response->getStatusCode());
         self::assertEquals('', (string)$response->getBody());
-
     }
 
     public function testExisting(): void

@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http\Validator;
-
-
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -24,6 +21,5 @@ class Validator
         if ($violations->count() > 0) {
             throw new ValidationException($violations);
         }
-
     }
 }

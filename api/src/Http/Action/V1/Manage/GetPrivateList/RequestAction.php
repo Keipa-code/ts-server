@@ -25,8 +25,7 @@ class RequestAction extends BaseAction
         Validator $validator,
         ContainerInterface $container,
         PageCounter $counter
-    )
-    {
+    ) {
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
@@ -42,6 +41,12 @@ class RequestAction extends BaseAction
         $data = $request->getQueryParams();
         //$data = $args;
         $command = new Command();
+        if (isset($data['name'])) {
+            $command->fio = mb_strtolower($data['name']);
+            $pageCount = $this->counter->pageCountByFIO($command->fio);
+        } else {
+            $pageCount = $this->counter->pageCountPrivate();
+        }
         $command->fio = isset($data['name']) ? mb_strtolower($data['name']) : '';
         $command->phonenumber = $data['phonenumber'] ?? '';
         $command->order = $data['order'] ?? 'ASC';
@@ -56,7 +61,7 @@ class RequestAction extends BaseAction
         }
 
         $this->validator->validate($command);
-        $link = Link::generateSortLinkM($data);
+        $link = Link::generateSortLink($data);
         $list = $this->handler->handle($command, $this->logger);
         //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
         return $this->render(
@@ -69,12 +74,14 @@ class RequestAction extends BaseAction
                 'phonenumber' => $data['phonenumber'] ?? '',
                 'placeholder' => 'Ф.И.О.',
                 'type' => 'private',
-                'total' => $this->counter->pageCount($list, $data),
+                'total' => $pageCount,
                 'current' => $data['page'] ?? 1,
-                'url' => "list?" . http_build_query($data) . 'page=',
+                'url' => "private?" . http_build_query($data) . '&page=',
                 'numberSort' => $link['number'],
                 'nameSort' => $link['name'],
-                'urlForButton' => 'editPrivate'
-            ]);
+                'urlForButton' => 'editPrivate',
+                'addButton' => 'addPrivate'
+            ]
+        );
     }
 }

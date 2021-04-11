@@ -1,9 +1,9 @@
 <?php
 
-
 namespace App\Http\Service;
 
-use App\PhoneList\Command\GetAllNumberCount\Handler;
+use App\PhoneList\Command\GetPageCount\Handler;
+use App\PhoneList\Command\GetPageCount\Command;
 
 class PageCounter
 {
@@ -14,22 +14,35 @@ class PageCounter
         $this->handler = $handler;
     }
 
-    public function pageCount($rows, $queryData): int
+    public function pageCountPrivate(): int
     {
-          if (
-                !isset($queryData['phonenumber']) &&
-                !isset($queryData['organizationName']) &&
-                !isset($queryData['fio'])
-            ) {
-                return $this->handler->handle();
-            }
+        $rowCount = $this->handler->handlePrivate();
+        return $this->rowToCount($rowCount);
+    }
 
+    public function pageCountJuridical(): int
+    {
+        $rowCount = $this->handler->handleJuridical();
+        return $this->rowToCount($rowCount);
+    }
 
-        $rowCount = count($rows);
+    public function pageCountByFIO($fio): int
+    {
+        $rowCount = $this->handler->handleByFIO($fio);
+        return $this->rowToCount($rowCount);
+    }
 
+    public function pageCountByOrgName($orgName): int
+    {
+        $rowCount = $this->handler->handleByOrgName($orgName);
+        return $this->rowToCount($rowCount);
+    }
+
+    private function rowToCount($rowCount): int
+    {
         if ($rowCount > 50) {
             $pagesCount = (int)ceil($rowCount / 50);
-        }else{
+        } else {
             $pagesCount = 1;
         }
 

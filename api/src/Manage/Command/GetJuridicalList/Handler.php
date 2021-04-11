@@ -18,12 +18,10 @@ use Webmozart\Assert\Assert;
 class Handler
 {
     private SubscriberRepository $subscribers;
-    private Flusher $flusher;
 
-    public function __construct(SubscriberRepository $subscribers, Flusher $flusher)
+    public function __construct(SubscriberRepository $subscribers)
     {
         $this->subscribers = $subscribers;
-        $this->flusher = $flusher;
     }
 
     public function handle(Command $command): array
@@ -55,11 +53,13 @@ class Handler
                     $foundedOrgs = $this->subscribers->findByOrgNameWithSort(
                         $command->organizationName,
                         $command->sort,
-                        $command->order);
+                        $command->order,
+                        $offset,
+                        $limit
+                    );
                 } else {
-                    $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName);
+                    $foundedOrgs = $this->subscribers->findByOrgName($command->organizationName, $offset, $limit);
                 }
-
                 foreach ($foundedOrgs as $sub) {
                     $subs[] = $sub->getInListFormat();
                 }
@@ -68,6 +68,5 @@ class Handler
         }
 
         return $subs;
-
     }
 }
