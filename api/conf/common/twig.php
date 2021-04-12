@@ -19,6 +19,9 @@ return [
 
         $environment = $twig->getEnvironment();
         $environment->addGlobal('flash', $container->get(Messages::class));
+        $environment->addFunction(new \Twig\TwigFunction('json_decode', function ($data) use ($container) {
+            return json_decode($data);
+        }));
 
         return $twig;
     },

@@ -11,14 +11,13 @@ use App\Manage\Command\RemoveSubscriber\Request\Handler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Flash\Messages;
 use Slim\Routing\RouteContext;
 
 class RequestAction extends BaseAction
 {
     private Handler $handler;
     private Validator $validator;
-    private Messages $flash;
+    private ContainerInterface $container;
 
     public function __construct(
         Handler $handler,
@@ -28,7 +27,7 @@ class RequestAction extends BaseAction
         parent::__construct($container);
         $this->handler = $handler;
         $this->validator = $validator;
-        $this->flash = $container->get(Messages::class);
+        $this->container = $container;
     }
 
     public function handle(Request $request, Response $response, array $args = []): Response
@@ -47,16 +46,19 @@ class RequestAction extends BaseAction
         $this->handler->handle($command);
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         $url = $routeParser->urlFor('manage');
-        $this->flash->addMessage('success', 'Абонент удален');
-        return $this->render(
-            $request,
-            $response
-                ->withStatus(302)
-                ->withHeader('Location', $url),
+
+        $view = $this->container->get('view');
+        $str = $view->fetchFromString(
             'manage.twig',
             [
-                'flash' => $this->flash
-            ]
+                'flash' => [
+                    'success' => 'успешно'
+            ]]
+
         );
+        $response->getBody()->write($str);
+        return $response
+            ->withStatus(302)
+            ->withHeader('Location', $url);
     }
 }
