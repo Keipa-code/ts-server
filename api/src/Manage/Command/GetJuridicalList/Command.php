@@ -34,7 +34,7 @@ class Command
      */
     public string $fio = '';
     /**
-     * @Assert\Length(min=8, max=20, allowEmptyString=true)
+     * @Assert\Length(min=4, max=20, allowEmptyString=true)
      */
     public string $phonenumber = '';
     /**

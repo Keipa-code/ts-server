@@ -30,6 +30,23 @@ class Handler
             throw new InvalidArgumentException('Invalid page number');
         }
         $subs = [];
+        if (!$command->phonenumber && !$command->fio && !$command->organizationName) {
+            if (!$command->sort) {
+                $privateSubs = $this->subscribers->findAllPrivate($offset, $command->rowCount);
+            } else {
+                $command->sort = 'p.surname';
+                $privateSubs = $this->subscribers->findAllPrivateWithSort(
+                    $command->sort,
+                    $command->order,
+                    $offset,
+                    $command->rowCount
+                );
+            }
+            foreach ($privateSubs as $sub) {
+                $subs[] = $sub->getInListFormat();
+            }
+            return $subs;
+        }
         if ($command->fio) {
             if ($command->sort) {
                 $command->sort = 'p.surname';

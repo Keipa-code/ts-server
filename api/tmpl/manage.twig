@@ -26,8 +26,6 @@
             <div class="col-3">
                 <a href="{{ url_for('private') }}" role="button" class="btn btn-primary btn-lg">Физичиские лица</a>
             </div>
-
-
             <div class="col-3">
                 <a href="{{ url_for('juridical') }}" role="button" class="btn btn-primary btn-lg">Юридичиские лица</a>
             </div>
@@ -39,7 +37,7 @@
                 <div class="p-2 flex-fill bd-highlight">
                     <input type="search" class="form-control" name="phonenumber" placeholder="Номер телефона"
                            value="{{ phonenumber }}" aria-label="Номер телефона" id="phonenumber"
-                           pattern="[0-9\s\-()]{8,20}">
+                           pattern="[0-9\s\-()]{4,20}">
                 </div>
                 <div class="p-2 bd-highlight">
                     <button type="submit" class="btn btn-primary">Поиск</button>

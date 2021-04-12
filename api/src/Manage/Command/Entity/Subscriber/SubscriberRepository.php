@@ -29,7 +29,8 @@ class SubscriberRepository
         EntityManagerInterface $em,
         EntityRepository $privateRepo,
         EntityRepository $juridicalRepo
-    ) {
+    )
+    {
         $this->em = $em;
         $this->privateRepo = $privateRepo;
         $this->juridicalRepo = $juridicalRepo;
@@ -61,15 +62,15 @@ class SubscriberRepository
     public function findByPhoneNumber(Phonenumber $phoneNumber): array
     {
         $privateNumber = $this->privateRepo->createQueryBuilder('p')
-                ->select('p')
-                ->innerJoin('p.phonenumbers', 'n')
-                ->andWhere('n.phonenumber.number = :phonenumber')
-                ->setParameter(':phonenumber', $phoneNumber->getNumber())
-                ->getQuery()->getResult();
+            ->select('p')
+            ->innerJoin('p.phonenumbers', 'n')
+            ->andWhere('n.phonenumber.number LIKE :phonenumber')
+            ->setParameter(':phonenumber', $phoneNumber->getNumber())
+            ->getQuery()->getResult();
         $juridicalNumber = $this->juridicalRepo->createQueryBuilder('j')
             ->select('j')
             ->innerJoin('j.phonenumbers', 'n')
-            ->andWhere('n.phonenumber.number = :phonenumber')
+            ->andWhere('n.phonenumber.number LIKE :phonenumber')
             ->setParameter(':phonenumber', $phoneNumber->getNumber())
             ->getQuery()->getResult();
         if ($privateNumber) {
@@ -77,13 +78,13 @@ class SubscriberRepository
         } elseif ($juridicalNumber) {
             return $juridicalNumber;
         } else {
-            return [null];
+            return [];
         }
     }
 
     public function findByFIO($fio, int $offset, int $limit): array
     {
-         //$this->privateRepo->findBy(['firstname' => $fio]);
+        //$this->privateRepo->findBy(['firstname' => $fio]);
         $qb = $this->privateRepo->createQueryBuilder('p');
         return $qb->select('p')
             ->where($qb->expr()->orX(

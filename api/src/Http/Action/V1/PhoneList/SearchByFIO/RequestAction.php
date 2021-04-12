@@ -58,7 +58,16 @@ class RequestAction extends BaseAction
             $command->organizationName = mb_strtolower($data['organizationName']);
             $pageCount = $this->counter->pageCountByOrgName($command->organizationName);
         }
-        $command->phonenumber = $data['phonenumber']  ?? '';
+        if (isset($data['phonenumber'])) {
+            $command->phonenumber = $data['phonenumber'];
+            $pageCount = 1;
+        }
+        if (!isset($pageCount)) {
+            $pageCount = $this->counter->pageCountPrivate();
+        }
+        if (isset($data['phonenumber'])) {
+            $command->phonenumber = $data['phonenumber'];
+        }
         $command->order = $data['order']  ?? 'ASC';
         $command->pageNumber = (isset($data['page'])) ? intval($data['page']) : 1;
         if (isset($data['sort'])) {

@@ -25,7 +25,8 @@ class RequestAction extends BaseAction
         Validator $validator,
         ContainerInterface $container,
         PageCounter $counter
-    ) {
+    )
+    {
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
@@ -44,6 +45,9 @@ class RequestAction extends BaseAction
         if (isset($data['name'])) {
             $command->fio = mb_strtolower($data['name']);
             $pageCount = $this->counter->pageCountByFIO($command->fio);
+        } elseif (isset($data['phonenumber'])) {
+            $command->phonenumber = $data['phonenumber'];
+            $pageCount = 1;
         } else {
             $pageCount = $this->counter->pageCountPrivate();
         }
