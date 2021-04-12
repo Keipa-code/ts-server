@@ -19,7 +19,6 @@ use Webmozart\Assert\Assert;
 class Handler
 {
     private SubscriberRepository $subscribers;
-    private Flusher $flusher;
 
     public function __construct(SubscriberRepository $subscribers, Flusher $flusher)
     {
@@ -39,7 +38,16 @@ class Handler
         $subs = [];
 
         if (!$command->phonenumber && !$command->fio) {
+            if (!$command->sort) {
                 $privateSubs = $this->subscribers->findAllPrivate($offset, $limit);
+            } else {
+                $privateSubs = $this->subscribers->findAllPrivateWithSort(
+                    $command->sort,
+                    $command->order,
+                    $offset,
+                    $limit
+                );
+            }
             foreach ($privateSubs as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
@@ -47,9 +55,15 @@ class Handler
         } else {
             if ($command->fio) {
                 if ($command->sort) {
-                    $foundedFIO = $this->subscribers->findByFIOWithSort($command->fio, $command->sort, $command->order);
+                    $foundedFIO = $this->subscribers->findByFIOWithSort(
+                        $command->fio,
+                        $command->sort,
+                        $command->order,
+                        $offset,
+                        $limit
+                    );
                 } else {
-                    $foundedFIO = $this->subscribers->findByFIO($command->fio);
+                    $foundedFIO = $this->subscribers->findByFIO($command->fio, $offset, $limit);
                 }
                 foreach ($foundedFIO as $sub) {
                     $subs[] = $sub->getInListFormat();

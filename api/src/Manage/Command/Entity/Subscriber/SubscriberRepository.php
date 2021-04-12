@@ -152,6 +152,7 @@ class SubscriberRepository
             ->getQuery()->getResult();
     }
 
+
     public function findAllJuridical(int $offset, int $limit): array
     {
         $qb = $this->juridicalRepo->createQueryBuilder('p');
@@ -165,6 +166,7 @@ class SubscriberRepository
     {
         $qb = $this->privateRepo->createQueryBuilder('p');
         return $qb->select('p')
+            ->innerJoin('p.phonenumbers', 'n')
             ->addOrderBy($sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
@@ -175,6 +177,7 @@ class SubscriberRepository
     {
         $qb = $this->juridicalRepo->createQueryBuilder('p');
         return $qb->select('p')
+            ->innerJoin('p.phonenumbers', 'n')
             ->addOrderBy($sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults($limit)

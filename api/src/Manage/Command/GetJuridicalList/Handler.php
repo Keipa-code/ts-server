@@ -35,7 +35,16 @@ class Handler
         $subs = [];
 
         if (!$command->phonenumber && !$command->organizationName) {
-            $juridicalSubs = $this->subscribers->findAllJuridical($offset, $limit);
+            if (!$command->sort) {
+                $juridicalSubs = $this->subscribers->findAllJuridical($offset, $limit);
+            } else {
+                $juridicalSubs = $this->subscribers->findAllJuridicalWithSort(
+                    $command->sort,
+                    $command->order,
+                    $offset,
+                    $limit,
+                );
+            }
             foreach ($juridicalSubs as $sub) {
                 $subs[] = $sub->getInListFormat();
             }
