@@ -72,6 +72,7 @@
             {% for row in list %}
                 <tr>
                     <th>{{ row.phonenumber }}</th>
+
                     <td>{{ row.rowValue }}</td>
                     <td><a href="{{ (url_for(urlForButton) ~ row.id)|e }}" role="button"
                            class="btn btn-warning">&#9998</a></td>
@@ -81,6 +82,9 @@
             {% endfor %}
             </tbody>
         </table>
+        {% if not list %}
+        <p align="center"><i>Нет результатов</i></p>
+        {% endif %}
     </div>
     <div class="container">
         <div class="d-flex flex-row-reverse">

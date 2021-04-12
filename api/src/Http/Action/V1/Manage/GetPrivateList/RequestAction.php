@@ -13,12 +13,14 @@ use App\Manage\Command\GetPrivateList\Handler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Flash\Messages;
 
 class RequestAction extends BaseAction
 {
     private Validator $validator;
     private Handler $handler;
     private PageCounter $counter;
+    private Messages $flash;
 
     public function __construct(
         Handler $handler,
@@ -31,6 +33,7 @@ class RequestAction extends BaseAction
         $this->validator = $validator;
         $this->handler = $handler;
         $this->counter = $counter;
+        $this->flash = $container->get(Messages::class);
     }
 
     public function handle(Request $request, Response $response, array $args = []): Response
@@ -67,6 +70,7 @@ class RequestAction extends BaseAction
         $this->validator->validate($command);
         $link = Link::generateSortLink($data);
         $list = $this->handler->handle($command, $this->logger);
+
         //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
         return $this->render(
             $request,

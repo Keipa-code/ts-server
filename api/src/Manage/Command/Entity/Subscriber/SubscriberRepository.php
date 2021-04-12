@@ -61,17 +61,17 @@ class SubscriberRepository
 
     public function findByPhoneNumber(Phonenumber $phoneNumber): array
     {
-        $privateNumber = $this->privateRepo->createQueryBuilder('p')
-            ->select('p')
+        $qbp = $this->privateRepo->createQueryBuilder('p');
+        $privateNumber = $qbp->select('p')
             ->innerJoin('p.phonenumbers', 'n')
-            ->andWhere('n.phonenumber.number LIKE :phonenumber')
-            ->setParameter(':phonenumber', $phoneNumber->getNumber())
+            ->andWhere($qbp->expr()->like('n.phonenumber.number', '?1'))
+            ->setParameter(1, '%' . addcslashes($phoneNumber->getNumber(), '%_') . '%')
             ->getQuery()->getResult();
-        $juridicalNumber = $this->juridicalRepo->createQueryBuilder('j')
-            ->select('j')
+        $qbj = $this->juridicalRepo->createQueryBuilder('j');
+        $juridicalNumber = $qbj->select('j')
             ->innerJoin('j.phonenumbers', 'n')
-            ->andWhere('n.phonenumber.number LIKE :phonenumber')
-            ->setParameter(':phonenumber', $phoneNumber->getNumber())
+            ->andWhere($qbj->expr()->like('n.phonenumber.number', '?1'))
+            ->setParameter(1, '%' . addcslashes($phoneNumber->getNumber(), '%_') . '%')
             ->getQuery()->getResult();
         if ($privateNumber) {
             return $privateNumber;
@@ -258,5 +258,10 @@ class SubscriberRepository
     public function remove(object $subscriber): void
     {
         $this->em->remove($subscriber);
+    }
+
+    public function getEm(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

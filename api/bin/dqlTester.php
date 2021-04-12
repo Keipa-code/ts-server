@@ -12,15 +12,14 @@ $container = require __DIR__ . '/../conf/container.php';
 
 $subs = $container->get(SubscriberRepository::class);
 
+$em = $subs->getEm();
+
+$fio = '7770000006';
 $qb = $subs->privateRepo->createQueryBuilder('p');
-$data = $qb->select('p, j')
-    ->from('App\Manage\Command\Entity\Subscriber\JuridicalSubscriber', 'j')
-    ->where($qb->expr()->orX(
-        $qb->expr()->eq('p.id', '?2'),
-        $qb->expr()->eq('j.id', '?1')
-    ))  //LOWER(p.firstname) LIKE :firstname
-    ->setParameter(1, '00000000-0000-0000-0000-000000000002')
-    ->setParameter(2, '797fc191-4479-4600-b9e5-11a8728dfa21')
+$data = $qb->select('p')
+    ->innerJoin('p.phonenumbers', 'n')
+    ->andWhere($qb->expr()->like('n.phonenumber.number', '?1'))
+    ->setParameter(1, '%' . addcslashes($fio, '%_') . '%')
     ->getQuery()->getResult();
 
     $subs = [];

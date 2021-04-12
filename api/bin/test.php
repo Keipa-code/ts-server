@@ -10,7 +10,10 @@ use libphonenumber\PhoneNumberUtil;
 use Psalm\PhpUnitPlugin\Plugin;
 
 require __DIR__ . '/../vendor/autoload.php';
+$eqw = [];
+$list = $eqw;
 
-$faker = Factory::create('ru_RU');
-
-echo $faker->buildingNumber;
+if (!$list) {
+    echo 'privaet';
+}
+var_dump($list);
