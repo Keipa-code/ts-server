@@ -14,12 +14,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Flash\Messages;
 use Slim\Routing\RouteContext;
 
 class RequestAction extends BaseAction
 {
-    private \App\Manage\Command\RemoveSubscriber\Request\Handler $handler;
+    private Handler $handler;
     private Validator $validator;
+    private Messages $flash;
 
     public function __construct(
         Handler $handler,
@@ -29,6 +31,7 @@ class RequestAction extends BaseAction
         parent::__construct($container);
         $this->handler = $handler;
         $this->validator = $validator;
+        $this->flash = $container->get(Messages::class);
     }
 
     public function handle(Request $request, Response $response, array $args = []): Response
@@ -47,7 +50,8 @@ class RequestAction extends BaseAction
         $this->handler->handle($command, $this->logger);
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-        $url = $routeParser->urlFor('manage');
+        $url = $routeParser->urlFor('manage').'/edit/'.$command->subscriberType.$command->id;
+        $this->flash->addMessage('success', 'Абонент обновлён');
         return $response
             ->withStatus(302)
             ->withHeader('Location', $url);

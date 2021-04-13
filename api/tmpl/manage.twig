@@ -37,6 +37,9 @@
             <div class="col-3">
                 <a href="{{ url_for('juridical') }}" role="button" class="btn btn-primary btn-lg">Юридичиские лица</a>
             </div>
+            <div class="col-1 ms-auto">
+                <a href="{{ url_for(addButton) }}" role="button" class="btn-primary btn">Добавить</a>
+            </div>
         </div>
     </div>
     <div class="container">
@@ -84,7 +87,7 @@
                     <td>{{ row.rowValue }}</td>
                     <td><a href="{{ (url_for(urlForButton) ~ row.id)|e }}" role="button"
                            class="btn btn-warning">&#9998</a></td>
-                    <td><a href="{{ (url_for('remove') ~ row.id)|e }}" role="button" class="btn btn-light">&#10060</a>
+                    <td><a href="{{ (url_for('remove') ~ row.id)|e }}" role="button" class="btn btn-light" onclick="return confirm('Подтвердите удаление номера {{ row.phonenumber }}')">&#10060</a>
                     </td>
                 </tr>
             {% endfor %}

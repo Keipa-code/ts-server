@@ -53,7 +53,7 @@
                 <input type="hidden" name="type" value="{{ type }}">
                 <button type="submit" class="btn btn-success">{{ command }}</button>
                 {% if action == 'update' %}
-                    <button type="submit" class="btn btn-danger" formaction="{{ '/v1/manage/remove' }}">Удалить</button>
+                    <button type="submit" class="btn btn-danger" formaction="{{ '/v1/manage/remove' }}" onclick="return confirm('Подтвердите удаление номера {{ rows.phonenumber }}')">Удалить</button>
                 {% endif %}
             </form>
         </div>

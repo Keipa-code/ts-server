@@ -6,6 +6,7 @@ use App\Http\Middleware\ClearEmptyInput;
 use App\Http\Middleware\DomainExceptionHandler;
 use App\Http\Middleware\SessionMiddleware;
 use App\Http\Middleware\ValidationExceptionHandler;
+use Neoflow\FlashMessages\Middleware\FlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;

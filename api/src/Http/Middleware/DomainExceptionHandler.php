@@ -6,19 +6,26 @@ namespace App\Http\Middleware;
 
 use App\Http\JsonResponse;
 use DomainException;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Flash\Messages;
 
 class DomainExceptionHandler implements MiddlewareInterface
 {
     private LoggerInterface $logger;
+    private Messages $flash;
+    private ResponseFactoryInterface $responseFactory;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, Messages $flash, ResponseFactoryInterface $responseFactory)
     {
         $this->logger = $logger;
+        $this->flash = $flash;
+        $this->responseFactory = $responseFactory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -30,9 +37,11 @@ class DomainExceptionHandler implements MiddlewareInterface
                 'exception' => $exception,
                 'url' => (string)$request->getUri(),
             ]);
-            return new JsonResponse([
-                'message' => $exception->getMessage(),
-                ], 409);
+            $this->flash->addMessage('danger', $exception->getMessage());
+            $url = $request->getUri()->getPath();
+            return $this->responseFactory->createResponse()
+                ->withStatus(409)
+                ->withHeader('Location', $url);
         }
     }
 }

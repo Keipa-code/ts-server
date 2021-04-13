@@ -49,7 +49,7 @@ class RequestAction extends BaseAction
             'private.twig',
             [
                 'rows' => $rows,
-                'command' => 'update',
+                'command' => 'Обновить',
                 'type' => 'private',
                 'head' => 'Редактирование абонента',
                 'action' => 'update'

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "294ae1183933dc817e725376cbfd276f",
+    "content-hash": "c1bc27c8a7145918b5b9f0a21c8eac84",
     "packages": [
         {
             "name": "brick/math",
@@ -1924,6 +1924,56 @@
                 }
             ],
             "time": "2020-12-14T13:15:25+00:00"
+        },
+        {
+            "name": "neoflow/flash-messages",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Neoflow/FlashMessages.git",
+                "reference": "45d1f5b9b94f5ad06251bf4edcdad0c8420869c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Neoflow/FlashMessages/zipball/45d1f5b9b94f5ad06251bf4edcdad0c8420869c3",
+                "reference": "45d1f5b9b94f5ad06251bf4edcdad0c8420869c3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "middlewares/utils": "^3.1",
+                "pds/skeleton": "^1.0",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpunit/phpunit": "^9.2",
+                "psr/http-message": "^1.0",
+                "psr/http-server-middleware": "^1.0",
+                "slim/psr7": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Neoflow\\FlashMessages\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Nessier",
+                    "homepage": "https://www.neoflow.ch"
+                }
+            ],
+            "description": "Flash message service for Slim 4 and similar PSR-15 compliant frameworks and apps.",
+            "support": {
+                "issues": "https://github.com/Neoflow/FlashMessages/issues",
+                "source": "https://github.com/Neoflow/FlashMessages/tree/1.0.0"
+            },
+            "time": "2020-08-10T16:22:51+00:00"
         },
         {
             "name": "nikic/fast-route",

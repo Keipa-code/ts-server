@@ -8,16 +8,18 @@ use App\Http\Service\PageCounter;
 use App\Http\Validator\Validator;
 use App\Manage\Command\RemoveSubscriber\Request\Command;
 use App\Manage\Command\RemoveSubscriber\Request\Handler;
+use Neoflow\FlashMessages\FlashInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Flash\Messages;
 use Slim\Routing\RouteContext;
 
 class RequestAction extends BaseAction
 {
     private Handler $handler;
     private Validator $validator;
-    private ContainerInterface $container;
+    private Messages $flash;
 
     public function __construct(
         Handler $handler,
@@ -27,7 +29,7 @@ class RequestAction extends BaseAction
         parent::__construct($container);
         $this->handler = $handler;
         $this->validator = $validator;
-        $this->container = $container;
+        $this->flash = $container->get(Messages::class);
     }
 
     public function handle(Request $request, Response $response, array $args = []): Response
@@ -47,16 +49,7 @@ class RequestAction extends BaseAction
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         $url = $routeParser->urlFor('manage');
 
-        $view = $this->container->get('view');
-        $str = $view->fetchFromString(
-            'manage.twig',
-            [
-                'flash' => [
-                    'success' => 'успешно'
-            ]]
-
-        );
-        $response->getBody()->write($str);
+        $this->flash->addMessage('success', 'Абонент удалён');
         return $response
             ->withStatus(302)
             ->withHeader('Location', $url);
