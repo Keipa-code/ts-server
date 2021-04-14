@@ -38,7 +38,8 @@ class DomainExceptionHandler implements MiddlewareInterface
                 'url' => (string)$request->getUri(),
             ]);
             $this->flash->addMessage('danger', $exception->getMessage());
-            $url = $request->getUri()->getPath();
+            $data = $request->getParsedBody();
+            $url = $data['urlPath'] ?? $request->getUri()->getPath();
             return $this->responseFactory->createResponse()
                 ->withStatus(409)
                 ->withHeader('Location', $url);

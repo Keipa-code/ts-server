@@ -51,6 +51,7 @@
                 </div>
                 <input type="hidden" name="id" value="{{ rows.id }}">
                 <input type="hidden" name="type" value="{{ type }}">
+                <input type="hidden" name="urlPath" value="{{ urlPath }}">
                 <button type="submit" class="btn btn-success">{{ command }}</button>
                 {% if action == 'update' %}
                     <button type="submit" class="btn btn-danger" formaction="{{ '/v1/manage/remove' }}" onclick="return confirm('Подтвердите удаление номера {{ rows.phonenumber }}')">Удалить</button>

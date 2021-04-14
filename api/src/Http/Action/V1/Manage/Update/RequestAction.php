@@ -46,11 +46,11 @@ class RequestAction extends BaseAction
         $command->writeData($data);
         //$this->logger->warning('yatuta');
         $this->validator->validate($command);
-
+        $this->logger->warning($request->getUri());
         $this->handler->handle($command, $this->logger);
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-        $url = $routeParser->urlFor('manage').'/edit/'.$command->subscriberType.$command->id;
+        $url = $routeParser->urlFor('manage');
         $this->flash->addMessage('success', 'Абонент обновлён');
         return $response
             ->withStatus(302)

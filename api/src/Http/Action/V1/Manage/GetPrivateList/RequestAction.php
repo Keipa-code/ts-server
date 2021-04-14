@@ -66,7 +66,7 @@ class RequestAction extends BaseAction
                 $command->sort = 'p.surname';
             }
         }
-
+        $this->logger->warning($request->getUri()->getPath().'?'.$request->getUri()->getQuery());
         $this->validator->validate($command);
         $link = Link::generateSortLink($data);
         $list = $this->handler->handle($command, $this->logger);

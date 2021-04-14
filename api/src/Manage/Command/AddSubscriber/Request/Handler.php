@@ -34,7 +34,7 @@ class Handler
         $phoneNumber = new Phonenumber($command->phoneNumber);
 
         if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
-            throw new \DomainException('Phone number already exists.');
+            throw new \DomainException('Номер '.$phoneNumber->getFormattedNumber().'уже существуют в справчонике');
         }
 
         $id = Id::generate();

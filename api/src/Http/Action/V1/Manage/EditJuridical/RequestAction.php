@@ -53,7 +53,8 @@ class RequestAction extends BaseAction
                 'command' => 'Обновить',
                 'type' => 'juridical',
                 'head' => 'Редактирование абонента',
-                'action' => 'update'
+                'action' => 'update',
+                'urlPath' => $request->getUri()->getPath()
             ]
         );
     }

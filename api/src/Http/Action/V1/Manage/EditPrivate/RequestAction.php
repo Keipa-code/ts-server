@@ -39,7 +39,6 @@ class RequestAction extends BaseAction
         $data = $args;
         $command = new Command();
         $command->id = $data['uuid'] ?? '';
-
         $this->validator->validate($command);
         $rows = $this->handler->handle($command);
         //$this->logger->warning($numbers['0']->getPhonenumbers()['0']->getFormattedNumber());
@@ -52,7 +51,8 @@ class RequestAction extends BaseAction
                 'command' => 'Обновить',
                 'type' => 'private',
                 'head' => 'Редактирование абонента',
-                'action' => 'update'
+                'action' => 'update',
+                'urlPath' => $request->getUri()->getPath()
             ]
         );
     }
