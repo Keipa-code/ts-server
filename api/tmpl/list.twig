@@ -20,7 +20,9 @@
             {% endfor %}
             </tbody>
         </table>
-
+        {% if not list %}
+            <p align="center"><i>Нет результатов</i></p>
+        {% endif %}
     </div>
 
     <div class="container">
