@@ -88,15 +88,70 @@ class SubscriberRepository
         $qb = $this->privateRepo->createQueryBuilder('p');
         return $qb->select('p')
             ->where($qb->expr()->orX(
-                $qb->expr()->like('LOWER(p.firstname)', '?1'),
-                $qb->expr()->like('LOWER(p.surname)', '?2'),
-                $qb->expr()->like('LOWER(p.patronymic)', '?3')
-            ))  //LOWER(p.firstname) LIKE :firstname
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.surname)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.firstname)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.patronymic)')
+                    ), '?1'),
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.surname)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.patronymic)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.firstname)')
+                    ), '?1'),
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.firstname)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.surname)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.patronymic)')
+                    ), '?1'),
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.firstname)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.patronymic)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.surname)')
+                    ), '?1'),
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.patronymic)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.firstname)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.surname)')
+                    ), '?1'),
+                $qb->expr()->like(
+                    $qb->expr()->concat(
+                        $qb->expr()->concat(
+                            'LOWER(p.patronymic)', $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.surname)'
+                        )
+                        ),
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '), 'LOWER(p.firstname)')
+                    ), '?1'),
+            ))
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter(1, '%' . addcslashes($fio, '%_') . '%')
-            ->setParameter(2, '%' . addcslashes($fio, '%_') . '%')
-            ->setParameter(3, '%' . addcslashes($fio, '%_') . '%')
             ->getQuery()->getResult();
     }
 
@@ -116,18 +171,21 @@ class SubscriberRepository
         //$this->privateRepo->findBy(['firstname' => $fio]);
         $qb = $this->privateRepo->createQueryBuilder('p');
         return $qb->select('p')
-            ->where($qb->expr()->orX(
-                $qb->expr()->like('LOWER(p.firstname)', '?1'),
-                $qb->expr()->like('LOWER(p.surname)', '?2'),
-                $qb->expr()->like('LOWER(p.patronymic)', '?3')
-            ))  //LOWER(p.firstname) LIKE :firstname
+            ->where($qb->expr()->like(
+                $qb->expr()->concat(
+                    $qb->expr()->concat(
+                        'LOWER(p.surname)', $qb->expr()->concat(
+                        $qb->expr()->literal(' '), 'LOWER(p.firstname)'
+                    )
+                    ),
+                    $qb->expr()->concat(
+                        $qb->expr()->literal(' '), 'LOWER(p.patronymic)')
+                ), '?1'))
             ->innerJoin('p.phonenumbers', 'n')
             ->addOrderBy($sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter(1, '%' . addcslashes($fio, '%_') . '%')
-            ->setParameter(2, '%' . addcslashes($fio, '%_') . '%')
-            ->setParameter(3, '%' . addcslashes($fio, '%_') . '%')
             ->getQuery()->getResult();
     }
 

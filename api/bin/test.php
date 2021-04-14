@@ -9,11 +9,9 @@ use Faker\Factory;
 use libphonenumber\PhoneNumberUtil;
 use Psalm\PhpUnitPlugin\Plugin;
 
-require __DIR__ . '/../vendor/autoload.php';
-$eqw = [];
-$list = $eqw;
 
-if (!$list) {
-    echo 'privaet';
-}
-var_dump($list);
+require __DIR__ . '/../vendor/autoload.php';
+$fio = 'Хан Надежда Романовна';
+$data = '%' . addcslashes($fio, '%_') . '%';
+
+var_dump($data);

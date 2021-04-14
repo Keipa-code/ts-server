@@ -42,12 +42,14 @@ class RequestAction extends BaseAction
         //$data = $args;
         $command = new Command();
         if (isset($data['name'])) {
-            $command->organizationName = mb_strtolower($data['name']);
+            $command->organizationName = trim(mb_strtolower($data['name']));
             $pageCount = $this->counter->pageCountByOrgName($command->organizationName);
+        } elseif (isset($data['phonenumber'])) {
+            $command->phonenumber = trim($data['phonenumber']);
+            $pageCount = 1;
         } else {
             $pageCount = $this->counter->pageCountJuridical();
         }
-        $command->phonenumber = $data['phonenumber'] ?? '';
         $command->order = $data['order'] ?? 'ASC';
         $command->pageNumber = isset($data['page']) ? intval($data['page']) : 1;
         //$command->subscriberType = $data['type'] ?? 'private';
