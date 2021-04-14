@@ -33,7 +33,8 @@ class RequestAction extends BaseAction
                 'command' => 'Добавить',
                 'type' => 'juridical',
                 'head' => 'Добавление абонента - Юридическое лицо',
-                'action' => 'add'
+                'action' => 'add',
+                'urlPath' => $request->getUri()->getPath()
             ]
         );
     }

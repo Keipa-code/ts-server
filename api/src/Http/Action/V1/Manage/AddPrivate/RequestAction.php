@@ -35,7 +35,8 @@ class RequestAction extends BaseAction
                 'type' => 'private',
                 'head' => 'Добавление абонента - Физическое лицо',
                 'action' => 'add',
-                'command' => 'Добавить'
+                'command' => 'Добавить',
+                'urlPath' => $request->getUri()->getPath()
             ]
         );
     }
