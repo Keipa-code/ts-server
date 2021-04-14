@@ -39,7 +39,7 @@ class Handler
 
         if ($phoneNumber->getNumber() !== $subscriber->getPhonenumbers()['0']->getNumber()) {
             if ($this->subscribers->hasByPhoneNumber($phoneNumber)) {
-                throw new \DomainException('Phone number already exists.');
+                throw new \DomainException('Номер '.$phoneNumber->getFormattedNumber().' уже существуют в справчонике');
             }
         }
 

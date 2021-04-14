@@ -9,12 +9,14 @@ use App\Manage\Command\AddSubscriber\Request\Handler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Flash\Messages;
 use Slim\Routing\RouteContext;
 
 class RequestAction extends BaseAction
 {
     private Validator $validator;
     private Handler $handler;
+    private Messages $flash;
 
     public function __construct(
         Handler $handler,
@@ -24,6 +26,7 @@ class RequestAction extends BaseAction
         parent::__construct($container);
         $this->validator = $validator;
         $this->handler = $handler;
+        $this->flash = $container->get(Messages::class);
     }
 
     public function handle(Request $request, Response $response): Response
@@ -60,9 +63,9 @@ class RequestAction extends BaseAction
         $this->validator->validate($command);
 
         $this->handler->handle($command);
-
+        $this->flash->addMessage('success', 'Абонент добавлен');
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-        $url = $routeParser->urlFor('manage');
+        $url = $routeParser->urlFor('manage').$command->subscriberType;
         return $response
             ->withStatus(302)
             ->withHeader('Location', $url);

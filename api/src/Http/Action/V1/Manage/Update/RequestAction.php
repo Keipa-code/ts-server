@@ -50,7 +50,7 @@ class RequestAction extends BaseAction
         $this->handler->handle($command, $this->logger);
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
-        $url = $routeParser->urlFor('manage');
+        $url = $routeParser->urlFor('manage').$command->subscriberType;
         $this->flash->addMessage('success', 'Абонент обновлён');
         return $response
             ->withStatus(302)
