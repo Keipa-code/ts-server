@@ -1,0 +1,62 @@
+version: "3.7"
+services:
+  gateway:
+    image: ${REGISTRY}/ts-gateway:${IMAGE_TAG}
+    restart: always
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/html:/var/www/html:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - api
+
+  frontend:
+    image: ${REGISTRY}/ts-frontend:${IMAGE_TAG}
+    restart: always
+
+  api:
+    image: ${REGISTRY}/ts-api:${IMAGE_TAG}
+    restart: always
+    depends_on:
+      - api-php-fpm
+
+  api-php-fpm:
+    image: ${REGISTRY}/ts-api-php-fpm:${IMAGE_TAG}
+    restart: always
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      DB_HOST: api-postgres
+      DB_USER: app
+      DB_PASSWORD: ${API_DB_PASSWORD}
+      DB_NAME: app
+      FRONTEND_URL: https://keipa.gordei.kz
+      SENTRY_DSN: ${SENTRY_DSN}
+
+  api-php-cli:
+    image: ${REGISTRY}/ts-api-php-cli:${IMAGE_TAG}
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      DB_HOST: api-postgres
+      DB_USER: app
+      DB_PASSWORD: ${API_DB_PASSWORD}
+      DB_NAME: app
+      FRONTEND_URL: https://keipa.gordei.kz
+      SENTRY_DSN: ${SENTRY_DSN}
+
+  api-postgres:
+    image: postgres:12.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: ${API_DB_PASSWORD}
+      POSTGRES_DB: app
+    volumes:
+      - api-postgres:/var/lib/postgresql/data
+
+volumes:
+  api-postgres:

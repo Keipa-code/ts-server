@@ -1,27 +1,42 @@
+FROM php:7.4-cli-alpine AS builder
+
+RUN apk add --no-cache postgresql-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo_pgsql opcache
+
+RUN apk add --no-cache unzip
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet \
+    && rm -rf /root/.composer/cache
+
+WORKDIR /var/www
+
+COPY ./composer.json ./composer.lock ./
+
+RUN composer install --no-dev --prefer-dist --no-progress --no-suggest --optimize-autoloader \
+    && rm -rf /root/.composer/cache
+
+### FPM ###
+
 FROM php:7.4-fpm-alpine
 
-RUN apk add --no-cache autoconf g++ make \
-    && pecl install xdebug-3.0.2 \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable xdebug
-
-RUN apk add --no-cache postgresql-dev fcgi \
+RUN apk add --no-cache postgresql-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo_pgsql
-
-RUN apk add --no-cache tzdata
-ENV TZ Asia/Oral
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+    && docker-php-ext-install pdo_pgsql opcache
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+
 COPY ./docker/common/php/conf.d /usr/local/etc/php/conf.d
-COPY ./docker/common/php/php-fpm.d /usr/local/etc/php-fpm.d
-COPY ./docker/production/php-fpm/conf.d /usr/local/etc/php/conf.d
 COPY ./docker/production/php/conf.d /usr/local/etc/php/conf.d
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+WORKDIR /var/www
 
-RUN docker-php-ext-install pdo pdo_pgsql
+COPY --from=builder /var/www ./
+COPY ./ ./
+
+RUN chown www-data:www-data ./var -R
 
 WORKDIR /var/www
 

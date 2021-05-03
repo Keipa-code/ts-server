@@ -24,8 +24,5 @@
         "react": {
             "version": "17"
         }
-    },
-    "rules": {
-        "prettier/prettier": "error"
     }
 }

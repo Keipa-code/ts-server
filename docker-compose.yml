@@ -58,7 +58,14 @@ services:
       - ./api:/var/www
     environment:
       PHP_IDE_CONFIG: "serverName=Docker-ts"
+      APP_ENV: dev
       APP_DEBUG: 1
+      DB_HOST: postgres
+      DB_USER: phonedir
+      DB_PASSWORD: 123456
+      DB_NAME: admin
+      FRONTEND_URL: http://localhost:8080
+      SENTRY_DSN: null
 
 
   php-cli:
@@ -69,7 +76,14 @@ services:
       - ./api:/var/www
     restart: unless-stopped
     environment:
+      APP_ENV: dev
       APP_DEBUG: 1
+      DB_HOST: postgres
+      DB_USER: phonedir
+      DB_PASSWORD: 123456
+      DB_NAME: admin
+      FRONTEND_URL: http://localhost:8080
+      SENTRY_DSN: null
 
   postgres:
     image: postgres:13.1-alpine

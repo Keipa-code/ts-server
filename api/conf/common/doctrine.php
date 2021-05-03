@@ -63,19 +63,17 @@ return [
             __DIR__ . '/../../src/Manage/Command/Entity',
             __DIR__ . '/../../src/Auth/Entity'
         ],
-        'dev_mode' => true,
+        'dev_mode' => false,
         'proxy_dir' => __DIR__ . '/../../var/cache/proxies',
-        'cache' => null,
-        'event_subscribers' => [
-            \App\Data\Doctrine\FixDefaultSchemaSubscriber::class,
-        ],
+        'cache' => __DIR__ . '/../../var/cache/cache',
+        'event_subscribers' => [],
         'connection' => [
             'driver' => 'pdo_pgsql',
-            'host' => 'postgres',
-            'dbname' => 'phonedir',
+            'host' => getenv('DB_HOST'),
+            'dbname' => getenv('DB_NAME'),
             'port' => '5432',
-            'user' => 'admin',
-            'password' => '123456',
+            'user' => getenv('DB_USER'),
+            'password' => getenv('DB_PASSWORD'),
             'charset' => 'utf-8'
         ],
         'types' => [
