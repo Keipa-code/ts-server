@@ -1,3 +1,65 @@
+init: init-ci frontend-ready
+init-ci: docker-down-clear \
+	api-clear frontend-clear \
+	docker-pull docker-build docker-up \
+	api-init frontend-init
+
+docker-up:
+	docker-compose up -d
+
+docker-down:
+	docker-compose down --remove-orphans
+
+docker-build:
+	docker-compose build --pull
+
+docker-rebuild: docker-build docker-down docker-up
+
+docker-restart: docker-down docker-up
+
+docker-pull:
+	docker-compose pull
+
+docker-down-clear:
+	docker-compose down -v --remove-orphans
+
+api-init: api-permission api-composer-install
+
+api-clear:
+	docker run --rm -v ${PWD}/api://var/www -w /var/www alpine sh -c 'rm -rf var/log/cli/* var/log/fpm-fcgi/*'
+
+api-composer-install:
+	docker-compose run --rm php-cli composer install
+
+api-permission:
+	docker run --rm -v ${PWD}/api://var/www -w /var/www alpine chmod 777 var/cache var/log/cli var/log/fpm-fcgi
+
+api-wait-db:
+	docker-compose run --rm php-cli wait-for-it postgres:5432 -t 30
+
+api-migrations:
+	docker-compose run --rm php-cli composer app migrations:migrate -- --no-interaction
+
+api-test:
+	docker-compose run --rm php-cli composer test
+
+api-cs-fix:
+	docker-compose run --rm php-cli composer php-cs-fixer fix
+
+api-fixtures:
+	docker-compose run --rm php-cli composer app fixtures:load
+
+frontend-clear:
+	docker run --rm -v ${PWD}/frontend://var/www -w /var/www alpine sh -c 'rm -rf .ready build'
+
+frontend-init: frontend-yarn-install
+
+frontend-yarn-install:
+	docker-compose run --rm frontend-node-cli yarn install
+
+frontend-ready:
+	docker run --rm -v ${PWD}/frontend://var/www -w //var/www alpine touch .ready
+
 build: build-gateway build-frontend build-api
 
 build-gateway:

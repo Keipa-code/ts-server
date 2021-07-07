@@ -54,12 +54,12 @@ class RequestAction extends BaseAction
             $command->fio = trim(mb_strtolower($data['fio']));
             $pageCount = $this->counter->pageCountByFIO($command->fio);
         }
-        if (isset($data['organizationName'])) {
-            $command->organizationName = trim(mb_strtolower($data['organizationName']));
+        if (isset($data['orgName'])) {
+            $command->organizationName = trim(mb_strtolower($data['orgName']));
             $pageCount = $this->counter->pageCountByOrgName($command->organizationName);
         }
-        if (isset($data['phonenumber'])) {
-            $command->phonenumber = trim($data['phonenumber']);
+        if (isset($data['number'])) {
+            $command->phonenumber = trim($data['number']);
             $pageCount = 1;
         }
         if (!isset($pageCount)) {
